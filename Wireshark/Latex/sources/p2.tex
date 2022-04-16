@@ -12,7 +12,7 @@ Kết quả bắt gói tin chi tiết được lưu trong tập tin \textbf{\tex
 \end{figure}
 
 \textbf{2.	Cho biết IP của host.}\\
-IP của host là: 192.168.146.35.
+IP của host là: 192.168.146.135.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=1]{../figures/p2/p2_hostip}
@@ -103,4 +103,25 @@ Version HTTP mà trình duyện web đáng sử dụng là: \textbf{HTTP/1.1}.
 \end{center}
 \caption{Version HTTP}
 \end{figure}
+
+\textbf{13.	 Trong mục Filter, nhập câu query sau đây: udp.dstport==53 và click apply. Hãy cho biết chức năng và kết quả của câu query vừa thực hiện.}\\
+Chức năng của câu query \textbf{\textit{udp.dstport==53}}: lọc các gói tin có port đích là 53. Theo kết quả câu 9, port 53 được dùng bởi protocol DNS, có nghĩa là kết quả của câu query này cho ta danh sách các gói tin sử dụng truy vấn DNS server.\\
+Kết quả của query này như sau.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.45]{../figures/p2/p2_query}
+\end{center}
+\caption{Kết quả của câu query \textbf{\textit{udp.dstport==53}}}
+\end{figure}
+
+\textbf{14. Vẽ hình quá trình gửi ACK (gồm Sequence number, Acknowledgement number) từ khi kết nối đến khi kết thúc nhận data giữa client và HTTP server.}\\
+Quá trình gửi ACK từ khi kết nối đến khi kết thúc nhận data giữa client và HTTP server.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/p2_diagram}
+\end{center}
+\caption{Quá trình gửi ACK}
+\end{figure}
+
+
 
