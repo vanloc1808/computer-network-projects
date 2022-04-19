@@ -24,7 +24,7 @@ DHCP sử dụng nghi thức \textbf{UDP} tại tầng Transport.
 \textbf{3.	Mục đích của DHCP release message là gì? DHCP client có đảm bảo lúc nào cũng nhận được ACK message từ server? Chuyện gì xảy ra nếu DHCP release message của client bị mất?}\\
 \textbf{Mục đích:} thông báo việc giải phóng địa chỉ IP (của máy gửi) đến DHCP server.\\
 DHCP server \textbf{không} gửi message ACK đối với DHCP Release message.\\
-Nếu như DHCP message của client bị mất, DHCP server \textbf{phải chờ} cho hết thời gian cấp của IP đó, mới có thể cấp lại cho client khác.\\
+Nếu như DHCP Release message của client bị mất, DHCP server \textbf{phải chờ} cho hết thời gian cấp của IP đó, mới có thể cấp lại cho client khác.\\
 
 \textbf{4.	Một người cấu hình DHCP server cho modem của một quán cafe với thời gian cấp là 8 tiếng, và cấp IP thuộc đường mạng 192.168.1.0/24 với range IP từ 192.168.1.10 đến 192.168.1.100. Giả sử bắt đầu ngày mới và modem này được mở lên vào lúc 7:00 AM. Người uống cafe đến uống, ai cũng truy cập vào mạng wifi để truy cập Internet. Lượng khách cứ đi vào ra liên tục từ 7:00 AM đến 11:00 AM. Khi đến 11:00 AM, thì quán đón vị khách thứ 92 (và trong quán chỉ còn 20 khách đang uống và truy cập Internet) và người này không thể nào truy cập được Internet mặc dù đã nhập đúng pass Wifi. Hỏi:}\\
 \textbf{a.	Chuyện gì đã xảy ra mà vị khách thứ 92 không thể truy cập được Internet?}
@@ -32,11 +32,11 @@ Nếu như DHCP message của client bị mất, DHCP server \textbf{phải ch�
 \item Có 91 địa chỉ từ 192.168.1.10 đến 192.168.1.100.
 \item Thời gian cấp cho DHCP server là 8 tiếng.
 \item Thời điểm mở quán và modem vào lúc 7:00AM. Giả sử vị khách đầu tiên đến đúng lúc đó và rời đi, thì phải đến 3:00PM (sau 8 tiếng) thì địa chỉ đó mới được DHCP server thu hồi lại để cấp cho client mới.
-\item Vậy nên khi vị khách 92 đến nhưng không truy cập được là do DHCP server đã cấp hết địa chỉ (91 IP), và chưa đến thời điểm thu hồi nên không có IP cho vị khách này.
+\item Vậy nên khi vị khách 92 đến nhưng không truy cập được là do DHCP server đã cấp hết địa chỉ (91 IP), và chưa đến thời điểm thu hồi (địa chỉ đầu tiên) nên không có IP cho vị khách này.
 \end{itemize}
 
 \textbf{b.	Vậy những vị khách tiếp theo 93, 94, .... có truy cập được hay không? Và có thể truy cập vào thời điểm nào?}\\
-Những vị khách tiếp theo cũng không thể truy cập được vào thời điểm đó. Họ chỉ có thể truy cập sau 3:00PM và trong quán phải có ít hơn 91 người.\\
+Những vị khách tiếp theo cũng không thể truy cập được vào thời điểm đó. Họ chỉ có thể truy cập được khi những IP đầu tiên của quán được giải phóng (ít nhất là sau 3:00PM) và trong quán phải có ít hơn 91 người.\\
 
 \textbf{c.	Chủ quán cafe nên làm gì để vị khách thứ 92 có thể truy cập được Internet và hướng giải quyết để khắc phục tình trạng này về sau là gì?}\\
 \textbf{Cách khắc phục} đơn giản là \textbf{khởi động lại modem}. Khi ấy, dữ liệu về các IP được cấp sẽ được xóa và các máy tính trong mạng sẽ gửi request lên DHCP server để lấy lại IP. Tuy nhiên, cách này sẽ gây trải nghiệm không tốt với người dùng (mạng đột nhiên bị ngắt), và không phải lúc nào cũng biết được IP đã được cấp hết chưa.\\
