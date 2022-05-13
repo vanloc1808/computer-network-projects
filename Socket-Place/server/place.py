@@ -1,12 +1,18 @@
 import json
 
+"""
+    Positive longitude is east of Greenwich.
+    Positive latitude is north of the equator.
+    Negative longitude is west of Greenwich.
+    Negative latitude is south of the equator.
+"""
 class Coordinate:
     def __init__(self, longi, lati):
         if (longi < -180 or longi > 180):
-            raise ValueError("longi must be between -180 and 180")
+            raise ValueError("longitude must be between -180 and 180")
         
         if (lati < -90 or lati > 90):
-            raise ValueError("lati must be between -90 and 90")
+            raise ValueError("latitude must be between -90 and 90")
         
         self._longitude = longi
         self._latitude = lati
@@ -42,8 +48,3 @@ class Place:
             self._images.extend(image)
         else:  # if the image is a single image
             self._images.append(image)
-
-place_dict = {'this': 'is', 'just': 'for', 'it': 'will', 'not': 'be', 'an': 'empty', 'json': 'file'}
-out_file = open('db.json', 'w')
-json.dump(place_dict, out_file, indent=4)
-out_file.close()
