@@ -23,7 +23,7 @@ def query_all_places(sock, address):
         id = place['id']
         name = place['name']
 
-        this_place = {'ID:' : id, 'Name' : name}
+        this_place = {'ID' : id, 'Name' : name}
         # print(this_place)
 
         result.append(this_place)
@@ -48,7 +48,7 @@ def query_one_place(sock, address, place_id):
             id = place['id']
             name = place['name']
             description = place['description']
-            this_place = {'ID:' : id, 'Name' : name, 'Description' : description}
+            this_place = {'ID' : id, 'Name' : name, 'Description' : description}
             break
 
     # close the file
