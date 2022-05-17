@@ -36,38 +36,63 @@ print(len_block_list)
 
 cache = Queue(maxsize=0) # infinity queue
 
+def getSize(idx, len_):
+    return min(WINDOW_SIZE, len_ - idx)
+
+def sendLen(addr_port, len_):
+    done = False
+    while not done:
+        UDP_sv.sendto(str(len_).encode().ljust(BLOCK_SIZE, b'\x00'), addr_port)
+        UDP_sv.settimeout(0.75)
+        try:
+            ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
+            while (r_addr != addr_port):
+                cache.put((ack, r_addr))
+                ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
+            # request example: "LEN_000", send upto 999 blocks ~ 0.93gB real data
+            if ack == b"ACK_LEN".ljust(BLOCK_SIZE, '\x00'):
+                done = True
+        except sk.timeout: # Not received in time
+            continue
+    UDP_sv.settimeout(0)
+
+def sendData(addr_port, data_to_send):
+    for i in range(0, len(data_to_send), WINDOW_SIZE):
+        ack_list = [False] * getSize(i, len(data_to_send))
+        # Send phase
+        while not all(ack_list):
+            for j in range(len(ack_list)):
+                if not ack_list[j]: # Not sent / require resent
+                    UDP_sv.sendto(data_to_send[i + j], addr_port)
+
+            UDP_sv.settimeout(0.75) # 0.75 seconds to receive each ACK!
+            for j in range(len(ack_list)):
+                try:
+                    req, req_addr = UDP_sv.recvfrom(BLOCK_SIZE)
+                    while req_addr != addr_port:
+                        # The data isn't from one we interacting!
+                        # -> Move to queue (For later analyzing)
+                        cache.put((req, req_addr))
+                        # Retry
+                        req, req_addr = UDP_sv.recvfrom(BLOCK_SIZE)
+                    # Remember: only process 1 image at 1 time,
+                    # if not, please revoke to end. It'll bug if 2 or more request
+                    # of different data!
+
+                    # request example: "ACK_000"
+                    id_ = int(req[4:7])
+                    if (id_ - i < 0): continue # OLD packet!
+                    ack_list[id_ - i] = True
+                    print("[*] GOT ACK ", id_)
+                except sk.timeout: # Not received in time
+                    continue
+            UDP_sv.settimeout(0)
+
 while True:
     mess, addr_port = UDP_sv.recvfrom(BLOCK_SIZE)
     print(f"[?] Receive message: {mess}")
     print(f"[?] From: {addr_port}")
     if mess == b'GIV\n':
         # Give block (USING SELECTIVE REPEAT)
-        for i in range(0, len_block_list, WINDOW_SIZE):
-            ack_list = [False] * min(WINDOW_SIZE, len_block_list - i)
-            # Send phase
-            while not all(ack_list):
-                for j in range(len(ack_list)):
-                    if not ack_list[j]: # Not sent / require resent
-                        UDP_sv.sendto(block_list[i + j], addr_port)
-
-                UDP_sv.settimeout(15) # 15 seconds to receive each ACK!
-                for j in range(len(ack_list)):
-                    try:
-                        req, req_addr = UDP_sv.recvfrom(BLOCK_SIZE)
-                        while req_addr != addr_port:
-                            # The data isn't from one we interacting!
-                            # -> Move to queue (For later analyzing)
-                            cache.put((req, req_addr))
-                            # Retry
-                            req, req_addr = UDP_sv.recvfrom(BLOCK_SIZE)
-                        # Remember: only process 1 image at 1 time,
-                        # if not, please revoke to end. It'll bug if 2 or more request
-                        # of different data!
-
-                        # request example: "ACK_000"
-                        id_ = int(req[4:])
-                        if (id_ - i < 0): continue # OLD packet!
-                        ack_list[id_ - i] = True
-                        print("[*] GOT ACK ", id_)
-                    except sk.timeout: # Not received in time
-                        continue
+        sendLen(addr_port, len(block_list))
+        sendData(addr_port, block_list)
