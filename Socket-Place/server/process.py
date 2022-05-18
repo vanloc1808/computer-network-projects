@@ -48,7 +48,8 @@ def query_one_place(sock, address, place_id):
             id = place['id']
             name = place['name']
             description = place['description']
-            this_place = {'ID' : id, 'Name' : name, 'Description' : description}
+            coordinate = place['coordinate']
+            this_place = {'ID' : id, 'Name' : name, 'Coordinate' : coordinate  ,'Description' : description}
             break
 
     # close the file
@@ -74,12 +75,9 @@ def main():
 
     message = bytesAddressPair[0]
     place_id = message.decode('utf-8')
-    print(type(place_id))
-    print(place_id)
-
     address = bytesAddressPair[1]
 
-    query_all_places(UDPServerSocket, address)
+    query_one_place(UDPServerSocket, address, place_id)
     
     UDPServerSocket.close()
 
