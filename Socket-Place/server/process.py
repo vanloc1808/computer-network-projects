@@ -79,7 +79,7 @@ def main():
 
     address = bytesAddressPair[1]
 
-    query_one_place(UDPServerSocket, address, place_id)
+    query_all_places(UDPServerSocket, address)
     
     UDPServerSocket.close()
 
