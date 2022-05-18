@@ -1,7 +1,7 @@
 import hashlib
 
 def check_split_not_corrupted(s: bytearray) -> bool:
-    assert len(s) > 43
+    if len(s) <= 43: return False
     
     data = s[3: -40]
     _hash = s[-40: ]

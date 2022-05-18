@@ -1,10 +1,15 @@
 import socket as sk
 from spliter import Spliter
-from random import choices
-
 from queue import Queue
-
 from env import *
+import data_loader
+
+import logging
+
+logging.basicConfig(format='%(asctime)s %(message)s', 
+    filename='program.log', level=logging.INFO)
+
+cache = Queue(maxsize=0) # infinity queue
 
 # Init server host:
 def init():
@@ -14,27 +19,10 @@ def init():
         proto   = sk.IPPROTO_UDP
     )
     sv.bind((IP, PORT))
-    print(f"[+] UDP server at {(IP, PORT)}")
-    # sv.settimeout(1)
+    logging.info(f"[+] UDP server at {(IP, PORT)}")
     return sv
 
-# addr_cache = {} # IP -> Current action
 UDP_sv = init()
-
-# BEGIN testing: ----
-
-vocab = "1234567890"
-data_to_send = choices(vocab, k = BLOCK_SIZE * 3 + 123) # 3 + 1 block not rounded!
-data_to_send = ''.join(data_to_send).encode()
-
-sp = Spliter(BLOCK_SIZE)
-block_list = sp.split_from_bytearray(data_to_send)
-len_block_list = len(block_list)
-print(len_block_list)
-# Now send block_list to client when they requested!
-# END testing: ---
-
-cache = Queue(maxsize=0) # infinity queue
 
 def getSize(idx, len_):
     return min(WINDOW_SIZE, len_ - idx)
@@ -42,7 +30,7 @@ def getSize(idx, len_):
 def sendLen(addr_port, len_):
     done = False
     while not done:
-        print(str(len_).encode().rjust(BLOCK_SIZE, b'\x00'))
+        logging.info(f"[?] LEN: {len_}")
         UDP_sv.sendto(str(len_).encode().rjust(BLOCK_SIZE, b'\x00'), addr_port)
         UDP_sv.settimeout(1) # 1s timeout
         try:
@@ -82,26 +70,61 @@ def sendData(addr_port, data_to_send):
                     # of different data!
 
                     # request example: "ACK_000"
-                    # print(req)
                     id_ = int(req[4:7])
-                    # print(id_)
                     if (id_ - i < 0): continue # OLD packet!
                     ack_list[id_ - i] = True
-                    print("[*] GOT ACK ", id_)
+                    logging.info(f"[*] GOT ACK {id_}")
                 except sk.timeout: # Not received in time
                     continue
             UDP_sv.settimeout(None)
 
-print(UDP_sv.timeout)
+data_loader.__init__()
+
+sp = Spliter(BLOCK_SIZE)
+
+def send(addr_port, s: bytearray) -> None:
+    splited = sp.split_from_bytearray(s)
+    sendLen(addr_port, len(splited))
+    sendData(addr_port, splited)
 
 while True:
     if cache.empty():
         mess, addr_port = UDP_sv.recvfrom(BLOCK_SIZE)
     else:
         mess, addr_port = cache.get()
-    print(f"[?] Receive message: {mess}")
-    print(f"[?] From: {addr_port}")
-    if mess == b'GIV\n':
-        # Give block (USING SELECTIVE REPEAT)
-        sendLen(addr_port, len(block_list))
-        sendData(addr_port, block_list)
+    logging.info(f"[?] Receive message: {mess}")
+    logging.info(f"[?] From: {addr_port}")
+
+    # GIV_ALL
+    if mess[:7] == b'GIV_ALL':
+        logging.info(f"[?] Send all place to {addr_port}")
+        send(addr_port, data_loader.query_all_places())
+        continue
+    # GIV_DETAIL_XXXX...
+    if mess[:11] == b'GIV_DETAIL_':
+        mess = mess.rstrip(b'\x00')
+        id_ = mess[11:].decode('UTF-8')
+        logging.info(f"[?] Send specific place({id_}) to {addr_port}")
+        send(addr_port, data_loader.query_one_place(id_))
+        continue
+    # GIV_AVT_XXXX...
+    if mess[:8] == b'GIV_AVT_':
+        mess = mess.rstrip(b'\x00')
+        id_ = mess[8:].decode('UTF-8')
+        logging.info(f"[?] Send avatar of place({id_}) to {addr_port}")
+        try:
+            send(addr_port, data_loader.query_avatar(id_))
+        except Exception:
+            logging.error(f"[x] Not found {id_}")
+        continue
+    # GIV_IMG_YYY_XXXX...
+    if mess[:8] == b'GIV_IMG_':
+        mess = mess.rstrip(b'\x00')
+        pos = int(mess[8:11]) # YYY
+        id_ = mess[12:].decode('UTF-8') # XXXX...
+        logging.info(f"[?] Send image place({id_}) number {pos + 1} to {addr_port}")
+        try:
+            send(addr_port, data_loader.query_image(id_, pos))
+        except Exception:
+            logging.error(f"[x] Not found {id_} or {pos} out of range!")
+        continue

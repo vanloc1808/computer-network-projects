@@ -1,7 +1,18 @@
 import socket as sk
+from random import choices
+from string import ascii_lowercase
+from tempfile import gettempdir
 from env import *
 
-from random import randint
+from error_check import check_split_not_corrupted
+from joiner import join
+
+import logging
+import json
+
+logging.basicConfig(format='%(asctime)s %(message)s', 
+    filename='program.log', level=logging.INFO)
+
 
 def init():
     sv = sk.socket(
@@ -9,13 +20,10 @@ def init():
         type    = sk.SOCK_DGRAM,
         proto   = sk.IPPROTO_UDP
     )
-    # sv.bind((IP, PORT))
-    # print(f"[+] UDP server at {(IP, PORT)}")
     return sv
 
 UDP_cli = init()
-#while True:
-
+logging.info("[?] Client started!")
 
 def getSize(i, len_):
     return min(WINDOW_SIZE, len_ - i)
@@ -34,9 +42,8 @@ def getLen():
         except ValueError:
             print("? Not a length")
 
-
 def receiveData(len_):
-    # Get length after send b'GIV':
+    result = []
     x = 0
     while x < len_:
         buffer = [None] * getSize(x, len_)
@@ -45,28 +52,77 @@ def receiveData(len_):
                 if (x + i) >= len_: break
                 if buffer[i] != None: continue
                 
-                d = UDP_cli.recvfrom(BLOCK_SIZE)
+                d, addr_port = UDP_cli.recvfrom(BLOCK_SIZE)
+                if addr_port != (IP, PORT): continue # Not from server
                 
-                id_ = int(d[0][:3])
+                id_ = int(d[:3])
                 if (id_ < x): # Old packet
                     # Just send ACK back and do nothing!
-                    print("? OLD ACK ", id_)
+                    logging.info(f"? OLD ACK {id_}")
                     UDP_cli.sendto(f'ACK_{str(id_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
                     continue
 
-                print(d)
+                logging.info(f"Get: {d}")
+                if not check_split_not_corrupted(d):
+                    logging.warn(f"Corrupt datagram!")
+                    # Skip
+                    continue
                 buffer[i] = d
-                # if randint(0, 1) == 0:
-                #     print("[] LOSS :)")
-                #     continue
-                UDP_cli.sendto(f'ACK_{str(x + i).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
-        x += WINDOW_SIZE
 
-while True:
-    mess = input()
-    UDP_cli.sendto(mess.encode() + b'\n', (IP, PORT))
-    if mess == 'GIV':
-        l = getLen()
-        print("[?] Len: ", l)
-        receiveData(l)
-        print("[?] DONE")
+                UDP_cli.sendto(f'ACK_{str(x + i).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
+            result = result + buffer
+        x += WINDOW_SIZE
+    result = sorted(result)
+    return join(result)
+
+def recvData():
+    l = getLen()
+    logging.info(f"[?] Len: {l}")
+    g = receiveData(l)
+    logging.info("[?] DONE")
+    return g
+
+def sendCommand(cmd):
+    UDP_cli.sendto(cmd.ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
+
+def get_all_info():
+    sendCommand(b'GIV_ALL')
+    d = recvData()
+    return json.loads(d)
+
+def get_detail_info(id_):
+    sendCommand(f'GIV_DETAIL_{id_}'.encode())
+    d = recvData()
+    return json.loads(d)
+
+def get_avt(id_):
+    sendCommand(f'GIV_AVT_{id_}'.encode())
+    d = recvData()
+    # abcdefghijkl.jpg
+    file_name = ''.join(choices(ascii_lowercase, k=12)) + '.jpg'
+    path = gettempdir() + '/' + file_name
+    x = open(path, 'wb')
+    x.write(d)
+    x.close()
+    return path
+
+def get_img(id_, pos):
+    sendCommand(f'GIV_IMG_{str(pos).rjust(3, "0")}_{id_}'.encode())
+    d = recvData()
+    # abcdefghijkl.jpg
+    file_name = ''.join(choices(ascii_lowercase, k=12)) + '.jpg'
+    path = gettempdir() + '/' + file_name
+    x = open(path, 'wb')
+    x.write(d)
+    x.close()
+    return path
+
+
+# while True:
+#     mess = input()
+#     UDP_cli.sendto(mess.encode(), (IP, PORT))
+#     if mess[:3] == 'GIV':
+        
+#         x = open("tmp", "wb")
+#         x.write(g)
+#         x.close()
