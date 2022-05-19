@@ -47,8 +47,8 @@ def query_one_place_clicked(id, name):
             new_des = place_description[:i + 1] + '\n' + place_description[i + 1:]
             place_description = new_des
     print(place_description)
-    lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#0DF468', fg='red')
-    lbl_description.pack(side='left', fill='x', padx=10, pady=10)
+    lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#0DF468', fg='red', anchor="w", justify=tk.LEFT)
+    lbl_description.pack(side='left', fill='x', padx=10, pady=10, anchor='nw')
 
     w.mainloop()
 
