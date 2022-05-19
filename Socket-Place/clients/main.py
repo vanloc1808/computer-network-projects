@@ -7,7 +7,7 @@ from data import *
 
 def main():
     columns_headings = ['ID', 'Tên địa điểm', 'Chi tiết địa điểm', '']
-    dictionary_headings = ['ID', 'Name']
+    dictionary_headings = ['ID', 'Name', 'NOI']
 
     window = tk.Tk()
 
@@ -15,8 +15,10 @@ def main():
 
     id_list = [d['ID'] for d in data]
     name_list = [d['Name'] for d in data]
+    number_of_images = [d['NOI'] for d in data]
     print(id_list)
     print(name_list)
+    print(number_of_images)
 
     Table(data, columns_headings, dictionary_headings, window, text='Danh sách địa điểm').pack(side="top", fill="both", expand=True, padx=10, pady=10)
 

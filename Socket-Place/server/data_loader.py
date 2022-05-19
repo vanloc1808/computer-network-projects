@@ -10,7 +10,8 @@ def query_all_places():
     for place in data:
         id = place['id']
         name = place['name']
-        this_place = {'ID' : id, 'Name' : name}
+        img_list = place['images']
+        this_place = {'ID' : id, 'Name' : name, 'NOI': len(img_list)}
         result.append(this_place)
     return json.dumps(result).encode()
 

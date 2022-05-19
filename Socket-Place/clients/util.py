@@ -3,42 +3,9 @@ import tkinter.ttk as ttk
 from functools import partial
 from PIL import ImageTk, Image
 from data import *
+from pages import *
 
 # RGB link: https://htmlcolorcodes.com/
-
-# FUNCTIONS FOR RECEVING DATA FROM SERVER
-
-"""
-    function for receving data (ID, Name) about all places from server
-    @return: a list of dictionaries, one dictionary for each place
-"""
-def query_all_places():
-    pass
-
-"""
-    function for receiving data (ID, Name, Coordinate, Description) about one place from server
-    @param:
-        id: the id of the place
-    @return: a dictionary of the place
-"""
-def query_one_place(id):
-    pass
-
-"""
-    function for downloading all avatars of all places from server
-    @return: list of directory to avatars (?)
-"""
-def download_all_avatars():
-    pass
-
-"""
-    function for downloading all images of one place from server
-    @param:
-        id: the id of the place
-    @return: list of directory to images
-"""
-def download_images_one_place(id):
-    pass
 
 # FUNCTIONS FOR HANDLING MOUSE CLICK EVENTS
 def query_one_place_clicked(id, name):
@@ -79,8 +46,26 @@ def query_one_place_clicked(id, name):
 
     w.mainloop()
 
-def download_images_one_place_clicked(id):
-    print("Download images of place " + id)
+def download_images_one_place_clicked(id, name, images_num):
+    w = tk.Toplevel()
+    w.title('Hình ảnh từ ' + name)
+
+    images_path = []
+    for i in range(0, images_num - 1):
+        images_path.append(get_img(id, i))
+    print(images_path)
+
+    frames = []
+    for i in range(0, images_num - 1):
+        img = images_path[i]
+        page = Page(id, name, img , w)
+        frames.append(page)
+
+    create_frames(frames)
+
+    show_first_frame(frames)
+
+    w.mainloop()
 
 def download_all_avatars_clicked(id_list, name_list):
     w = tk.Toplevel()
@@ -92,23 +77,17 @@ def download_all_avatars_clicked(id_list, name_list):
         avatars_path.append(get_avt(id))
     print(avatars_path)
 
+    frames = []
     for i in range(len(id_list)):
-        avt_path = avatars_path[i]
         id = id_list[i]
         name = name_list[i]
+        avt = avatars_path[i]
 
-        frm_avt = tk.Frame(master=w)
-        frm_avt.pack()
+        page = Page(id, name, avt, w)
+        frames.append(page)
 
-        load_avt = Image.open(avt_path)
-        load_avt = load_avt.resize((256, 256), Image.ANTIALIAS)
-        photo_avt = ImageTk.PhotoImage(load_avt)
+    create_frames(frames)
 
-        lbl_avt = tk.Label(master=frm_avt, image=photo_avt)
-        lbl_avt.image = photo_avt
-        lbl_avt.pack()
-
-        lbl_caption = tk.Label(master=frm_avt, text=name)
-        lbl_caption.pack()
+    show_first_frame(frames)
 
     w.mainloop()
