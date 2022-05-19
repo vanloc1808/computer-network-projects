@@ -48,13 +48,13 @@ def create_frames(frames):
 
 def show_first_frame(frames):
     if (frames[1].winfo_ismapped() == True):
-        frames[1].destroy()
+        frames[1].pack_forget()
     frames[0].pack()     
 
 def show_last_frame(frames):
     idx = len(frames) - 1
     if (frames[idx - 1].winfo_ismapped() == True):
-        frames[idx - 1].destroy()
+        frames[idx - 1].pack_forget()
     frames[idx].pack()
 
 def show_middle_frame(frames, i):
@@ -64,9 +64,9 @@ def show_middle_frame(frames, i):
         show_last_frame(frames)
     else:
         if (frames[i - 1].winfo_ismapped() == True):
-            frames[i - 1].destroy()
+            frames[i - 1].pack_forget()
         if (frames[i + 1].winfo_ismapped() == True):
-            frames[i + 1].destroy()
+            frames[i + 1].pack_forget()
     
     frames[i].pack()
 
