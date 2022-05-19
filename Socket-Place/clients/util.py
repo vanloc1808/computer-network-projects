@@ -1,6 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from functools import partial
+from PIL import ImageTk, Image
+from data import *
 
 # RGB link: https://htmlcolorcodes.com/
 
@@ -45,10 +47,8 @@ def query_one_place_clicked(id, name):
     w['bg'] = '#EAF40D'
 
     # details = query_one_place(id)
-    details = {"ID": "TRV", 
-    "Name": "Trà Vinh", 
-    "Coordinate": [9.94719, 106.34225], 
-    "Description": "Trà Vinh là một tỉnh ven biển thuộc vùng Đồng bằng sông Cửu Long, Việt Nam. Trà Vinh cách Thành phố Hồ Chí Minh 200km đi bằng quốc lộ 53 qua tỉnh Vĩnh Long, khoảng cách rút ngắn thời gian chỉ còn 130km nếu đi bằng quốc lộ 60 qua tỉnh Bến Tre, cách thành phố Cần Thơ 50km. Được bao bọc bởi sông Tiền, sông Hậu với 02 cửa Cung Hầu và Định An nên giao thông đường thủy có điều kiện phát triển."}
+    
+    details = get_detail_info(id)
 
     place_id = details['ID']
     place_name = details['Name']
@@ -77,5 +77,38 @@ def query_one_place_clicked(id, name):
     lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#0DF468', fg='red')
     lbl_description.pack(side='left', fill='x', padx=10, pady=10)
 
+    w.mainloop()
+
+def download_images_one_place_clicked(id):
+    print("Download images of place " + id)
+
+def download_all_avatars_clicked(id_list, name_list):
+    w = tk.Toplevel()
+    w.title('Hình đại diện các địa điểm')
+
+
+    avatars_path = []
+    for id in id_list:
+        avatars_path.append(get_avt(id))
+    print(avatars_path)
+
+    for i in range(len(id_list)):
+        avt_path = avatars_path[i]
+        id = id_list[i]
+        name = name_list[i]
+
+        frm_avt = tk.Frame(master=w)
+        frm_avt.pack()
+
+        load_avt = Image.open(avt_path)
+        load_avt = load_avt.resize((256, 256), Image.ANTIALIAS)
+        photo_avt = ImageTk.PhotoImage(load_avt)
+
+        lbl_avt = tk.Label(master=frm_avt, image=photo_avt)
+        lbl_avt.image = photo_avt
+        lbl_avt.pack()
+
+        lbl_caption = tk.Label(master=frm_avt, text=name)
+        lbl_caption.pack()
 
     w.mainloop()

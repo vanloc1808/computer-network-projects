@@ -38,7 +38,7 @@ def sendLen(addr_port, len_):
             while (r_addr != addr_port):
                 cache.put((ack, r_addr))
                 ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
-            # request example: "ACK_LEN_000", send upto 999 blocks ~ 0.93gB real data
+            # request example: "ACK_LEN_000", send upto 999 blocks ~ 0.93mB real data
             if ack[:7] == b"ACK_LEN": # Check packet
                 if int(ack[8:11]) == len_: # Check correct length
                     done = True
