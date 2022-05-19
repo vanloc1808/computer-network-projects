@@ -88,6 +88,7 @@ def send(addr_port, s: bytearray) -> None:
     sendData(addr_port, splited)
 
 while True:
+    UDP_sv.settimeout(None)
     if cache.empty():
         mess, addr_port = UDP_sv.recvfrom(BLOCK_SIZE)
     else:

@@ -41,6 +41,12 @@ def query_one_place_clicked(id, name):
 
     frm_description = tk.Frame(master=w, bg='#0DF468')
     frm_description.pack(side='top', fill='x', padx=10, pady=10)
+    break_list = ['.', '!', '?']
+    for i in range(len(place_description)):
+        if (place_description[i] in break_list):
+            new_des = place_description[:i + 1] + '\n' + place_description[i + 1:]
+            place_description = new_des
+    print(place_description)
     lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#0DF468', fg='red')
     lbl_description.pack(side='left', fill='x', padx=10, pady=10)
 
