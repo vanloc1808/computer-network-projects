@@ -11,7 +11,7 @@ from pages import *
 def query_one_place_clicked(id, name):
     w = tk.Toplevel()
     w.title("Chi tiết về " + name)
-    w['bg'] = '#EAF40D'
+    w['bg'] = '#F8FBF3'
 
     # details = query_one_place(id)
     
@@ -23,23 +23,23 @@ def query_one_place_clicked(id, name):
     place_description = details['Description']
 
     # frames and labels
-    frm_id = tk.Frame(master=w, bg='#45F40D')
+    frm_id = tk.Frame(master=w, bg='#98C1D8')
     frm_id.pack(side='top', fill='x', padx=10, pady=10)
-    lbl_id = tk.Label(master=frm_id, text='ID: ' + place_id, bg='#45F40D', fg='red')
+    lbl_id = tk.Label(master=frm_id, text='ID: ' + place_id, bg='#98C1D8', fg='red')
     lbl_id.pack(side='left', fill='x', padx=10, pady=10)
 
-    frm_name = tk.Frame(master=w, bg='#0DE2F4')
+    frm_name = tk.Frame(master=w, bg='#98D8B2')
     frm_name.pack(side='top', fill='x', padx=10, pady=10)
-    lbl_name = tk.Label(master=frm_name, text='Tên địa điểm: ' + place_name, bg='#0DE2F4', fg='red')
+    lbl_name = tk.Label(master=frm_name, text='Tên địa điểm: ' + place_name, bg='#98D8B2', fg='red')
     lbl_name.pack(side='left', fill='x', padx=10, pady=10)
 
-    frm_coordinate = tk.Frame(master=w, bg='#0DC0F4')
+    frm_coordinate = tk.Frame(master=w, bg='#D8AD98')
     frm_coordinate.pack(side='top', fill='x', padx=10, pady=10)
     str_coordinate = '(' + str(place_coordinate[0]) + ', ' + str(place_coordinate[1]) + ')'
-    lbl_coordinate = tk.Label(master=frm_coordinate, text='Tọa độ: ' + str_coordinate, bg='#0DC0F4', fg='red')
+    lbl_coordinate = tk.Label(master=frm_coordinate, text='Tọa độ: ' + str_coordinate, bg='#D8AD98', fg='red')
     lbl_coordinate.pack(side='left', fill='x', padx=10, pady=10)
 
-    frm_description = tk.Frame(master=w, bg='#0DF468')
+    frm_description = tk.Frame(master=w, bg='#D8989C')
     frm_description.pack(side='top', fill='x', padx=10, pady=10)
     break_list = ['.', '!', '?']
     for i in range(len(place_description)):
@@ -47,8 +47,15 @@ def query_one_place_clicked(id, name):
             new_des = place_description[:i + 1] + '\n' + place_description[i + 1:]
             place_description = new_des
     print(place_description)
-    lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#0DF468', fg='red', anchor="w", justify=tk.LEFT)
+    lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#D8989C', fg='red', anchor="w", justify=tk.LEFT)
     lbl_description.pack(side='left', fill='x', padx=10, pady=10, anchor='nw')
+
+    frm_avatar = tk.Frame(master=w)
+    frm_avatar.pack(side='top', fill='x', padx=10, pady=10)
+    img_avatar = ImageTk.PhotoImage(Image.open(get_avt(id)).resize((200, 200), Image.ANTIALIAS))
+    lbl_avatar = tk.Label(master=frm_avatar, image=img_avatar)
+    lbl_avatar.image = img_avatar
+    lbl_avatar.pack(side='bottom', fill='x', padx=10, pady=10)
 
     w.mainloop()
 
