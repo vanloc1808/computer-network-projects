@@ -47,7 +47,7 @@ def query_one_place_clicked(id, name):
         if (place_description[i] in break_list):
             new_des = place_description[:i + 1] + '\n' + place_description[i + 1:]
             place_description = new_des
-    print(place_description)
+    # print(place_description)
     lbl_description = tk.Label(master=frm_description, text='Mô tả: ' + place_description, bg='#D8989C', fg='red', anchor="w", justify=tk.LEFT)
     lbl_description.pack(side='left', fill='x', padx=10, pady=10, anchor='nw')
 
@@ -68,7 +68,7 @@ def download_images_one_place_clicked(id, name, images_num):
     images_path = []
     for i in range(0, images_num - 1):
         images_path.append(get_img(id, i))
-    print(images_path)
+    # print(images_path)
 
     frames = []
     size = (400, 300)
@@ -91,7 +91,7 @@ def download_all_avatars_clicked(id_list, name_list):
     avatars_path = []
     for id in id_list:
         avatars_path.append(get_avt(id))
-    print(avatars_path)
+    # print(avatars_path)
 
     frames = []
     for i in range(len(id_list)):

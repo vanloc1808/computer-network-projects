@@ -20,7 +20,7 @@ def create_first_frame(frames):
     frm_button = tk.Frame(master=frames[0])
     frm_button.pack(side='bottom')
 
-    btn_next = tk.Button(master=frm_button, text='Next', command=partial(show_middle_frame, frames, 1))
+    btn_next = tk.Button(master=frm_button, text='Ảnh kế', command=partial(show_middle_frame, frames, 1))
     btn_next.pack(pady=30, side='right')
 
 def create_last_frame(frames):
@@ -28,15 +28,15 @@ def create_last_frame(frames):
     
     frm_buttons = tk.Frame(master=frames[idx])
     frm_buttons.pack(side='bottom')
-    btn_next = tk.Button(master=frm_buttons, text='Prev', command=partial(show_middle_frame, frames, idx - 1))
+    btn_next = tk.Button(master=frm_buttons, text='Ảnh trước', command=partial(show_middle_frame, frames, idx - 1))
     btn_next.pack(pady=30, side='left')
 
 def create_middle_frames(frames, i):
     frm_buttons = tk.Frame(master=frames[i])
     frm_buttons.pack(side='bottom')
-    btn_next = tk.Button(master=frm_buttons, text='Prev', command=partial(show_middle_frame, frames, i - 1))
+    btn_next = tk.Button(master=frm_buttons, text='Ảnh trước', command=partial(show_middle_frame, frames, i - 1))
     btn_next.pack(pady=30, side='left')
-    btn_prev = tk.Button(master=frm_buttons, text='Next', command=partial(show_middle_frame, frames, i + 1))
+    btn_prev = tk.Button(master=frm_buttons, text='Ảnh kế', command=partial(show_middle_frame, frames, i + 1))
     btn_prev.pack(pady=30, side='right')
 
 def create_frames(frames):
