@@ -44,7 +44,13 @@
     - padding: kiểu `byte`, gồm các null byte (`\x00`) sao cho toàn bộ thông điệp đủ  `1024` byte
 
 ## Cách tổ chức cơ sở dữ liệu
-<L's part>
+Dữ liệu được lưu trong tập tin `db.json` thành các bộ với các trường thông tin sau:
+- `id`: gồm ba ký tự kiểu `char`, viết tắt tên địa điểm (tỉnh/thành phố).
+- `name`: lưu tên đầy đủ của tỉnh/thành phố tương ứng.
+- `coordinate`: tọa độ vị trí trung tâm tỉnh/thành phố theo thứ tự vĩ độ Bắc và kinh độ Đông, ví dụ 10.34599, 107.08426 nghĩa là 10.34599 độ vĩ Bắc, 107.08426 độ kinh Đông.
+- `description`: đoạn mô tả ngắn về tỉnh-thành tương ứng bằng tiếng Việt.
+- `images`: lưu đường dẫn tương đối đến hình ảnh minh họa. 
+Thư mục images được chia thành các thư mục con, mỗi thư mục con có tên chính là `id`, trong thư mục tương ứng bao gồm một hình đại diện `avt.jpg`, và các hình ảnh minh họa khác `img*.png`, trong đó * là số thứ tự của hình ảnh tương ứng.
 
 ## Quá trình truyền từ server đến client
 1. Đoạn dữ liệu ban đầu sẽ được xử lý thành danh sách các thông điệp kích thước 1024
