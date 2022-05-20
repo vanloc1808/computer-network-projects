@@ -3,10 +3,10 @@ from PIL import ImageTk, Image
 from functools import partial
 
 class Page(tk.Frame):
-    def __init__(self, id, name, avt, *args, **kwargs):
+    def __init__(self, id, name, avt, size, *args, **kwargs):
         tk.Frame.__init__(self, *args, **kwargs)
         load_avt = Image.open(avt)
-        load_avt = load_avt.resize((256, 256), Image.ANTIALIAS)
+        load_avt = load_avt.resize(size, Image.ANTIALIAS)
         photo_avt = ImageTk.PhotoImage(load_avt)
 
         lbl_avt = tk.Label(master=self, image=photo_avt)

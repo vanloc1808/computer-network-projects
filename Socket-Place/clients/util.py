@@ -71,9 +71,10 @@ def download_images_one_place_clicked(id, name, images_num):
     print(images_path)
 
     frames = []
+    size = (400, 300)
     for i in range(0, images_num - 1):
         img = images_path[i]
-        page = Page(id, name, img , w)
+        page = Page(id, name, img, size, w)
         frames.append(page)
 
     create_frames(frames)
@@ -97,8 +98,8 @@ def download_all_avatars_clicked(id_list, name_list):
         id = id_list[i]
         name = name_list[i]
         avt = avatars_path[i]
-
-        page = Page(id, name, avt, w)
+        size = (256, 256)
+        page = Page(id, name, avt, size, w)
         frames.append(page)
 
     create_frames(frames)
