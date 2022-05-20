@@ -19,7 +19,7 @@
 
 - Thông điệp xác nhận phần data: |  specifier  |  id  |  padding  |
     - specifier: kiểu `str`, là chuỗi ký tự "ACK_" (4 bytes)
-    - len: kiểu `str`, là thứ tự của thông điệp nhận từ server, gồm 3 ký tự thể hiện số trong đoạn [000; 999] (3 bytes)
+    - id: kiểu `str`, là thứ tự của thông điệp nhận từ server, gồm 3 ký tự thể hiện số trong đoạn [000; 999] (3 bytes)
     - padding: kiểu `byte`, gồm các null byte (`\x00`) sao cho toàn bộ thông điệp đủ  `1024` byte
 
 - Thông điệp yêu cầu thông tin toàn bộ địa điểm: |  command  |  padding  |
