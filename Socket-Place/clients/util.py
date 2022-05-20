@@ -63,7 +63,7 @@ def query_one_place_clicked(id, name):
 def download_images_one_place_clicked(id, name, images_num):
     w = tk.Toplevel()
     w.title('Hình ảnh từ ' + name)
-    w.geometry('500x400')
+    w.geometry('600x500')
 
     images_path = []
     for i in range(0, images_num - 1):
@@ -86,7 +86,7 @@ def download_images_one_place_clicked(id, name, images_num):
 def download_all_avatars_clicked(id_list, name_list):
     w = tk.Toplevel()
     w.title('Hình đại diện các địa điểm')
-    w.geometry('500x400')
+    w.geometry('600x500')
 
     avatars_path = []
     for id in id_list:

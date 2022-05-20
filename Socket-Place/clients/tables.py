@@ -19,14 +19,14 @@ class Table(tk.LabelFrame):
             id = data[dictionary_headings[0]]
             name = data[dictionary_headings[1]]
             images_num = data[dictionary_headings[2]]
-            lbl_id = tk.Label(self, text=str(id), anchor='w')
-            lbl_name = tk.Label(self, text=name, anchor='w')
+            lbl_id = tk.Label(self, text=str(id), anchor='center')
+            lbl_name = tk.Label(self, text=name, anchor='center')
             btn_detail = tk.Button(self, text='Xem chi tiết', command=partial(query_one_place_clicked, id, name))
             btn_images = tk.Button(self, text='Tải về hình ảnh', command=partial(download_images_one_place_clicked, id, name, images_num))
 
-            lbl_id.grid(row=row, column=0, sticky="w")
-            lbl_name.grid(row=row, column=1, sticky="w")
-            btn_detail.grid(row=row, column=2, sticky="w")
-            btn_images.grid(row=row, column=3, sticky="w")
+            lbl_id.grid(row=row, column=0, sticky="ew")
+            lbl_name.grid(row=row, column=1, sticky="ew")
+            btn_detail.grid(row=row, column=2, sticky="ew")
+            btn_images.grid(row=row, column=3, sticky="e")
 
             row += 1
