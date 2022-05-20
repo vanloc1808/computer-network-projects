@@ -1,6 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 from functools import partial
+from PIL import Image, ImageTk
+import ctypes
 from util import *
 from tables import *
 from data import *
@@ -10,6 +12,11 @@ def main():
     dictionary_headings = ['ID', 'Name', 'NOI']
 
     window = tk.Tk()
+    window.title('Favorite Place')
+    window.geometry('800x600')
+    ico = Image.open('icon.jpg')
+    photo = ImageTk.PhotoImage(ico)
+    window.wm_iconphoto(False, photo)
 
     data = get_all_info()
 
