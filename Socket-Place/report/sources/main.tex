@@ -77,6 +77,14 @@
   breakatwhitespace=true,
   tabsize=3
 }
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=red,
+    pdftitle={An Example},
+	pdfpagemode=FullScreen,
+    }
 \renewcommand{\listfigurename}{Danh sách hình}
 \renewcommand{\listtablename}{Danh sách bảng}
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
@@ -103,7 +111,14 @@ innerleftmargin=5pt,innerrightmargin=5pt]{mybox}
 \newpage
 \input{header}
 \newpage
-\input{overview-description}
 \input{protocol}
-\printbibliography[title = Tài liệu tham khảo]
+\newpage
+\input{environment}
+\newpage
+\input{instructions}
+\newpage
+\input{jobs}
+\nocite{*}
+\newpage
+\printbibliography[title = Tài liệu tham khảo chủ yếu]
 \end{document}
