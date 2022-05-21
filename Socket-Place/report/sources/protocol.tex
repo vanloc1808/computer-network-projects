@@ -166,6 +166,28 @@ Các thông tin được đưa vào cơ sở dữ liệu dưới dạng mã Unic
     \EndFunction
   \end{algorithmic}
 \end{breakablealgorithm}
+\item Phía client
+\begin{breakablealgorithm}
+  \caption{Phía client}
+  \begin{algorithmic}[1]
+    \Function{SWServer}{} 
 
+	\State $l\_tds \gets $ độ dài danh sách
+    \State $size \gets $ kích thước cửa sổ = $5$
+    \State $i \gets 0 $
+    \State $result \gets $ thông điệp được truyền
+    \While{$ i < l\_tds$}
+    	\State $snhan \gets $ số lượng nhận = $\min\left( {size,{\text{ }}l\_tds{\text{ }} - {\text{ }}i} \right)$
+    	\State $buffer \gets$ bộ nhớ tạm để lưu cửa sổ với kích thước $snhan$
+    	\While{$buffer$ chưa đầy hết:}
+    		\State với mỗi phần tử, thực hiện nhận và kiểm lỗi, sau đó đưa vào $buffer$
+    	\EndWhile
+    	\State sắp xếp lại gói tin trong $buffer$, tách phần data và nối vào $result$
+
+    	\State $i \gets i + size$ (dịch tới cửa sổ tiếp theo)
+    \EndWhile
+    \EndFunction
+  \end{algorithmic}
+\end{breakablealgorithm}
 \end{itemize}
 \end{enumerate}
