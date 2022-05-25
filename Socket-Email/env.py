@@ -1,4 +1,4 @@
 
 # To be exported! -- Should be redacted
-email = b'notabotbytheway@gmail.com'
-password = b'12345@Aa'
+email = b'notabotbytheway@outlook.com'
+password = b'12345@Bb'
