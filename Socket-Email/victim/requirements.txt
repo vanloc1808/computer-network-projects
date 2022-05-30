@@ -1,0 +1,4 @@
+keyboard
+pynput
+psutil
+pillow
