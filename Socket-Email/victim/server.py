@@ -87,7 +87,7 @@ def Connect():
             registry()
         elif "QUIT" in msg:
             client.close()
-            s.close()
+            # s.close()
             return
 ###############################################################################    
 
