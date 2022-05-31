@@ -13,7 +13,7 @@ list_of_ip = []
 s = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
 s.setsockopt(sk.SOL_SOCKET, sk.SO_REUSEADDR, 1)
 s.bind((HOST, PORT))
-s.listen(4) # Upto 4 clients (4 threads)
+s.listen(4) # Up to 4 clients (4 threads)
 
 
 def handle_thread(conn, addr):

