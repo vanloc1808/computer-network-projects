@@ -1,6 +1,7 @@
 __pycache__/
 .vscode/
 *.log
+*.pyc
 Wireshark/Latex/sources/main.aux
 Wireshark/Latex/sources/main.lof
 Wireshark/Latex/sources/main.log
