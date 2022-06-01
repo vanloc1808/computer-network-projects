@@ -56,23 +56,25 @@ def send_kill(client):
         tk.messagebox.showerror(message = "Lỗi!")
     return
 
-def _list(client, tab, s):
-    client.sendall(bytes("1", "utf8"))
-    client.sendall(bytes(s, "utf8"))
-    ls1 = receive(client)
+def _list(conn, s):
+    conn.sendall(bytes("1", "utf8"))
+    conn.sendall(bytes(s, "utf8"))
+    ls1 = receive(conn)
     ls1 = pickle.loads(ls1)
-    ls2 = receive(client)
+    ls2 = receive(conn)
     ls2 = pickle.loads(ls2) 
-    ls3 = receive(client)
+    ls3 = receive(conn)
     ls3 = pickle.loads(ls3)
     print(ls1)
     print(ls2)
     print(ls3)
+    """
     for i in tab.get_children():
         tab.delete(i)
     for i in range(len(ls1)):
         tab.insert(parent = '', index = 'end', text = '', values = (ls1[i], ls2[i], ls3[i]))
     return
+    """
 
 def clear(tab):
     for i in tab.get_children():

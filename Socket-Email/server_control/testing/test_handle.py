@@ -13,7 +13,7 @@ def list_ip():
     pass
 
 def list_process(ip_address):
-    message_to_ip = (ip_address, "List process".encode())
+    message_to_ip = (ip_address, lambda conn, string: app_process_client.list_process(conn, string))
     q.put(message_to_ip)
     
     
