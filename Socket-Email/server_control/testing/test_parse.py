@@ -7,6 +7,12 @@ ip_per_address = []
 
 q = Queue(maxsize=0)
 
+def get_corresponding_ip(sender_address):
+    for i in ip_per_address:
+        if i['email_address'] == sender_address:
+            return i['IP']
+    return None
+
 """
     AUTH <Key> <IP>: start connection to IP, return ACK
     LIST <Key>: list all connected IPs, return list str
