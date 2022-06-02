@@ -20,17 +20,17 @@ def abs_path(file_name):
 
     return os.path.join(base_path, file_name)
 
-def listDirs(client, path):
-    client.sendall(path.encode())
+def listDirs(conn, path):
+    conn.sendall(path.encode())
 
-    data_size = int(client.recv(BUFFER_SIZE))
+    data_size = int(conn.recv(BUFFER_SIZE))
     if (data_size == -1):
         messagebox.showerror(message = "Click SHOW button again to watch the new directory tree!")
         return []
-    client.sendall("received filesize".encode())
+    conn.sendall("received filesize".encode())
     data = b""
     while len(data) < data_size:
-        packet = client.recv(999999)
+        packet = conn.recv(999999)
         data += packet
     if (data == "error"):
         messagebox.showerror(message = "Cannot open this directory!")

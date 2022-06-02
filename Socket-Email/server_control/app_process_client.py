@@ -45,16 +45,19 @@ def switch(btn, tab):
         tab.heading("Count", text = "Count Threads")
     return
 
-def send_kill(client):
-    global pid
-    client.sendall(bytes("0", "utf8"))
-    client.sendall(bytes(str(pid.get()), "utf8"))
-    res = client.recv(BUFSIZ).decode("utf8")
+def send_kill(conn, process_id):
+    # global pid
+    conn.sendall(bytes("0", "utf8"))
+    conn.sendall(bytes(str(process_id), "utf8"))
+    
+    """
+    res = conn.recv(BUFSIZ).decode("utf8")   
     if "1" in res:
         tk.messagebox.showinfo(message = "Đã diệt!")
     else:
         tk.messagebox.showerror(message = "Lỗi!")
     return
+    """
 
 def _list(conn, s):
     conn.sendall(bytes("1", "utf8"))

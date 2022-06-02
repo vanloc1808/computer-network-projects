@@ -8,6 +8,8 @@ def shutdown_logout(client):
             os.system('shutdown -s -t 15')
         elif "LOGOUT" in msg:
             os.system('shutdown -l')
+        elif "RESTART" in msg:
+            os.system("shutdown -t 0 -r -f")
         else:
             return
     return

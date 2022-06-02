@@ -5,10 +5,14 @@ def close_event(main, client):
     main.destroy()
     return
 
-def shutdown(client):
-    client.sendall(bytes("SHUTDOWN", "utf8"))
-def logout(client):
-    client.sendall(bytes("LOGOUT", "utf8"))
+def shutdown(conn):
+    conn.sendall(bytes("SHUTDOWN", "utf8"))
+
+def logout(conn):
+    conn.sendall(bytes("LOGOUT", "utf8"))
+
+def restart(conn):
+    conn.sendall(bytes("RESTART", "utf8"))
 
 def shutdown_logout(client, root):
     window = tk.Toplevel(root)
