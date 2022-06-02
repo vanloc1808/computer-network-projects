@@ -14,7 +14,7 @@ def list_apps():
     ls2 = list()
     ls3 = list()
 
-    cmd = 'powershell "gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}'
+    cmd = 'powershell "gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}"'
     proc = os.popen(cmd).read().split('\n')
     tmp = list()
     for line in proc:

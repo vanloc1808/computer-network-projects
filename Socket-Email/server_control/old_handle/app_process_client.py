@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import  ttk
 import pickle, struct
 from tkinter import Canvas, Button, PhotoImage
-
+import socket
 BUFSIZ = 1024 * 4
 import os
 import sys
@@ -59,9 +59,10 @@ def send_kill(conn, process_id):
     return
     """
 
-def _list(conn, s):
-    conn.sendall(bytes("1", "utf8"))
-    conn.sendall(bytes(s, "utf8"))
+def _list(conn:socket.socket, s):
+    # Break system without padding ?
+    conn.sendall(b"1".ljust(BUFSIZ))
+    conn.sendall(s.encode().ljust(BUFSIZ))
     ls1 = receive(conn)
     ls1 = pickle.loads(ls1)
     ls2 = receive(conn)

@@ -1,24 +1,34 @@
-from server_control import app_process_client
-from server_control import directory_tree_client
-from server_control import keylogger_client
-from server_control import live_screen_client
-from server_control import mac_address_client
-from server_control import registry_client
-from server_control import shutdown_logout_client
+from collections import defaultdict
+from old_handle import app_process_client
+from old_handle import directory_tree_client
+from old_handle import keylogger_client
+from old_handle import live_screen_client
+from old_handle import mac_address_client
+from old_handle import registry_client
+from old_handle import shutdown_logout_client
 from queue import Queue
 
-def list_ip():
-    pass
 
-ip_list = list_ip()
+conn_ip_list = [] # list_ip() # Tuple (conn, addr)
+
+auth_dict = defaultdict(lambda: False) # MAIL -> bool
+email_ip_dict = {} # MAIL -> IP
+
+def list_ip():
+    return [elem[1] for elem in conn_ip_list]
+
 action_dictionary = {}
-for i in ip_list:
-    action_dictionary[i] = Queue(maxsize=0)
+def __init__():
+    for i in conn_ip_list:
+        action_dictionary[i[1]] = Queue(maxsize=0)
 
 def list_process(ip_address):
-    action_message = lambda conn: app_process_client._list(conn, "PROCESS")
+    action_message = lambda conn: (
+        conn.sendall(bytes("APP_PRO", "utf8")), # NHO DIEN THEM CAI NAY (TRONG FILE CLIENT.PY)
+        app_process_client._list(conn, "PROCESS") 
+    )
     action_dictionary[ip_address].put(action_message)
-       
+
 
 def list_application(ip_address):
     action_message = lambda conn: app_process_client._list(conn, "APPLICATION")

@@ -89,6 +89,10 @@ def Connect():
             client.close()
             # s.close()
             return
+        else:
+            print("ERROR ?")
+            client.close()
+            return
 ###############################################################################    
 
 # tk.Button(main, text = "OPEN", width = 10, height = 2, fg = 'white', bg = 'IndianRed3', borderwidth=0,
