@@ -1,5 +1,6 @@
 import  pickle, psutil, struct
 import os
+import subprocess
 
 BUFSIZ = 1024 * 4
 
@@ -14,19 +15,22 @@ def list_apps():
     ls2 = list()
     ls3 = list()
 
-    cmd = 'powershell "gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}"'
-    proc = os.popen(cmd).read().split('\n')
+    cmd = ['C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', 
+        'gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}']
+    #proc = os.popen(cmd).read().split('\n')
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read().split(b'\n')
     tmp = list()
     for line in proc:
         if not line.isspace():
             tmp.append(line)
+    print(len(tmp))
     tmp = tmp[3:]
     for line in tmp:
         try:
-            arr = line.split(" ")
+            arr = line.split(b" ")
             if len(arr) < 3:
                 continue
-            if arr[0] == '' or arr[0] == ' ':
+            if arr[0] == b'' or arr[0] == b' ':
                 continue
 
             name = arr[0]
@@ -106,7 +110,7 @@ def app_process(client):
         elif action == 1:
             try:
                 status = client.recv(BUFSIZ).decode("utf8")
-                if "PROCESS" in status:
+                if "PROCESS" not in status:
                     ls1, ls2, ls3 = list_apps()
                 else:
                     ls1, ls2, ls3 = list_processes()

