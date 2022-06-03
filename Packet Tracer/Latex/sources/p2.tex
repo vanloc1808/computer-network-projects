@@ -1,0 +1,63 @@
+\section{Bài 2:}
+
+Nhóm đóng vai trò là kỹ sư mạng của một công ty, nhóm được giao nhiệm vụ xây dựng hệ thống mạng cho văn phòng mới của công ty.
+
+\bf Mô tả yêu cầu hệ thống:
+\begin{enumerate}
+\it\item Công ty sử dụng dãy địa chỉ 172.XX.0.0/16 để chia đường mạng cho toàn hệ thống để mỗi phòng/tầng/nhu cầu có đường mạng riêng.
+
+\it\item Tòa nhà của công ty có 4 tầng:
+\begin{enumerate}
+\sc \item Tầng 1: \rm phòng hành chính (10 users), và một mạng wi-fi cho nhân viên và khách vãng lai (tối đa 20 users)
+
+\sc \item Tầng 2: \rm phòng kỹ thuật (5 users), phòng lãnh đạo (tối đa 5 users)
+
+\sc \item Tầng 3: \rm phòng họp dùng mạng wifi (tối đa 20 users)
+
+\sc \item Tầng 4: \rm phòng server dùng địa chỉ IP tĩnh (tối đa 10 hosts)
+\begin{enumerate}
+\tt \item Dịch vụ DHCP: \rm triển khai trên 1 server duy nhất/ 1 router để cung cấp dải IP động cho các phòng ban ở tầng 1-2-3
+
+\rm Gợi ý: cấu hình DHCP relay-agent bằng câu lệnh helper-address trên router
+
+\tt \item Dịch vụ DNS phân giải tên miền: \rm mmt-XX.com
+
+\tt \item Dịch vụ WEB \rm để người dùng có thể truy cập trang web công ty từ mạng nội bộ của công ty với tên miền: www.mmt-XX.com. Nội dung trang WEB: hiển thị thông tin MSSV - Họ tên thành viên của nhóm
+\end{enumerate}
+
+\sc \item Thiết bị mạng ở các phòng ban có thể kết nối lẫn nhau.
+\end{enumerate}
+\end{enumerate}
+
+Yêu cầu:
+\begin{enumerate}
+\bf \item Phân tích hiện trạng và nhu cầu của công ty. Hãy vẽ sơ đồ mạng logic cho văn phòng công ty (có ghi chú tên thiết bị, tên interface/ port, IP, subnet).
+
+\rm 
+
+\bf \item Lập bảng mô tả chi tiết thiết bị gồm: khu vực đặt thiết bị, loại thiết bị, tên thiết bị, version/model, chức năng, tên interface/port, IP
+
+\rm
+
+\bf \item Sử dụng công cụ packet tracer để triển khai mô hình mạng đã thiết kế (chụp hình các bước triển khai cấu hình)
+
+\rm
+
+\bf \item Kiểm tra kết quả hoạt động của mô hình mạng vừa triển khai (dùng các câu lệnh console như ping, nslookup, ipconfig, và trình duyệt web)
+
+\rm Lưu ý:
+\begin{enumerate}
+\item Chỉ sử dụng phương thức cấu hình định tuyến tĩnh
+
+\item Chỉ sử dụng số lượng PC vừa đủ để kiểm tra hoạt động của mô hình, không cần thiết vẽ đầy đủ số host cho mỗi đường mạng trong mô hình
+
+\item XX là 2 chữ số cuối của MSSV. Nếu làm nhóm 3 người, thì chọn MSSV của một trong 3 bạn.
+\end{enumerate}
+
+\end{enumerate}
+
+
+
+
+
+
