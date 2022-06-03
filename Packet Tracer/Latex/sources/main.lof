@@ -7,3 +7,13 @@
 \contentsline {figure}{\numberline {3}{\ignorespaces Kiểm tra thông tin IP của router}}{4}{figure.3}%
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {4}{\ignorespaces Mô hình mạng}}{5}{figure.4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {5}{\ignorespaces Kiểm tra cấu hình gateway}}{5}{figure.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6}{\ignorespaces Kiểm tra kết nối từ PC0 (\texttt {192.168.1.10}) đến PC1 (\texttt {192.168.2.10})}}{6}{figure.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {7}{\ignorespaces Cấu hình bảng định tuyến cho router0}}{6}{figure.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {8}{\ignorespaces Cấu hình bảng định tuyến router}}{7}{figure.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {9}{\ignorespaces Lệnh \texttt {ping} từ PC0 (192.168.1.10) đến PC1 (192.168.2.10) sau khi cấu hình bảng định tuyến và \texttt {tracert}}}{7}{figure.9}%
