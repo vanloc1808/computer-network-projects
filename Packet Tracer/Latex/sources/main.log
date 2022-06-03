@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.11)  3 JUN 2022 15:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.11)  3 JUN 2022 15:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1619,36 +1619,67 @@ Package hyperref Warning: Composite letter `\textdotbelow+\ocircumflex'
 Package hyperref Warning: Glyph not defined in PD1 encoding,
 (hyperref)                removing `\ocircumflex' on input line 19.
 
-)
-Underfull \hbox (badness 10000) in paragraph at lines 20--83
+
+Underfull \hbox (badness 10000) in paragraph at lines 20--22
 
  []
 
-[2] (./p1.tex
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\h' on input line 23.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\dj' on input line 23.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\h' on input line 23.
+
+
+Package hyperref Warning: Glyph not defined in PD1 encoding,
+(hyperref)                removing `\uhorn' on input line 23.
+
+
+Package hyperref Warning: Composite letter `\textdotbelow+u'
+(hyperref)                not defined in PD1 encoding,
+(hyperref)                removing `\textdotbelow' on input line 23.
+
+) [2] (./p1.tex
 Overfull \hbox (43.08426pt too wide) in paragraph at lines 8--25
  [] 
  []
 
-<../figures/p1/p1-prob.png, id=58, 1156.32pt x 650.43pt>
+<../figures/p1/p1-prob.png, id=60, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-prob.png Graphic file (type png)
 <use ../figures/p1/p1-prob.png>
 Package pdftex.def Info: ../figures/p1/p1-prob.png  used on input line 28.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
-<../figures/p1/p1-ipconfig-pc.png, id=59, 1156.32pt x 650.43pt>
+<../figures/p1/p1-ipconfig-pc.png, id=61, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-ipconfig-pc.png Graphic file (type png)
 <use ../figures/p1/p1-ipconfig-pc.png>
 Package pdftex.def Info: ../figures/p1/p1-ipconfig-pc.png  used on input line 3
 6.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
 [3 <../figures/p1/p1-prob.png>]
-<../figures/p1/p1-ipconfig-router.png, id=65, 1156.32pt x 650.43pt>
+<../figures/p1/p1-ipconfig-router.png, id=67, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-ipconfig-router.png Graphic file (type png)
 <use ../figures/p1/p1-ipconfig-router.png>
 Package pdftex.def Info: ../figures/p1/p1-ipconfig-router.png  used on input li
 ne 43.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
- [4 <../figures/p1/p1-ipconfig-pc.png> <../figures/p1/p1-ipconfig-router.png>])
- [5] (./p2.tex
+<../figures/p1/p1-2.png, id=68, 555.87675pt x 81.906pt>
+File: ../figures/p1/p1-2.png Graphic file (type png)
+<use ../figures/p1/p1-2.png>
+Package pdftex.def Info: ../figures/p1/p1-2.png  used on input line 53.
+(pdftex.def)             Requested size: 500.28445pt x 73.7147pt.
+
+Overfull \hbox (16.58759pt too wide) in paragraph at lines 53--54
+ [] 
+ []
+
+[4 <../figures/p1/p1-ipconfig-pc.png> <../figures/p1/p1-ipconfig-router.png>])
+[5 <../figures/p1/p1-2.png>] (./p2.tex
 LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 1
 9.
 
@@ -1682,9 +1713,15 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 92.
  (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 92.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 92.
-Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: A80E157FB6788469AC401D3206E87174;205.
 
+
+Package rerunfilecheck Warning: File `main.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `main.out':
+(rerunfilecheck)             Before: A80E157FB6788469AC401D3206E87174;205
+(rerunfilecheck)             After:  D27A9751D0B2525C6D6C64D5C50A05F7;325.
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
@@ -1702,10 +1739,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 41077 strings out of 480608
- 903869 string characters out of 5907535
+ 41094 strings out of 480608
+ 904113 string characters out of 5907535
  1678145 words of memory out of 5000000
- 56044 multiletter control sequences out of 15000+600000
+ 56055 multiletter control sequences out of 15000+600000
  555777 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,11n,103p,827b,743s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1718,10 +1755,10 @@ c10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb><c:/texlive
 /2020/texmf-dist/fonts/type1/vntex/vnr/vnr12.pfb><c:/texlive/2020/texmf-dist/fo
 nts/type1/vntex/vnr/vnti12.pfb><c:/texlive/2020/texmf-dist/fonts/type1/vntex/vn
 r/vntt12.pfb>
-Output written on main.pdf (8 pages, 2205380 bytes).
+Output written on main.pdf (8 pages, 2266559 bytes).
 PDF statistics:
- 155 PDF objects out of 1000 (max. 8388607)
- 128 compressed objects within 2 object streams
- 41 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 161 PDF objects out of 1000 (max. 8388607)
+ 132 compressed objects within 2 object streams
+ 43 named destinations out of 1000 (max. 500000)
+ 70 words of extra memory for PDF output out of 10000 (max. 10000000)
 
