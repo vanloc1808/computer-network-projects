@@ -9,3 +9,27 @@
 \contentsline {figure}{\numberline {4}{\ignorespaces Mô hình mạng}}{5}{figure.4}%
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {5}{\ignorespaces Kiểm tra cấu hình gateway}}{5}{figure.5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {6}{\ignorespaces Kiểm tra kết nối từ PC0 (\texttt {192.168.1.10}) đến PC1 (\texttt {192.168.2.10})}}{6}{figure.6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {7}{\ignorespaces Trước khi thêm PC2}}{6}{figure.7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {8}{\ignorespaces Thêm máy tính mới PC2}}{7}{figure.8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {9}{\ignorespaces Mở cấu hình máy}}{7}{figure.9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {10}{\ignorespaces Nối PC2 với Switch1 (Switch1 đang nối 2 router với các cổng \texttt {192.168.8.1} (của Router0), \texttt {192.168.8.2} (của Router1))}}{8}{figure.10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {11}{\ignorespaces Cấu hình máy PC2, chọn default gateway là \texttt {192.168.8.1}}}{8}{figure.11}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {12}{\ignorespaces Kiểm tra kết nối từ PC0 (\texttt {192.168.1.10}) đến PC2 (\texttt {192.168.8.3})}}{9}{figure.12}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {13}{\ignorespaces Cấu hình bảng định tuyến cho router0}}{10}{figure.13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {14}{\ignorespaces Cấu hình bảng định tuyến router}}{10}{figure.14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {15}{\ignorespaces Lệnh \texttt {ping} từ PC0 (\texttt {192.168.1.10}) đến PC1 (\texttt {192.168.2.10}) và PC2 (\texttt {192.168.8.3}) sau khi cấu hình bảng định tuyến tĩnh}}{11}{figure.15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {16}{\ignorespaces Lệnh \texttt {ping} từ PC2 (\texttt {192.168.8.3}) đến PC0 (\texttt {192.168.1.10}) và PC1 (\texttt {192.168.2.10}) sau khi cấu hình bảng định tuyến tĩnh}}{12}{figure.16}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {17}{\ignorespaces Lệnh \texttt {ping} từ PC1 (\texttt {192.168.2.10}) đến PC0 (\texttt {192.168.1.10}) và PC2 (\texttt {192.168.8.3}) sau khi cấu hình bảng định tuyến tĩnh}}{13}{figure.17}%
