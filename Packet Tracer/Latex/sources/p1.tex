@@ -50,18 +50,60 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 \rm 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.9]{../figures/p1/p1-2}
+\includegraphics[scale=0.4]{../figures/p1/p1-2}
 \end{center}
 \caption{Mô hình mạng}
 \end{figure}
 
 \bf \item Hãy cho biết các router có được cấu hình gateway hay không? Nếu có hãy viết thông tin gateway của từng router.
 
-\rm
+\rm Cả 2 router đều chưa được cấu hình gateway.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{../figures/p1/p1-3}
+\end{center}
+\caption{Kiểm tra cấu hình gateway}
+\end{figure}
 
 \bf \item Kiểm tra kết nối từ PC0 đến PC1, cho biết kết quả như thế nào? (ở lần ping đầu tiên các gói tin ICMP có được gửi thành công hay không). Cho biết đường đi của gói tin ICMP (đi qua các thiết bị, IP nào?)
 
-\rm
+\rm 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{../figures/p1/p1-4}
+\end{center}
+\caption{Kiểm tra kết nối từ PC0 (\texttt{192.168.1.10}) đến PC1 (\texttt{192.168.2.10})}
+\end{figure}
+
+Lúc này cả 2 router chưa cấu hình thông tin định tuyến, do đó máy PC0 trong mạng \texttt{192.168.1.0/24} chưa thể kết nối với máy PC1 trong mạng \texttt{192.168.2.0/24}. Gói tin chỉ đến được router0 cổng 0 (192.168.1.1).
+
+Cấu hình static route cho các router:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{../figures/p1/p1-4a}
+\end{center}
+\caption{Cấu hình bảng định tuyến cho router0}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{../figures/p1/p1-4b}
+\end{center}
+\caption{Cấu hình bảng định tuyến router}
+\end{figure}
+
+Sau khi cấu hình bảng định tuyến cho các router, kết nối được thiết lập, lệnh \texttt{ping} thực hiện được.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.4]{../figures/p1/p1-4c}
+\end{center}
+\caption{Lệnh \texttt{ping} từ PC0 (192.168.1.10) đến PC1 (192.168.2.10) sau khi cấu hình bảng định tuyến và \texttt{tracert}}
+\end{figure}
+
 
 \bf \item Thêm PC2 vào đường mạng 192.168.8.0/24. Cấu hình địa chỉ IP, subnetmask, gateway tương ứng cho PC2.
 
@@ -69,7 +111,7 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 
 \bf \item Kiểm tra kết nối từ PC0 đến PC2, cho biết kết quả như thế nào? (ở lần ping đầu tiên các gói tin ICMP có được gửi thành công hay không). Cho biết đường đi của gói tin ICMP (đi qua các thiết bị, IP nào?)
 
-\rm
+\rm 
 
 \bf \item Thay thế đường default route có trong Router0, Router1 bằng cấu hình định tuyến tĩnh sao cho tất cả các subnet có trong mô hình có thể kết nối lẫn nhau.
 
