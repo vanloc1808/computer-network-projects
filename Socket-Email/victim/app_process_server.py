@@ -91,6 +91,7 @@ def app_process(client):
     global msg
     while True:
         msg = client.recv(BUFSIZ).decode("utf8")
+        print("Messages:", msg)
         if "QUIT" in msg and len(msg) < 20:
             return
         res = 0

