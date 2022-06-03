@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.11)  3 JUN 2022 17:37
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/W32TeX) (preloaded format=pdflatex 2020.11.11)  3 JUN 2022 19:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1576,7 +1576,13 @@ LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 1
 3.
 (c:/texlive/2020/texmf-dist/tex/latex/vntex/t5cmtt.fd
 File: t5cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-))
+)
+Overfull \hbox (0.1375pt too wide) in paragraph at lines 21--21
+ [][] [][]\T5/cmr/m/n/13 Nèi PC2 vîi Switch1 (Switch1 ^^_ang nèi 2 router vîi c
+¡c cêng \T5/cmtt/m/n/13 192.168.8.1 
+ []
+
+)
 \tf@lof=\write8
 \openout8 = `main.lof'.
 
@@ -1654,58 +1660,106 @@ Overfull \hbox (43.08426pt too wide) in paragraph at lines 8--25
  [] 
  []
 
-<../figures/p1/p1-prob.png, id=78, 1156.32pt x 650.43pt>
+<../figures/p1/p1-prob.png, id=97, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-prob.png Graphic file (type png)
 <use ../figures/p1/p1-prob.png>
 Package pdftex.def Info: ../figures/p1/p1-prob.png  used on input line 28.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
-<../figures/p1/p1-ipconfig-pc.png, id=79, 1156.32pt x 650.43pt>
+<../figures/p1/p1-ipconfig-pc.png, id=98, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-ipconfig-pc.png Graphic file (type png)
 <use ../figures/p1/p1-ipconfig-pc.png>
 Package pdftex.def Info: ../figures/p1/p1-ipconfig-pc.png  used on input line 3
 6.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
 [3 <../figures/p1/p1-prob.png>]
-<../figures/p1/p1-ipconfig-router.png, id=85, 1156.32pt x 650.43pt>
+<../figures/p1/p1-ipconfig-router.png, id=104, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-ipconfig-router.png Graphic file (type png)
 <use ../figures/p1/p1-ipconfig-router.png>
 Package pdftex.def Info: ../figures/p1/p1-ipconfig-router.png  used on input li
 ne 43.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
-<../figures/p1/p1-2.png, id=86, 1156.32pt x 289.08pt>
+<../figures/p1/p1-2.png, id=105, 1156.32pt x 289.08pt>
 File: ../figures/p1/p1-2.png Graphic file (type png)
 <use ../figures/p1/p1-2.png>
 Package pdftex.def Info: ../figures/p1/p1-2.png  used on input line 53.
 (pdftex.def)             Requested size: 462.5198pt x 115.62994pt.
  [4 <../figures/p1/p1-ipconfig-pc.png> <../figures/p1/p1-ipconfig-router.png>]
-<../figures/p1/p1-3.png, id=93, 1156.32pt x 650.43pt>
+<../figures/p1/p1-3.png, id=112, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-3.png Graphic file (type png)
 <use ../figures/p1/p1-3.png>
 Package pdftex.def Info: ../figures/p1/p1-3.png  used on input line 64.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
-<../figures/p1/p1-4.png, id=94, 1156.32pt x 650.43pt>
+<../figures/p1/p1-4.png, id=113, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-4.png Graphic file (type png)
 <use ../figures/p1/p1-4.png>
 Package pdftex.def Info: ../figures/p1/p1-4.png  used on input line 75.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
  [5 <../figures/p1/p1-2.png> <../figures/p1/p1-3.png>]
-<../figures/p1/p1-4a.png, id=102, 775.09575pt x 640.19176pt>
+LaTeX Font Info:    Font shape `T5/cmtt/bx/n' in size <13> not available
+(Font)              Font shape `T5/cmtt/m/n' tried instead on input line 82.
+<../figures/p1/p1-5a.png, id=121, 871.45575pt x 540.21825pt>
+File: ../figures/p1/p1-5a.png Graphic file (type png)
+<use ../figures/p1/p1-5a.png>
+Package pdftex.def Info: ../figures/p1/p1-5a.png  used on input line 88.
+(pdftex.def)             Requested size: 348.57613pt x 216.08347pt.
+<../figures/p1/p1-5b.png, id=122, 811.23074pt x 520.94624pt>
+File: ../figures/p1/p1-5b.png Graphic file (type png)
+<use ../figures/p1/p1-5b.png>
+Package pdftex.def Info: ../figures/p1/p1-5b.png  used on input line 95.
+(pdftex.def)             Requested size: 324.48654pt x 208.3748pt.
+ [6 <../figures/p1/p1-4.png> <../figures/p1/p1-5a.png>]
+<../figures/p1/p1-5c.png, id=130, 882.8985pt x 582.37575pt>
+File: ../figures/p1/p1-5c.png Graphic file (type png)
+<use ../figures/p1/p1-5c.png>
+Package pdftex.def Info: ../figures/p1/p1-5c.png  used on input line 102.
+(pdftex.def)             Requested size: 353.15314pt x 232.94617pt.
+<../figures/p1/p1-5d.png, id=131, 720.89325pt x 499.8675pt>
+File: ../figures/p1/p1-5d.png Graphic file (type png)
+<use ../figures/p1/p1-5d.png>
+Package pdftex.def Info: ../figures/p1/p1-5d.png  used on input line 109.
+(pdftex.def)             Requested size: 288.35219pt x 199.94345pt.
+ [7 <../figures/p1/p1-5b.png> <../figures/p1/p1-5c.png>]
+<../figures/p1/p1-5e.png, id=138, 890.1255pt x 579.96675pt>
+File: ../figures/p1/p1-5e.png Graphic file (type png)
+<use ../figures/p1/p1-5e.png>
+Package pdftex.def Info: ../figures/p1/p1-5e.png  used on input line 116.
+(pdftex.def)             Requested size: 356.0439pt x 231.98259pt.
+<../figures/p1/p1-6.png, id=139, 929.27174pt x 611.886pt>
+File: ../figures/p1/p1-6.png Graphic file (type png)
+<use ../figures/p1/p1-6.png>
+Package pdftex.def Info: ../figures/p1/p1-6.png  used on input line 127.
+(pdftex.def)             Requested size: 371.70212pt x 244.75006pt.
+ [8 <../figures/p1/p1-5d.png> <../figures/p1/p1-5e.png>]
+<../figures/p1/p1-4a.png, id=147, 775.09575pt x 640.19176pt>
 File: ../figures/p1/p1-4a.png Graphic file (type png)
 <use ../figures/p1/p1-4a.png>
-Package pdftex.def Info: ../figures/p1/p1-4a.png  used on input line 86.
+Package pdftex.def Info: ../figures/p1/p1-4a.png  used on input line 141.
 (pdftex.def)             Requested size: 310.0328pt x 256.07216pt.
-<../figures/p1/p1-4b.png, id=103, 1156.32pt x 650.43pt>
+ [9 <../figures/p1/p1-6.png>]
+<../figures/p1/p1-4b.png, id=154, 1156.32pt x 650.43pt>
 File: ../figures/p1/p1-4b.png Graphic file (type png)
 <use ../figures/p1/p1-4b.png>
-Package pdftex.def Info: ../figures/p1/p1-4b.png  used on input line 93.
+Package pdftex.def Info: ../figures/p1/p1-4b.png  used on input line 148.
 (pdftex.def)             Requested size: 462.5198pt x 260.16739pt.
- [6 <../figures/p1/p1-4.png> <../figures/p1/p1-4a.png>]
-<../figures/p1/p1-4c.png, id=110, 831.70724pt x 531.1845pt>
-File: ../figures/p1/p1-4c.png Graphic file (type png)
-<use ../figures/p1/p1-4c.png>
-Package pdftex.def Info: ../figures/p1/p1-4c.png  used on input line 102.
-(pdftex.def)             Requested size: 332.677pt x 212.47002pt.
- [7 <../figures/p1/p1-4b.png> <../figures/p1/p1-4c.png>]) [8] (./p2.tex) [9]
+<../figures/p1/p1-70.png, id=155, 422.7795pt x 563.10374pt>
+File: ../figures/p1/p1-70.png Graphic file (type png)
+<use ../figures/p1/p1-70.png>
+Package pdftex.def Info: ../figures/p1/p1-70.png  used on input line 159.
+(pdftex.def)             Requested size: 422.77846pt x 563.10237pt.
+ [10 <../figures/p1/p1-4a.png> <../figures/p1/p1-4b.png>]
+<../figures/p1/p1-72.png, id=164, 425.1885pt x 557.6835pt>
+File: ../figures/p1/p1-72.png Graphic file (type png)
+<use ../figures/p1/p1-72.png>
+Package pdftex.def Info: ../figures/p1/p1-72.png  used on input line 168.
+(pdftex.def)             Requested size: 425.18745pt x 557.68213pt.
+ [11 <../figures/p1/p1-70.png>]
+<../figures/p1/p1-71.png, id=170, 428.19975pt x 449.88075pt>
+File: ../figures/p1/p1-71.png Graphic file (type png)
+<use ../figures/p1/p1-71.png>
+Package pdftex.def Info: ../figures/p1/p1-71.png  used on input line 177.
+(pdftex.def)             Requested size: 428.1987pt x 449.87965pt.
+ [12 <../figures/p1/p1-72.png>]) [13 <../figures/p1/p1-71.png>] (./p2.tex) [14]
+
 
 LaTeX Warning: Citation 'gt' undefined on input line 88.
 
@@ -1727,7 +1781,7 @@ Package minitoc(hints) Warning: W0024
 (minitoc(hints))                Some hints have been written 
 (minitoc(hints))                in the main.log file.
 
-[10]
+[15]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 92.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 92.
  (./main.aux)
@@ -1753,10 +1807,10 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 41143 strings out of 480608
- 905092 string characters out of 5907535
- 1678145 words of memory out of 5000000
- 56091 multiletter control sequences out of 15000+600000
+ 41221 strings out of 480608
+ 906686 string characters out of 5907535
+ 1679145 words of memory out of 5000000
+ 56148 multiletter control sequences out of 15000+600000
  555777 words of font info for 77 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  64i,11n,103p,827b,743s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1769,10 +1823,10 @@ c10.pfb><c:/texlive/2020/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb><c:/texlive
 /2020/texmf-dist/fonts/type1/vntex/vnr/vnr12.pfb><c:/texlive/2020/texmf-dist/fo
 nts/type1/vntex/vnr/vnti12.pfb><c:/texlive/2020/texmf-dist/fonts/type1/vntex/vn
 r/vntt12.pfb>
-Output written on main.pdf (11 pages, 5474997 bytes).
+Output written on main.pdf (16 pages, 7168518 bytes).
 PDF statistics:
- 198 PDF objects out of 1000 (max. 8388607)
- 158 compressed objects within 2 object streams
- 51 named destinations out of 1000 (max. 500000)
- 103 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 256 PDF objects out of 1000 (max. 8388607)
+ 195 compressed objects within 2 object streams
+ 64 named destinations out of 1000 (max. 500000)
+ 143 words of extra memory for PDF output out of 10000 (max. 10000000)
 
