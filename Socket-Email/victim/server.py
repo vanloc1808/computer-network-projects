@@ -100,5 +100,3 @@ def Connect():
 # main.mainloop()
 
 Connect()
-
-

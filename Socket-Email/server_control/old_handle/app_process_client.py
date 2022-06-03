@@ -3,6 +3,8 @@ from tkinter import  ttk
 import pickle, struct
 from tkinter import Canvas, Button, PhotoImage
 import socket
+import pandas as pd
+
 BUFSIZ = 1024 * 4
 import os
 import sys
@@ -45,19 +47,17 @@ def switch(btn, tab):
         tab.heading("Count", text = "Count Threads")
     return
 
-def send_kill(conn, process_id):
+def send_kill(conn:socket.socket, process_id):
     # global pid
-    conn.sendall(bytes("0", "utf8"))
-    conn.sendall(bytes(str(process_id), "utf8"))
-    
-    """
-    res = conn.recv(BUFSIZ).decode("utf8")   
-    if "1" in res:
-        tk.messagebox.showinfo(message = "Đã diệt!")
-    else:
-        tk.messagebox.showerror(message = "Lỗi!")
-    return
-    """
+    # conn.sendall(bytes("0", "utf8"))
+    conn.sendall(b"0".ljust(BUFSIZ))
+    s = str(process_id)
+    # conn.sendall(bytes(str(process_id), "utf8"))
+    conn.sendall(s.encode().ljust(BUFSIZ))
+    # print(s.encode().ljust(BUFSIZ))
+    ack = conn.recv(BUFSIZ).decode()
+    print(ack)
+
 
 def _list(conn:socket.socket, s):
     # Break system without padding ?
@@ -69,9 +69,21 @@ def _list(conn:socket.socket, s):
     ls2 = pickle.loads(ls2) 
     ls3 = receive(conn)
     ls3 = pickle.loads(ls3)
-    print(ls1)
-    print(ls2)
-    print(ls3)
+    process_list = pd.DataFrame(
+        {
+            'Name': ls1,
+            'ID': ls2,
+            'Count Threads': ls3,
+        }
+    )
+
+    str_process_list = process_list.to_string(index = True)
+    print(str_process_list)
+    # print(process_list)
+
+    # print(ls1)
+    # print(ls2)
+    # print(ls3)
     """
     for i in tab.get_children():
         tab.delete(i)

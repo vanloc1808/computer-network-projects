@@ -7,6 +7,7 @@ from old_handle import mac_address_client
 from old_handle import registry_client
 from old_handle import shutdown_logout_client
 from queue import Queue
+import pandas as pd
 
 from time import sleep
 BUFSIZ = 4 * 1024
@@ -33,11 +34,17 @@ def list_process(ip_address):
 
 
 def list_application(ip_address):
-    action_message = lambda conn: app_process_client._list(conn, "APPLICATION")
+    action_message = lambda conn: (
+        conn.sendall(bytes("APP_PRO", "utf8")),
+        app_process_client._list(conn, "APPLICATION")
+    )    
     action_dictionary[ip_address].put(action_message)
 
 def kill_process(ip_address, id):
-    action_message = lambda conn: app_process_client.send_kill(conn, id)
+    action_message = lambda conn: (
+        conn.sendall(bytes("APP_PRO", "utf8")),
+        app_process_client.send_kill(conn, id)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def kill_application(ip_address, id):

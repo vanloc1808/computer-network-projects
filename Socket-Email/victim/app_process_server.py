@@ -102,14 +102,23 @@ def app_process(client):
         if action == 0:
             pid = client.recv(BUFSIZ).decode("utf8")
             pid = int(pid)
+            # print(pid)
             try:
                 res = kill(pid)
+                
             except:
                 res = 0
+            if res == 1:
+                msg = "Process " + str(pid) + " killed!"
+            else:
+                msg = "Process " + str(pid) + " not found!"
+            send_data(client, msg.encode("utf8"))
         #1-xem
         elif action == 1:
             try:
                 status = client.recv(BUFSIZ).decode("utf8")
+                # print("Status:", status)
+                # print(status)
                 if "PROCESS" not in status:
                     ls1, ls2, ls3 = list_apps()
                 else:

