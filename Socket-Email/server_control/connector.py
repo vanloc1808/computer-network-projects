@@ -85,4 +85,6 @@ t.start()
 # handler.list_application(target[1])
 # handler.kill_process(target[1], 16316) # ------------
 # handler.kill_application(target[1], 3504) # ----------
-
+# handler.shut_down(target[1])
+# handler.logout(target[1])
+# handler.restart(target[1])

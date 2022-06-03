@@ -61,15 +61,22 @@ def capture_screen(ip_address):
     pass
 
 def shut_down(ip_address):
-    action_message = lambda conn: shutdown_logout_server.shutdown(conn)
+    action_message = lambda conn: (
+       # conn.sendall(bytes("SHUTDOWN", "utf8")),
+        shutdown_logout_server.shutdown(conn)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def logout(ip_address):
-    action_message = lambda conn: shutdown_logout_server.logout(conn)
+    action_message = lambda conn: (
+        shutdown_logout_server.logout(conn)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def restart(ip_address):
-    action_message = lambda conn: app_process_server.restart(conn)
+    action_message = lambda conn: (
+        shutdown_logout_server.restart(conn)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def mac_address(ip_address):
