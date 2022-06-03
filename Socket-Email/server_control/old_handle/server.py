@@ -2,13 +2,13 @@ import entrance_ui as ui1
 import main_ui as ui2
 import socket
 import tkinter as tk
-import shutdown_logout_client as sl
-import mac_address_client as mac
-import keylogger_client as kl
-import app_process_client as ap
-import directory_tree_client as dt
-import live_screen_client as lsc
-import registry_client as rc
+import shutdown_logout_server as sl
+import mac_address_server as mac
+import keylogger_server as kl
+import app_process_server as ap
+import directory_tree_server as dt
+import live_screen_server as lsc
+import registry_server as rc
 
 #global variables
 BUFSIZ = 1024 * 4

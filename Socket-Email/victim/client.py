@@ -1,12 +1,12 @@
 # import tkinter as tk
 import socket
-import keylogger_server as kl 
-import app_process_server as ap
-import directory_tree_server as dt
-import live_screen_server as lss
-import mac_address_server as mac
-import shutdown_logout_server as sl
-import registry_server as rs
+import keylogger_client as kl 
+import app_process_client as ap
+import directory_tree_client as dt
+import live_screen_client as lss
+import mac_address_client as mac
+import shutdown_logout_client as sl
+import registry_client as rs
 
 # main = tk.Tk()
 # main.geometry("200x200")
