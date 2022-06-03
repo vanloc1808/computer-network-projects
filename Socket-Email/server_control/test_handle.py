@@ -48,7 +48,10 @@ def kill_process(ip_address, id):
     action_dictionary[ip_address].put(action_message)
 
 def kill_application(ip_address, id):
-    action_message = lambda conn: app_process_client.send_kill(conn, id)
+    action_message = lambda conn: (
+        conn.sendall(bytes("APP_PRO", "utf8")),
+        app_process_client.send_kill(conn, id)
+    )
     action_dictionary[ip_address].put(action_message)
 
 def capture_webcam(ip_address, time):
