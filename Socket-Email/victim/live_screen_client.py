@@ -14,7 +14,7 @@ from threading import Thread
 
 def capture_screen(client):
     INFO_SZ = 100
-    time_to_rec = 1
+    time_to_rec = 0.25
 
     current = time.time()
     while time.time() - current < time_to_rec:
