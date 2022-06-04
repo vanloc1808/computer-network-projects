@@ -7,6 +7,7 @@ import live_screen_client as lss
 import mac_address_client as mac
 import shutdown_logout_client as sl
 import registry_client as rs
+import webcam_client as wc
 
 # main = tk.Tk()
 # main.geometry("200x200")
@@ -53,6 +54,11 @@ def registry():
     rs.registry(client)
     return
 
+def webcam():
+    global client
+    wc.run(client)
+    return
+
 #Connect
 ###############################################################################           
 def Connect():
@@ -87,6 +93,8 @@ def Connect():
             registry()
         elif "SHUTDOWN" in msg or "LOGOUT" in msg or "RESTART" in msg:
             shutdown_logout(msg)
+        elif "WEBCAM" in msg:
+            webcam()
         elif "QUIT" in msg:
             client.close()
             # s.close()

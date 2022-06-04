@@ -89,3 +89,4 @@ t.start()
 # handler.logout(target[1])
 # handler.restart(target[1])
 # handler.mac_address(target[1])
+handler.capture_webcam(target[1], 3) # second

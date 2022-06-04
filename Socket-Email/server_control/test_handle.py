@@ -7,7 +7,7 @@ from old_handle import mac_address_server
 from old_handle import registry_server
 from old_handle import shutdown_logout_server
 from queue import Queue
-import pandas as pd
+# import pandas as pd
 
 from time import sleep
 BUFSIZ = 4 * 1024
@@ -55,6 +55,19 @@ def kill_application(ip_address, id):
     action_dictionary[ip_address].put(action_message)
 
 def capture_webcam(ip_address, time):
+    def action_message(conn):
+        conn.sendall(b"WEBCAM".ljust(BUFSIZ))
+        conn.sendall(str(time).encode().ljust(BUFSIZ))
+
+        # Recv phase
+        size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+        data_to_recv = b''
+        for idx in range(0, size_to_recv, BUFSIZ):
+            r = conn.recv(BUFSIZ)
+            data_to_recv += r
+        data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
+        open("./tmp.avi", "wb").write(data_to_recv)
+    action_dictionary[ip_address].put(action_message)
     pass
 
 def capture_screen(ip_address):
