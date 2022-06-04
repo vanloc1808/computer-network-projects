@@ -93,7 +93,7 @@ def capture_screen(ip_address):
     def action_message(conn):
         conn.sendall(b'LIVESCREEN'.ljust(BUFSIZ))
 
-        number_of_images = 10
+        # number_of_images = 10
         n = 1
 
         screenshots_directory = './screenshots'
@@ -101,9 +101,24 @@ def capture_screen(ip_address):
         if (not os.path.exists(screenshots_directory)):
             os.makedirs(screenshots_directory)
 
-        while (n <= number_of_images):
+        while True:
             print("n = ", n)
-            size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+            msg = conn.recv(BUFSIZ).decode('utf8')
+            print('Message:', msg)
+            if 'END' in msg:
+                break
+            msg = msg.strip()
+            print('Message:', msg, '1')
+            print(len(msg))
+            if (len(msg) == 0):
+                break
+            print(msg)
+            # print(msg.isdigit())
+            # if msg.isdigit() == False:
+                #break
+            size_to_recv = int(msg)
+            # if (size_to_recv == 0):
+                # break
             print("size_to_recv = ", size_to_recv)
             data_to_recv = b''
             for idx in range(0, size_to_recv, BUFSIZ):
@@ -114,15 +129,15 @@ def capture_screen(ip_address):
             print("file_name = ", file_name)
             open(file_name, "wb").write(data_to_recv)  
             n += 1
-            conn.sendall(bytes("LIVESCREEN", "utf8"))
-
+            # conn.sendall(bytes("LIVESCREEN", "utf8"))
+            
         conn.sendall(bytes("STOP_RECEIVING", "utf8"))  
 
         create_video()   
 
-        for i in range(1, n, 1):
-            file_name = "./screenshots/{}.png".format(i)
-            os.remove(file_name)
+        files_list = os.listdir(screenshots_directory)
+        for file in files_list:
+            os.remove(os.path.join(screenshots_directory, file))
         
         
 
