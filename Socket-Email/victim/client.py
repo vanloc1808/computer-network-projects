@@ -45,7 +45,7 @@ def live_screen():
 
 def directory_tree():
     global client 
-    dt.directory(client)
+    dt.directory_handle(client)
     return
 
 def registry():

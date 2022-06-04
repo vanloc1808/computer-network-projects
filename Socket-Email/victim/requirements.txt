@@ -2,3 +2,4 @@ keyboard
 pynput
 psutil
 pillow
+shutil

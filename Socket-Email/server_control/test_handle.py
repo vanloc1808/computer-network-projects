@@ -212,8 +212,26 @@ def registry_update(ip_address, absolute_path, value, data_type):
     action_dictionary[ip_address].put(action_message)
 
 def dir_list(ip_address, path_to_folder):
-    action_message = lambda conn: directory_tree_server.dir_list(conn, path_to_folder)
+    def action_message(conn):
+        conn.sendall(bytes("DIRECTORY", "utf8"))
+        conn.sendall(bytes("LIST ", "utf8"))
+        conn.sendall(bytes(path_to_folder, "utf8"))
+        size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+        data_to_recv = b''
+        for idx in range(0, size_to_recv, BUFSIZ):
+            r = conn.recv(BUFSIZ)
+            data_to_recv += r
+        data_to_recv = data_to_recv[:size_to_recv] 
+        print(data_to_recv.decode('utf8'))
     action_dictionary[ip_address].put(action_message)
 
 def dir_copy(ip_address, src_path, dst_path):
-    pass
+    def action_message(conn):
+        conn.sendall(bytes("DIRECTORY", "utf8"))
+        conn.sendall(bytes("COPY ", "utf8"))
+        conn.sendall(bytes(src_path, "utf8"))
+        conn.sendall(bytes(" ", "utf8"))
+        conn.sendall(bytes(dst_path, "utf8"))
+        ack = conn.recv(BUFSIZ).decode('utf8')
+        print(ack)
+    action_dictionary[ip_address].put(action_message)

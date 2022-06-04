@@ -92,4 +92,6 @@ t.start()
 # handler.capture_webcam(target[1], 3) # second
 # handler.capture_screen(target[1])
 # handler.registry_list(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be")
-handler.registry_update(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be\\Hello", 'Hellooooooo Worldddddd', 'REG_SZ')
+# handler.registry_update(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be\\Hello", 'Hellooooooo Worldddddd', 'REG_SZ')
+# handler.dir_list(target[1], 'C:\\Users\\admin')
+handler.dir_copy(target[1], 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email\\victim\\requirements.txt', 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email')
