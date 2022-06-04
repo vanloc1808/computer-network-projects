@@ -42,7 +42,6 @@ def live_screen():
     global client
     lss.capture_screen(client)
     return
-    return
 
 def directory_tree():
     global client 
@@ -83,6 +82,8 @@ def Connect():
             shutdown_logout()
         elif "LIVESCREEN" in msg:
             live_screen()
+        elif  "STOP_RECEIVING" in msg:
+            pass
         elif "APP_PRO" in msg:
             app_process()
         elif "MAC" in msg:

@@ -7,6 +7,10 @@ from old_handle import mac_address_server
 from old_handle import registry_server
 from old_handle import shutdown_logout_server
 from queue import Queue
+import cv2
+# import numpy as np
+# import glob
+import os
 # import pandas as pd
 
 from time import sleep
@@ -68,10 +72,62 @@ def capture_webcam(ip_address, time):
         data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
         open("./tmp.avi", "wb").write(data_to_recv)
     action_dictionary[ip_address].put(action_message)
-    pass
+
+def create_video():
+    image_folder = 'screenshots'
+    video_name = 'video.avi'
+
+    images = [img for img in os.listdir(image_folder) if img.endswith(".png")]
+    frame = cv2.imread(os.path.join(image_folder, images[0]))
+    height, width, layers = frame.shape
+
+    video = cv2.VideoWriter(video_name, 0, 1, (width,height))
+
+    for image in images:
+        video.write(cv2.imread(os.path.join(image_folder, image)))
+
+    cv2.destroyAllWindows()
+    video.release()
 
 def capture_screen(ip_address):
-    pass
+    def action_message(conn):
+        conn.sendall(b'LIVESCREEN'.ljust(BUFSIZ))
+
+        number_of_images = 10
+        n = 1
+
+        screenshots_directory = './screenshots'
+
+        if (not os.path.exists(screenshots_directory)):
+            os.makedirs(screenshots_directory)
+
+        while (n <= number_of_images):
+            print("n = ", n)
+            size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+            print("size_to_recv = ", size_to_recv)
+            data_to_recv = b''
+            for idx in range(0, size_to_recv, BUFSIZ):
+                r = conn.recv(BUFSIZ)
+                data_to_recv += r
+            data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
+            file_name = "./screenshots/{}.png".format(n)
+            print("file_name = ", file_name)
+            open(file_name, "wb").write(data_to_recv)  
+            n += 1
+            conn.sendall(bytes("LIVESCREEN", "utf8"))
+
+        conn.sendall(bytes("STOP_RECEIVING", "utf8"))  
+
+        create_video()   
+
+        for i in range(1, n, 1):
+            file_name = "./screenshots/{}.png".format(i)
+            os.remove(file_name)
+        
+        
+
+    action_dictionary[ip_address].put(action_message)
+
 
 def shut_down(ip_address):
     action_message = lambda conn: (
