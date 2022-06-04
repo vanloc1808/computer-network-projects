@@ -50,7 +50,7 @@ def directory_tree():
 
 def registry():
     global client
-    rs.registry(client)
+    rs.registry_handle(client)
     return
 
 def webcam():

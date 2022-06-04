@@ -1,5 +1,5 @@
 from queue import Queue
-import test_handle
+import test_handle as handler
 
 # a list of dictionary, each of which has the type
 # { email_address: IP connected }
@@ -33,7 +33,8 @@ def get_corresponding_ip(sender_address):
         SHUTDOWN/RESTART, ACK, call DISC afterwards
         REGISTRY, DIR:
             LIST <path to folder>, list of "directory/files"
-            UPDATE <absolute path> <value>, ACK
+            
+        REGISTRY UPDATE <absolute path> <value> <data-type>, ACK
         DIR COPY <src path> <dst path folder>, ACK
 """
 def command_parser(message, sender_address):
@@ -45,23 +46,21 @@ def command_parser(message, sender_address):
     file_in.close()
 
     try:
-        if len(msg) > 4: # too many arguments
+        if len(msg) > 5: # too many arguments
             raise Exception("Too many arguments")
+        if len(msg) == 5:
+             if msg[0] == "REGISTRY":
+                if msg[1] == "UPDATE":
+                    handler.registry_update(msg[2], msg[3], msg[4])
+                else:
+                    raise Exception("Invalid command")
         if len(msg) == 0:
             raise Exception("No arguments")
         
         if len(msg) == 4:
-            if msg[0] == "REGISTRY":
-                if msg[1] == "UPDATE":
-                    test_handle.registry_update(msg[2], msg[3])
-                else:
-                    raise Exception("Invalid command")
-
-            elif msg[0] == "DIR":
-                if msg[1] == "UPDATE":
-                    test_handle.registry_update(msg[2], msg[3])
-                elif msg[1] == "COPY":
-                    test_handle.dir_copy(msg[2], msg[3])
+            if msg[0] == "DIR":
+                if msg[1] == "COPY":
+                    handler.dir_copy(msg[2], msg[3])
                 else:
                     raise Exception("Invalid command")
 
@@ -73,22 +72,22 @@ def command_parser(message, sender_address):
                 if msg[1] != key:
                    raise Exception("Invalid key")
 
-                if test_handle.is_valid_ip(msg[2]) == False:
+                if handler.is_valid_ip(msg[2]) == False:
                     raise Exception("Invalid IP")  
 
                  # if the code goes here, it will start connection to the IP at msg[2]
                 ip_address = msg[2]
-                test_handle.authorize(sender_address, ip_address, ip_per_address)
+                handler.authorize(sender_address, ip_address, ip_per_address)
 
             elif msg[0] == "REGISTRY":
                 if msg[1] == "LIST":
-                    test_handle.registry_list(msg[2])
+                    handler.registry_list(msg[2])
                 else:
                     raise Exception("Invalid command")
 
             elif msg[0] == "DIR":
                 if msg[1] == "LIST":
-                    test_handle.dir_list(msg[2])
+                    handler.dir_list(msg[2])
                 else:
                     raise Exception("Invalid command")
 
@@ -100,56 +99,56 @@ def command_parser(message, sender_address):
                 if msg[1] != key:
                     raise Exception("Invalid key")
 
-                test_handle.list_ip()
+                handler.list_ip()
             elif msg[0] == "KILL":
-                list_of_process = test_handle.list_process()
+                list_of_process = handler.list_process()
                 if msg[1] in list_of_process:
-                    test_handle.kill_process(msg[1])
+                    handler.kill_process(msg[1])
                 else:
-                    list_of_application = test_handle.list_application()
+                    list_of_application = handler.list_application()
                     if msg[1] in list_of_application:
-                        test_handle.kill_application(msg[1])
+                        handler.kill_application(msg[1])
                     else:
                         raise Exception("Invalid PID or ID")
             elif msg[0] == "WEB" or msg[0] == "REC":
                 if msg[1].isdigit() == False:
                     raise Exception("Invalid number of seconds")
                 else:
-                    test_handle.capture_webcam(int(msg[1]))
+                    handler.capture_webcam(int(msg[1]))
             elif msg[0] == "KEYLOG":
                 if msg[1].isdigit() == False:
                     raise Exception("Invalid number of seconds")
                 else:
-                    test_handle.keylog(int(msg[1]))
+                    handler.keylog(int(msg[1]))
             else:
                 raise Exception("Invalid command")
         else:
             if msg[0] == "DISC": # disconnect 
-                test_handle.disconnect(sender_address, ip_per_address)
+                handler.disconnect(sender_address, ip_per_address)
             elif msg[0] == "LIST_PROC":
-                test_handle.list_process()
+                handler.list_process()
             elif msg[0] == "LIST_ABP":
-                test_handle.list_application()
+                handler.list_application()
             elif msg[0] == "SCREENSHOT":
-                test_handle.capture_screen()
+                handler.capture_screen()
             elif msg[0] == "MAC":
-                test_handle.mac_address()
+                handler.mac_address()
             elif msg[0] == "SHUTDOWN":
-                test_handle.shutdown()
-                test_handle.disconnect(sender_address, ip_per_address)
+                handler.shutdown()
+                handler.disconnect(sender_address, ip_per_address)
             elif msg[0] == "LOGOUT":
-                test_handle.logout()
-                test_handle.disconnect(sender_address, ip_per_address)
+                handler.logout()
+                handler.disconnect(sender_address, ip_per_address)
             elif msg[0] == "RESTART":
-                test_handle.restart()
-                test_handle.disconnect(sender_address, ip_per_address)
+                handler.restart()
+                handler.disconnect(sender_address, ip_per_address)
             else:
                 raise Exception("Invalid command")
                 
 
 
     except Exception as e:
-        test_handle.raise_error_message(e)      
+        handler.raise_error_message(e)      
 
 
 def main():
