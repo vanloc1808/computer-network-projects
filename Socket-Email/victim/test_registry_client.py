@@ -44,9 +44,11 @@ def go_through_registry_tree(hkey, key_path, reg_dict):
     key = winreg.OpenKey(hkey, key_path, 0, winreg.KEY_READ)
     reg_dict[key_path] = get_value_of_key(key)
     
+    """
     for subkey in get_sub_keys(key):
         subkey_path = "%s\\%s" % (key_path, subkey)
         go_through_registry_tree(hkey, subkey_path, reg_dict)
+    """
 
 def list_all_registry_entries(registry_path):
     reg_dict = {}
