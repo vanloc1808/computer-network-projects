@@ -89,63 +89,59 @@ def start(name):
 
 def app_process(client):
     global msg
-    while True:
-        msg = client.recv(BUFSIZ).decode("utf8")
-        print("Messages:", msg)
-        if "QUIT" in msg and len(msg) < 20:
-            return
-        res = 0
-        ls1 = list()
-        ls2 = list()
-        ls3 = list()
-        action = int(msg)
-        #0-kill
-        if action == 0:
-            pid = client.recv(BUFSIZ).decode("utf8")
-            pid = int(pid)
-            # print(pid)
-            try:
-                res = kill(pid)
-                
-            except:
-                res = 0
-            if res == 1:
-                msg = "Process " + str(pid) + " killed!"
+    msg = client.recv(BUFSIZ).decode("utf8")
+    print("Messages:", msg)
+    res = 0
+    ls1 = list()
+    ls2 = list()
+    ls3 = list()
+    action = int(msg)
+    #0-kill
+    if action == 0:
+        pid = client.recv(BUFSIZ).decode("utf8")
+        pid = int(pid)
+        # print(pid)
+        try:
+            res = kill(pid)
+            
+        except:
+            res = 0
+        if res == 1:
+            mesg = "Process " + str(pid) + " killed!"
+        else:
+            mesg = "Process " + str(pid) + " not found!"
+        client.sendall(mesg.encode("utf8"))
+    #1-xem
+    elif action == 1:
+        try:
+            status = client.recv(BUFSIZ).decode("utf8")
+            # print("Status:", status)
+            # print(status)
+            if "PROCESS" not in status:
+                ls1, ls2, ls3 = list_apps()
             else:
-                msg = "Process " + str(pid) + " not found!"
-            send_data(client, msg.encode("utf8"))
-        #1-xem
-        elif action == 1:
-            try:
-                status = client.recv(BUFSIZ).decode("utf8")
-                # print("Status:", status)
-                # print(status)
-                if "PROCESS" not in status:
-                    ls1, ls2, ls3 = list_apps()
-                else:
-                    ls1, ls2, ls3 = list_processes()
-                res = 1
-            except:
-                res = 0
-        #2-xoa
-        elif action == 2:
+                ls1, ls2, ls3 = list_processes()
             res = 1
-        #3 - start
-        elif action == 3:
-            pname = client.recv(BUFSIZ).decode("utf8")
-            try:
-                start(pname)
-                res = 1
-            except:
-                res = 0
-        if action != 1 and action != 3:
-            client.sendall(bytes(str(res), "utf8"))
-        if action == 1:
-            ls1 = pickle.dumps(ls1)
-            ls2 = pickle.dumps(ls2)
-            ls3 = pickle.dumps(ls3)
+        except:
+            res = 0
+    #2-xoa
+    elif action == 2:
+        res = 1
+    #3 - start
+    elif action == 3:
+        pname = client.recv(BUFSIZ).decode("utf8")
+        try:
+            start(pname)
+            res = 1
+        except:
+            res = 0
+    if action != 1 and action != 3:
+        client.sendall(bytes(str(res), "utf8"))
+    if action == 1:
+        ls1 = pickle.dumps(ls1)
+        ls2 = pickle.dumps(ls2)
+        ls3 = pickle.dumps(ls3)
 
-            send_data(client, ls1)   
-            send_data(client, ls2)
-            send_data(client, ls3)
-    return
+        send_data(client, ls1)   
+        send_data(client, ls2)
+        send_data(client, ls3)

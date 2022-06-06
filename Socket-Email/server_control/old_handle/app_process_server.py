@@ -56,7 +56,8 @@ def send_kill(conn:socket.socket, process_id):
     conn.sendall(s.encode().ljust(BUFSIZ))
     # print(s.encode().ljust(BUFSIZ))
     ack = conn.recv(BUFSIZ).decode()
-    print(ack)
+    
+    return ack
 
 
 def _list(conn:socket.socket, s):
@@ -78,19 +79,7 @@ def _list(conn:socket.socket, s):
     )
 
     str_process_list = process_list.to_string(index = True)
-    print(str_process_list)
-    # print(process_list)
-
-    # print(ls1)
-    # print(ls2)
-    # print(ls3)
-    """
-    for i in tab.get_children():
-        tab.delete(i)
-    for i in range(len(ls1)):
-        tab.insert(parent = '', index = 'end', text = '', values = (ls1[i], ls2[i], ls3[i]))
-    return
-    """
+    return str_process_list
 
 def clear(tab):
     for i in tab.get_children():

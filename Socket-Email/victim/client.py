@@ -98,6 +98,7 @@ def Connect():
             webcam()
         elif "QUIT" in msg:
             client.close()
+            # print("Connection closed!")
             # s.close()
             return
         else:

