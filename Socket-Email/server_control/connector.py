@@ -68,10 +68,7 @@ def check_return_ip(email):
     else:
         return None
 
-def disconnect(email):
-    if email in handler.auth_dict and handler.auth_dict[email]:
-        handler.auth_dict[email] = False
-        handler.email_ip_dict[email] = None
+
 
 
 # Sample connection (1 machine)
@@ -94,4 +91,4 @@ t.start()
 # handler.registry_list(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be")
 # handler.registry_update(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be\\Hello", 'Hellooooooo_Worldddddd', 'REG_SZ')
 # handler.dir_list(target[1], 'C:\\Users\\admin')
-handler.dir_copy(target[1], 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email\\victim\\requirements.txt', 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email')
+# handler.dir_copy(target[1], 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email\\victim\\requirements.txt', 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email')

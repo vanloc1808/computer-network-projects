@@ -1,7 +1,7 @@
 import os
 
 BUFSIZ = 1024 * 4
-def shutdown_logout(msg):
+def shutdown_logout(conn, msg):
     while(True):
         # msg = client.recv(BUFSIZ).decode("utf8")
         if "SHUTDOWN" in msg:

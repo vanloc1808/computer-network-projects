@@ -24,6 +24,31 @@ email_ip_dict = {} # MAIL -> IP
 def list_ip():
     return [elem[1] for elem in conn_ip_list]
 
+def disconnect(email):
+    if email in auth_dict and auth_dict[email]:
+        auth_dict[email] = False
+        email_ip_dict[email] = None
+
+def find_corresponding_email(ip_address):
+    for i in email_ip_dict:
+        if email_ip_dict[i] == ip_address:
+            return i
+
+def delete_ip_from_list(ip_address):
+    to_delete = None
+    for i in range(len(conn_ip_list)):
+        if conn_ip_list[i][1] == ip_address:
+            to_delete = conn_ip_list[i]
+            break
+    if to_delete is not None:
+        conn_ip_list.remove(to_delete)
+
+def remove_this_connection(conn, ip_address):
+    conn.close()
+    delete_ip_from_list(ip_address)
+    email = find_corresponding_email(ip_address)
+    disconnect(email)
+
 action_dictionary = {}
 result_dictionary = {}
 def __init__():
@@ -171,6 +196,8 @@ def shut_down(ip_address):
        # conn.sendall(bytes("SHUTDOWN", "utf8")),
         shutdown_logout_server.shutdown(conn)
 
+        remove_this_connection(conn, ip_address)
+
         result = 'OK'
         result_dictionary[ip_address].put(result)
 
@@ -180,6 +207,8 @@ def logout(ip_address):
     def action_message(conn):
         shutdown_logout_server.logout(conn)
 
+        remove_this_connection(conn, ip_address)
+
         result = 'OK'
         result_dictionary[ip_address].put(result)
 
@@ -188,6 +217,8 @@ def logout(ip_address):
 def restart(ip_address):
     def action_message(conn):
         shutdown_logout_server.restart(conn)
+
+        remove_this_connection(conn, ip_address)
 
         result = 'OK'
         result_dictionary[ip_address].put(result)
@@ -282,3 +313,4 @@ def dir_copy(ip_address, src_path, dst_path):
         result_dictionary[ip_address].put(ack)
         # print(ack)
     action_dictionary[ip_address].put(action_message)
+
