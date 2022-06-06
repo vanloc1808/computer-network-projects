@@ -1,19 +1,12 @@
 from collections import defaultdict
 from old_handle import app_process_server
-from old_handle import directory_tree_server
-from old_handle import keylogger_server
-from old_handle import live_screen_server
 from old_handle import mac_address_server
-from old_handle import registry_server
 from old_handle import shutdown_logout_server
 from queue import Queue
 import cv2
-# import numpy as np
-# import glob
 import os
-# import pandas as pd
-
 from time import sleep
+
 BUFSIZ = 4 * 1024
 
 conn_ip_list = [] # list_ip() # Tuple (conn, addr)
@@ -178,7 +171,7 @@ def capture_screen(ip_address):
         conn.sendall(bytes("STOP_RECEIVING", "utf8"))  
 
         create_video()   
-
+        
         files_list = os.listdir(screenshots_directory)
         for file in files_list:
             os.remove(os.path.join(screenshots_directory, file))
@@ -262,7 +255,7 @@ def registry_list(ip_address, full_path):
             data_to_recv += r
         data_to_recv = data_to_recv[:size_to_recv] 
         result_dictionary[ip_address].put(data_to_recv)
-        # print(data_to_recv)
+        print(data_to_recv)
 
     action_dictionary[ip_address].put(action_message)
         
@@ -296,7 +289,7 @@ def dir_list(ip_address, path_to_folder):
             data_to_recv += r
         
         data_to_recv = data_to_recv[:size_to_recv] 
-        # print(data_to_recv.decode('utf8'))
+        print(data_to_recv.decode('utf8'))
         result_dictionary[ip_address].put(data_to_recv)
 
     action_dictionary[ip_address].put(action_message)
@@ -311,6 +304,6 @@ def dir_copy(ip_address, src_path, dst_path):
 
         ack = conn.recv(BUFSIZ).decode('utf8')
         result_dictionary[ip_address].put(ack)
-        # print(ack)
+        print(ack)
     action_dictionary[ip_address].put(action_message)
 
