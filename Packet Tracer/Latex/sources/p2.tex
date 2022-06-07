@@ -61,28 +61,28 @@ Trả lời:
 \begin{enumerate}
 \bf \item Phân tích hiện trạng và nhu cầu của công ty. Hãy vẽ sơ đồ mạng logic cho văn phòng công ty (có ghi chú tên thiết bị, tên interface/ port, IP, subnet).
 
-\rm Hiện trạng và nhu cầu của công ty: Công ty đã có dãy địa chỉ \tt \textcolor{red}{172.72.0.0/16} \rm cần chia cho toàn hệ thống:
+\rm Hiện trạng và nhu cầu của công ty: Công ty đã có dãy địa chỉ \tt \textcolor{red}{172.72.0.0/16} \rm cần chia cho toàn hệ thống (dùng số lượng host tối đa theo yêu cầu):
 
 \begin{enumerate}
 \item Tầng 1: 
 
 \(\bullet\) 1 đường mạng cho phòng hành chính - 10 users
 
-\(\bullet\) 1 đường mạng wi-fi cho nhân viên + khách vãng lai - tối đa 20 users
+\(\bullet\) 1 đường mạng wi-fi cho nhân viên + khách vãng lai - 20 users
 
 \item Tầng 2:
 
 \(\bullet\) 1 đường mạng cho phòng kỹ thuật - 5 users
 
-\(\bullet\) 1 đường mạng cho phòng lãnh đạo - tối đa 5 users
+\(\bullet\) 1 đường mạng cho phòng lãnh đạo - 5 users
 
 \item Tầng 3:
 
-\(\bullet\) 1 đường mạng wi-fi cho phòng họp - tối đa 20 users
+\(\bullet\) 1 đường mạng wi-fi cho phòng họp - 20 users
 
 \item Tầng 4:
 
-\(\bullet\) 1 đường mạng cho tối đa 10 servers.
+\(\bullet\) 1 đường mạng - 10 servers.
 
 \end{enumerate}
 
@@ -114,24 +114,23 @@ STT & Đ/c đường mạng & Subnet mask & Đ/c broadcast & Dải đ/c host h�
 
 Ta chia cho từng nhu cầu một đường mạng con (subnet) như sau:
 
-Subnet 1: 172.72.0.0/19 dùng cho phòng hành chính, tầng 1.
+Subnet 1: 172.72.0.0/19 dùng cho phòng hành chính, tầng 1 (10 hosts).
 
-Subnet 2: 172.72.32.0/19 dùng cho mạng wi-fi nhân viên và khách vãng lai, tầng 1.
+Subnet 2: 172.72.32.0/19 dùng cho mạng wi-fi nhân viên và khách vãng lai, tầng 1 (20 hosts).
 
-Subnet 3: 172.72.64.0/19 dùng cho phòng kỹ thuật, tầng 2.
+Subnet 3: 172.72.64.0/19 dùng cho phòng kỹ thuật, tầng 2 (5 hosts).
 
-Subnet 4: 172.72.96.0/19 dùng cho phòng lãnh đạo, tầng 2.
+Subnet 4: 172.72.96.0/19 dùng cho phòng lãnh đạo, tầng 2 (5 hosts).
 
-Subnet 5: 172.72.128.0/19 dùng cho mạng wi-fi phòng họp, tầng 3.
+Subnet 5: 172.72.128.0/19 dùng cho mạng wi-fi phòng họp, tầng 3 (20 hosts).
 
-Tầng 4, \(x\le 10\) servers dùng địa chỉ IP tĩnh, ta lấy tương ứng \(x\) địa chỉ trong subnet 6: 172.72.160.0/19, cụ thể là 172.72.160.1 - 172.72.160.\(x\)
+Tầng 4, 10 servers dùng địa chỉ IP tĩnh, ta lấy tương ứng 10 địa chỉ trong subnet 6: 172.72.160.0/19, cụ thể là 172.72.160.1 - 172.72.160.10
 
 Dịch vụ DHCP: triển khai trên server 172.72.160.1
 
 Dịch vụ DNS: triển khai trên server 172.72.160.2
 
 Dịch vụ WEB: triển khai trên server 172.72.160.3
-
 
 \bf \item Lập bảng mô tả chi tiết thiết bị gồm: khu vực đặt thiết bị, loại thiết bị, tên thiết bị, version/model, chức năng, tên interface/port, IP
 
