@@ -56,6 +56,92 @@ Yêu cầu:
 
 \end{enumerate}
 
+Trả lời:
+
+\begin{enumerate}
+\bf \item Phân tích hiện trạng và nhu cầu của công ty. Hãy vẽ sơ đồ mạng logic cho văn phòng công ty (có ghi chú tên thiết bị, tên interface/ port, IP, subnet).
+
+\rm Hiện trạng và nhu cầu của công ty: Công ty đã có dãy địa chỉ \tt \textcolor{red}{172.72.0.0/16} \rm cần chia cho toàn hệ thống:
+
+\begin{enumerate}
+\item Tầng 1: 
+
+\(\bullet\) 1 đường mạng cho phòng hành chính - 10 users
+
+\(\bullet\) 1 đường mạng wi-fi cho nhân viên + khách vãng lai - tối đa 20 users
+
+\item Tầng 2:
+
+\(\bullet\) 1 đường mạng cho phòng kỹ thuật - 5 users
+
+\(\bullet\) 1 đường mạng cho phòng lãnh đạo - tối đa 5 users
+
+\item Tầng 3:
+
+\(\bullet\) 1 đường mạng wi-fi cho phòng họp - tối đa 20 users
+
+\item Tầng 4:
+
+\(\bullet\) 1 đường mạng cho tối đa 10 servers.
+
+\end{enumerate}
+
+Ta thực hiện chia subnet như sau:
+
+Có tổng cộng 6 subnets, trong đó subnet cần nhiều hosts/users nhất là 20 \(\Rightarrow\) cần giữ lại \(m\) bit host sao cho \(2^m-2\ge 20\Rightarrow m\ge 5\), do đó ta được mượn tối đa \(32-16-5 = 11\) bit net. Trong đó ta chỉ cần 6 subnets do đó ta chỉ cần mượn 3 bit (ở byte 3), chia được thành 8 địa chỉ đường mạng con (subnet), mỗi subnet này cho phép số địa chỉ host hợp lệ là \(2^{32-16-3}-2 = 8190 > 20\).
+
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+STT & Subnet & Đ/c đường mạng & Đ/c broadcast & Dải đ/c host hợp lệ\\
+\hline
+1 & 172.72.0.0/19 & 172.72.0.0 & 172.72.31.255 & 172.72.0.1 - 172.72.31.254\\
+\hline
+2 & 172.72.32.0/19 & 172.72.32.0 & 172.72.63.255 & 172.72.32.1 - 172.72.63.254\\
+\hline
+3 & 172.72.64.0/19 & 172.72.64.0 & 172.72.95.255 & 172.72.64.1 - 172.72.95.254\\
+\hline
+4 & 172.72.96.0/19 & 172.72.96.0 & 172.72.127.255 & 172.72.96.1 - 172.72.127.254\\
+\hline
+5 & 172.72.128.0/19 & 172.72.128.0 & 172.72.159.255 & 172.72.128.1 - 172.72.159.254\\
+\hline
+6 & 172.72.160.0/19 & 172.72.160.0 & 172.72.191.255 & 172.72.160.1 - 172.72.191.254\\
+\hline
+7 & 172.72.192.0/19 & 172.72.192.0 & 172.72.223.255 & 172.72.192.1 - 172.72.223.254\\
+\hline
+8 & 172.72.224.0/19 & 172.72.224.0 & 172.72.255.255 & 172.72.224.1 - 172.72.255.254\\
+\hline
+\end{tabular}
+
+Ta chia cho từng nhu cầu một đường mạng con (subnet) như sau:
+
+Subnet 1: 172.72.0.0/19 dùng cho phòng hành chính, tầng 1.
+
+Subnet 2: 172.72.32.0/19 dùng cho mạng wi-fi nhân viên và khách vãng lai, tầng 1.
+
+Subnet 3: 172.72.64.0/19 dùng cho phòng kỹ thuật, tầng 2.
+
+Subnet 4: 172.72.96.0/19 dùng cho phòng lãnh đạo, tầng 2.
+
+Subnet 5: 172.72.128.0/19 dùng cho mạng wi-fi phòng họp, tầng 3.
+
+Tầng 4, \(x\le 10\) servers dùng địa chỉ IP tĩnh, ta lấy tương ứng \(x\) địa chỉ trong subnet 6: 172.72.160.0/19, cụ thể là 172.72.160.1 - 172.72.160.\(x\)
+
+\bf \item Lập bảng mô tả chi tiết thiết bị gồm: khu vực đặt thiết bị, loại thiết bị, tên thiết bị, version/model, chức năng, tên interface/port, IP
+
+\rm
+
+\bf \item Sử dụng công cụ packet tracer để triển khai mô hình mạng đã thiết kế (chụp hình các bước triển khai cấu hình)
+
+\rm
+
+\bf \item Kiểm tra kết quả hoạt động của mô hình mạng vừa triển khai (dùng các câu lệnh console như ping, nslookup, ipconfig, và trình duyệt web)
+
+\rm
+
+\end{enumerate}
+
+
+
 
 
 
