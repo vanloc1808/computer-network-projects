@@ -40,10 +40,10 @@ def send_threading(to_:str, subject_:str, content_, file_name = "x.txt"):
     # t.setDaemon(True)
     t.start()
 
-# Testing
-TO = 'vanloc1808@gmail.com'
-SUBJECT = 'NHAN DUOC THU CKUA ?'
-# CONTENT = 'welcome to smtp world!'
-CONTENT = open("./test.png", "rb").read()
+# # Testing
+# TO = 'vanloc1808@gmail.com'
+# SUBJECT = 'NHAN DUOC THU CKUA ?'
+# # CONTENT = 'welcome to smtp world!'
+# CONTENT = open("./test.png", "rb").read()
 
-send_threading(TO, SUBJECT, CONTENT, "test.png")
+# send_threading(TO, SUBJECT, CONTENT, "test.png")
