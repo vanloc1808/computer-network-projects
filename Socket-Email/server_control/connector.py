@@ -1,7 +1,8 @@
 import socket as sk
 import threading
-from time import sleep
+# from time import sleep
 
+import test_parse as parser
 import test_handle as handler
 
 HOST = '' # Localhost
@@ -86,9 +87,11 @@ t.start()
 # handler.logout(target[1])
 # handler.restart(target[1])
 # handler.mac_address(target[1])
-# handler.capture_webcam(target[1], 3) # second
-# handler.capture_screen(target[1])
+# handler.capture_webcam(target[1], 10) # second
+# handler.capture_screen(target[1], 10)
 # handler.registry_list(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be")
 # handler.registry_update(target[1], "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\2fcf99be\\Hello", 'Hellooooooo_Worldddddd', 'REG_SZ')
 # handler.dir_list(target[1], 'C:\\Users\\admin')
-handler.dir_copy(target[1], 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email\\victim\\requirements.txt', 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email')
+# handler.dir_copy(target[1], 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email\\victim\\requirements.txt', 'F:\\GitHub\\HCMUS-Computer-Networks-Projects\\Socket-Email')
+email_address = 'vanloc1808@gmail.com'
+parser.command_parser('LIST_PROC', email_address)

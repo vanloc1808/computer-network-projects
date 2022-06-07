@@ -3,14 +3,13 @@ import test_handle as handler
 
 # a list of dictionary, each of which has the type
 # { email_address: IP connected }
-ip_per_address = [] 
+ip_per_address = {'vanloc1808@gmail.com': '127.0.0.1'}
 
 q = Queue(maxsize=0)
 
 def get_corresponding_ip(sender_address):
-    for i in ip_per_address:
-        if i['email_address'] == sender_address:
-            return i['IP']
+    if sender_address in ip_per_address:
+        return ip_per_address[sender_address]
     return None
 
 """
@@ -21,11 +20,11 @@ def get_corresponding_ip(sender_address):
 
     * PROCESS & ABP
         LIST_PROC (Name, PID, threads)
-        LIST_ABP (Name, ID, threads)
+        LIST_APP (Name, ID, threads)
         KILL <ID/PID>, ACK/Err
     
     * CAPTURING
-        SCREENSHOT, a single image
+        SCREENSHOT <seconds>, a video
         WEB/REC <seconds>, a video
         KEYLOG <seconds>, a list of actions
     
@@ -39,28 +38,39 @@ def get_corresponding_ip(sender_address):
 """
 def command_parser(message, sender_address):
     msg = message.split(' ')
-    file_in = open("keys.txt", "r")
+    '''
+    file_in = open('keys.txt', "r")
     key = file_in.readline()
     key = key.strip()
     # print(key)
-    file_in.close()
-
+    '''
+    key = 'ABDCFE123465'
+    # file_in.close()
+    
     try:
         if len(msg) > 5: # too many arguments
             raise Exception("Too many arguments")
+
+        if len(msg) == 0:
+            raise Exception("No arguments")
+
         if len(msg) == 5:
              if msg[0] == "REGISTRY":
                 if msg[1] == "UPDATE":
-                    handler.registry_update(msg[2], msg[3], msg[4])
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.registry_update(ip_address, msg[2], msg[3], msg[4])
                 else:
                     raise Exception("Invalid command")
-        if len(msg) == 0:
-            raise Exception("No arguments")
         
-        if len(msg) == 4:
+        elif len(msg) == 4:
             if msg[0] == "DIR":
                 if msg[1] == "COPY":
-                    handler.dir_copy(msg[2], msg[3])
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.dir_copy(ip_address, msg[2], msg[3])
                 else:
                     raise Exception("Invalid command")
 
@@ -81,13 +91,19 @@ def command_parser(message, sender_address):
 
             elif msg[0] == "REGISTRY":
                 if msg[1] == "LIST":
-                    handler.registry_list(msg[2])
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.registry_list(ip_address, msg[2])
                 else:
                     raise Exception("Invalid command")
 
             elif msg[0] == "DIR":
                 if msg[1] == "LIST":
-                    handler.dir_list(msg[2])
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.dir_list(ip_address, msg[2])
                 else:
                     raise Exception("Invalid command")
 
@@ -101,58 +117,83 @@ def command_parser(message, sender_address):
 
                 handler.list_ip()
             elif msg[0] == "KILL":
-                list_of_process = handler.list_process()
-                if msg[1] in list_of_process:
-                    handler.kill_process(msg[1])
-                else:
-                    list_of_application = handler.list_application()
-                    if msg[1] in list_of_application:
-                        handler.kill_application(msg[1])
-                    else:
-                        raise Exception("Invalid PID or ID")
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.kill_process(ip_address, msg[1])
             elif msg[0] == "WEB" or msg[0] == "REC":
                 if msg[1].isdigit() == False:
                     raise Exception("Invalid number of seconds")
                 else:
-                    handler.capture_webcam(int(msg[1]))
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.capture_webcam(ip_address, int(msg[1]))
             elif msg[0] == "KEYLOG":
                 if msg[1].isdigit() == False:
                     raise Exception("Invalid number of seconds")
                 else:
-                    handler.keylog(int(msg[1]))
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.keylog(ip_address, int(msg[1]))
+            elif msg[0] == "SCREENSHOT":
+                if msg[1].isdigit() == False:
+                    raise Exception("Invalid number of seconds")
+                else:
+                    ip_address = get_corresponding_ip(sender_address)
+                    if ip_address is None:
+                        raise Exception("No corresponding IP")
+                    handler.capture_screen(ip_address, int(msg[1]))
             else:
                 raise Exception("Invalid command")
         else:
             if msg[0] == "DISC": # disconnect 
-                handler.disconnect(sender_address, ip_per_address)
+                handler.disconnect(sender_address)
             elif msg[0] == "LIST_PROC":
-                handler.list_process()
-            elif msg[0] == "LIST_ABP":
-                handler.list_application()
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.list_process(ip_address)
+            elif msg[0] == "LIST_APP":
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.list_application(ip_address)
+            elif msg[0] == "KEYLOG":
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.keylog(ip_address)
             elif msg[0] == "SCREENSHOT":
-                handler.capture_screen()
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.capture_screen(ip_address)
             elif msg[0] == "MAC":
-                handler.mac_address()
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.mac_address(ip_address)
             elif msg[0] == "SHUTDOWN":
-                handler.shutdown()
-                handler.disconnect(sender_address, ip_per_address)
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.shut_down(ip_address)
+                handler.disconnect(sender_address)
             elif msg[0] == "LOGOUT":
-                handler.logout()
-                handler.disconnect(sender_address, ip_per_address)
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.logout(ip_address)
+                handler.disconnect(sender_address)
             elif msg[0] == "RESTART":
-                handler.restart()
-                handler.disconnect(sender_address, ip_per_address)
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.restart(ip_address)
+                handler.disconnect(sender_address)
             else:
                 raise Exception("Invalid command")
-                
-
-
     except Exception as e:
         handler.raise_error_message(e)      
-
-
-
-def main():
-    print("End main")
-
-main()

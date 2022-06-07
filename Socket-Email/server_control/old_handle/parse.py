@@ -19,7 +19,7 @@ q = Queue(maxsize=0)
         KILL <ID/PID>, ACK/Err
     
     * CAPTURING
-        SCREENSHOT, a single image
+        SCREENSHOT <seconds>, a video
         WEB/REC <seconds>, a video
         KEYLOG <seconds>, a list of actions
     

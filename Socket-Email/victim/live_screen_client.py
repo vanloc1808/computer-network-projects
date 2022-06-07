@@ -14,7 +14,12 @@ BUFSIZ = 4 * 1024
 
 def capture_screen(client):
     INFO_SZ = 100
-    time_to_rec = 0.5
+    msg = client.recv(BUFSIZ).decode("utf8")
+    print('Message: ', msg)
+    try:
+        time_to_rec = float(msg)
+    except:
+        return
 
     current = time.time()
     while time.time() - current < time_to_rec:

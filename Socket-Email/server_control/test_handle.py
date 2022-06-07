@@ -14,6 +14,14 @@ conn_ip_list = [] # list_ip() # Tuple (conn, addr)
 auth_dict = defaultdict(lambda: False) # MAIL -> bool
 email_ip_dict = {} # MAIL -> IP
 
+def authorize(sender_address, ip_address, ip_per_address):
+    if sender_address in ip_per_address:
+        if ip_per_address[sender_address] == ip_address:
+            return True
+        return False
+    ip_per_address[sender_address] = ip_address
+    return True
+
 def list_ip():
     return [elem[1] for elem in conn_ip_list]
 
@@ -55,7 +63,7 @@ def list_process(ip_address):
 
         result = app_process_server._list(conn, "PROCESS") 
         result_dictionary[ip_address].put(result)
-        # print(result)
+        print(result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -66,7 +74,7 @@ def list_application(ip_address):
 
         result = app_process_server._list(conn, "APPLICATION")
         result_dictionary[ip_address].put(result)
-        # print(result)
+        print(result)
     
     action_dictionary[ip_address].put(action_message)
 
@@ -76,7 +84,7 @@ def kill_process(ip_address, id):
 
         result = app_process_server.send_kill(conn, id)
         result_dictionary[ip_address].put(result)
-        # print(result)
+        print(result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -86,7 +94,7 @@ def kill_application(ip_address, id):
 
         result = app_process_server.send_kill(conn, id)
         result_dictionary[ip_address].put(result)
-        # print(result)
+        print(result)
     
     action_dictionary[ip_address].put(action_message)
 
@@ -126,9 +134,11 @@ def create_video():
     cv2.destroyAllWindows()
     video.release()
 
-def capture_screen(ip_address):
+def capture_screen(ip_address, time=0.5):
     def action_message(conn):
         conn.sendall(b'LIVESCREEN'.ljust(BUFSIZ))
+        str_time = str(time).encode().ljust(BUFSIZ)
+        conn.sendall(str_time)
 
         # number_of_images = 10
         n = 1
@@ -224,11 +234,11 @@ def mac_address(ip_address):
 
         result = mac_address_server.mac_address(conn)
         result_dictionary[ip_address].put(result)
-        # print(result)
+        print(result)
 
     action_dictionary[ip_address].put(action_message)
 
-def keylog(ip_address, time):
+def keylog(ip_address, time=10):
     def action_message(conn):
         conn.sendall(bytes("KEYLOG", "utf8"))
         conn.sendall(b'HOOK'.ljust(BUFSIZ))
@@ -238,7 +248,7 @@ def keylog(ip_address, time):
 
         data = conn.recv(BUFSIZ)      
         result_dictionary[ip_address].put(data.decode('utf8'))
-        # print(data.decode('utf8'))
+        print(data.decode('utf8'))
 
     action_dictionary[ip_address].put(action_message)
 
@@ -259,7 +269,6 @@ def registry_list(ip_address, full_path):
 
     action_dictionary[ip_address].put(action_message)
         
-        # print(data) 
 
 def registry_update(ip_address, absolute_path, value, data_type):
     def action_message(conn):
@@ -273,7 +282,7 @@ def registry_update(ip_address, absolute_path, value, data_type):
         
         ack = conn.recv(BUFSIZ).decode('utf8')
         result_dictionary[ip_address].put(ack)
-        # print(ack)
+        print(ack)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -306,4 +315,7 @@ def dir_copy(ip_address, src_path, dst_path):
         result_dictionary[ip_address].put(ack)
         print(ack)
     action_dictionary[ip_address].put(action_message)
+
+def raise_error_message(error_message):
+    print(error_message)
 
