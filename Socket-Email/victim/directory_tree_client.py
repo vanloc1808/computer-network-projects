@@ -9,7 +9,7 @@ BUFSIZ = 1024 * 4
 SEPARATOR = "<SEPARATOR>" 
 
 def directory_handle(conn):
-    BUFSIZ = 32768
+    BUFSIZ = 32768 # caution!
     msg = conn.recv(BUFSIZ).decode('utf8')
     print(msg)
     if not msg:
