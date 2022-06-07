@@ -98,7 +98,7 @@ def kill_application(ip_address, id):
     
     action_dictionary[ip_address].put(action_message)
 
-def capture_webcam(ip_address, time):
+def capture_webcam(ip_address, time=5):
     def action_message(conn):
         conn.sendall(b"WEBCAM".ljust(BUFSIZ))
         conn.sendall(str(time).encode().ljust(BUFSIZ))
