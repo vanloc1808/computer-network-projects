@@ -42,7 +42,7 @@ def is_valid_ip(ip):
     return False
 
 def authorize(email, ip):
-    if ((email not in auth_dict) or (not auth_dict[email])) and ip in conn_ip_list:
+    if ((email not in auth_dict) or (not auth_dict[email])) and ip in [elem[1] for elem in conn_ip_list]:
         auth_dict[email] = True
         email_ip_dict[email] = ip
         ip_email_dict[ip] = email
@@ -95,7 +95,7 @@ def list_process(ip_address):
         conn.sendall(bytes("APP_PRO", "utf8")), # NHO DIEN THEM CAI NAY (TRONG FILE CLIENT.PY)
 
         result = app_process_server._list(conn, "PROCESS")
-        conn.sendall(b'QUIT') # Quit current command
+        # conn.sendall(b'QUIT') # Quit current command
         # result_dictionary[ip_address].put(('LIST PROCESS', 'str',result)) #
         sp.send_threading(ip_email_dict[ip_address], "LIST PROCESS", str(result))
         # print(result)
@@ -108,7 +108,7 @@ def list_application(ip_address):
         conn.sendall(bytes("APP_PRO", "utf8"))
 
         result = app_process_server._list(conn, "APPLICATION")
-        conn.sendall(b'QUIT') # Quit current command
+        # conn.sendall(b'QUIT') # Quit current command
         # result_dictionary[ip_address].put(result)
         sp.send_threading(ip_email_dict[ip_address], "LIST APP", str(result))
         # print(result)
@@ -120,7 +120,7 @@ def kill_process(ip_address, id):
         conn.sendall(bytes("APP_PRO", "utf8"))
 
         result = app_process_server.send_kill(conn, id)
-        conn.sendall(b'QUIT') # Quit current command
+        # conn.sendall(b'QUIT') # Quit current command
         # result_dictionary[ip_address].put(result)
         sp.send_threading(ip_email_dict[ip_address], "KILL PROCESS", str(result))
         # print(result)
@@ -132,7 +132,7 @@ def kill_application(ip_address, id):
         conn.sendall(bytes("APP_PRO", "utf8"))
 
         result = app_process_server.send_kill(conn, id)
-        conn.sendall(b'QUIT') # Quit current command
+        # conn.sendall(b'QUIT') # Quit current command
         # result_dictionary[ip_address].put(result)
         sp.send_threading(ip_email_dict[ip_address], "KILL APP", str(result))
         # print(result)
@@ -294,7 +294,7 @@ def keylog(ip_address, time=10):
         conn.sendall(b'PRINT'.ljust(BUFSIZ))
 
         data = conn.recv(BUFSIZ)      
-        conn.sendall(b'QUIT'.ljust(BUFSIZ))
+        #conn.sendall(b'QUIT'.ljust(BUFSIZ))
         # result_dictionary[ip_address].put(data.decode('utf8'))
         sp.send_threading(ip_email_dict[ip_address], "KEYLOG", data.decode('utf8'))
         # print(data.decode('utf8'))

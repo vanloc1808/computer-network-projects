@@ -3,9 +3,9 @@ import mail_handler as handler
 # a list of dictionary, each of which has the type
 # { email_address: IP connected }
 
-def get_corresponding_ip(sender_address):
-    if sender_address in handler.email_ip_dict:
-        return handler.email_ip_dict[sender_address]
+def get_corresponding_ip(email_address):
+    if email_address in handler.email_ip_dict:
+        return handler.email_ip_dict[email_address]
     return None
 
 """
@@ -33,7 +33,9 @@ def get_corresponding_ip(sender_address):
         DIR COPY <src path> <dst path folder>, ACK
 """
 def command_parser(message, sender_address):
+    print('Command:', message)
     msg = message.split(' ')
+    print('After split: ', msg)
     '''
     file_in = open('keys.txt', "r")
     key = file_in.readline()
@@ -170,11 +172,13 @@ def command_parser(message, sender_address):
                 if ip_address is None:
                     raise Exception("No corresponding IP")
                 handler.capture_screen(ip_address)
+                '''
             elif msg[0] == "MAC":
                 ip_address = get_corresponding_ip(sender_address)
                 if ip_address is None:
                     raise Exception("No corresponding IP")
                 handler.mac_address(ip_address)
+                '''
             elif msg[0] == "SHUTDOWN":
                 ip_address = get_corresponding_ip(sender_address)
                 if ip_address is None:
@@ -193,6 +197,11 @@ def command_parser(message, sender_address):
                     raise Exception("No corresponding IP")
                 handler.restart(ip_address)
                 handler.disconnect(sender_address)
+            elif msg[0] == "WEB" or msg[0] == "REC":
+                ip_address = get_corresponding_ip(sender_address)
+                if ip_address is None:
+                    raise Exception("No corresponding IP")
+                handler.capture_webcam(ip_address)
             else:
                 raise Exception("Invalid command")
     except Exception as e:
