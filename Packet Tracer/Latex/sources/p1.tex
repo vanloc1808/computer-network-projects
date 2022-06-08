@@ -4,28 +4,35 @@
 \item Sử dụng mô hình cho sẵn (đính kèm trong tập tin Project3{\_}1.pkt) để trả lời các yêu cầu bên dưới:
 
 \rm Điền thông tin còn thiếu vào bảng: (các ô không có dấu -):
+
+Các thông tin còn thiếu được điền bằng màu xanh.
+\begin{table}[H]
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 \textbf{Device}&\textbf{Interface}&\textbf{IP address}&\textbf{Subnet mask}&\textbf{Default gateway}\\
 \hline
-Router0&G0/0&192.168.1.1&255.255.255.0&-\\
+Router0&G0/0&\textcolor{blue}{192.168.1.1}&\textcolor{blue}{255.255.255.0}&-\\
 \hline
-Router0&G0/1&192.168.8.1&255.255.255.0&-\\
+Router0&G0/1&\textcolor{blue}{192.168.8.1}&\textcolor{blue}{255.255.255.0}&-\\
 \hline
-Router1&G1/0&192.168.2.1&255.255.255.0&-\\
+Router1&G1/0&\textcolor{blue}{192.168.2.1}&\textcolor{blue}{255.255.255.0}&-\\
 \hline
-Router1&G1/1&192.168.8.2&255.255.255.0&-\\
+Router1&G1/1&\textcolor{blue}{192.168.8.2}&\textcolor{blue}{255.255.255.0}&-\\
 \hline
-PC0 (PC1 trên hình \ref{fig1.1})&-&192.168.1.10&255.255.255.0&192.168.1.1\\
+PC0 (PC1 trên hình \ref{fig1.1})&-&\textcolor{blue}{192.168.1.10}&\textcolor{blue}{255.255.255.0}&\textcolor{blue}{192.168.1.1}\\
 \hline
-PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
+PC1 (PC2 trên hình \ref{fig1.1})&-&\textcolor{blue}{192.168.2.10}&\textcolor{blue}{255.255.255.0}&\textcolor{blue}{192.168.2.1}\\
 \hline
 \end{tabular}
+\caption{Điền thông tin còn thiếu}
 \end{center}
+\end{table}
+
+
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-prob}
+\includegraphics[scale=0.5]{../figures/p1/p1-prob}
 \end{center}
 \caption{Nội dung tập tin Project3{\_}1.pkt ban đầu}
 \label{fig1.1}
@@ -33,14 +40,14 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-ipconfig-pc}
+\includegraphics[scale=0.5]{../figures/p1/p1-ipconfig-pc}
 \end{center}
 \caption{Kiểm tra thông tin IP của PC}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-ipconfig-router}
+\includegraphics[scale=0.5]{../figures/p1/p1-ipconfig-router}
 \end{center}
 \caption{Kiểm tra thông tin IP của router}
 \end{figure}
@@ -50,7 +57,7 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 \rm 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-2}
+\includegraphics[scale=0.5]{../figures/p1/p1-2}
 \end{center}
 \caption{Mô hình mạng}
 \end{figure}
@@ -61,7 +68,7 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-3}
+\includegraphics[scale=0.5]{../figures/p1/p1-3}
 \end{center}
 \caption{Kiểm tra cấu hình gateway}
 \end{figure}
@@ -72,7 +79,7 @@ PC1 (PC2 trên hình \ref{fig1.1})&-&192.168.2.10&255.255.255.0&192.168.2.1\\
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-4}
+\includegraphics[scale=0.5]{../figures/p1/p1-4}
 \end{center}
 \caption{Kiểm tra kết nối từ PC0 (\texttt{192.168.1.10}) đến PC1 (\texttt{192.168.2.10})}
 \end{figure}
@@ -85,35 +92,35 @@ Lúc này cả 2 router chưa cấu hình thông tin định tuyến, do đó m�
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-5a}
+\includegraphics[scale=0.5]{../figures/p1/p1-5a}
 \end{center}
 \caption{Trước khi thêm PC2}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-5b}
+\includegraphics[scale=0.5]{../figures/p1/p1-5b}
 \end{center}
 \caption{Thêm máy tính mới PC2}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-5c}
+\includegraphics[scale=0.5]{../figures/p1/p1-5c}
 \end{center}
 \caption{Mở cấu hình máy}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-5d}
+\includegraphics[scale=0.5]{../figures/p1/p1-5d}
 \end{center}
 \caption{Nối PC2 với Switch1 (Switch1 đang nối 2 router với các cổng \texttt{192.168.8.1} (của Router0), \texttt{192.168.8.2} (của Router1))}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-5e}
+\includegraphics[scale=0.5]{../figures/p1/p1-5e}
 \end{center}
 \caption{Cấu hình máy PC2, chọn default gateway là \texttt{192.168.8.1}}
 \end{figure}
@@ -124,12 +131,14 @@ Lúc này cả 2 router chưa cấu hình thông tin định tuyến, do đó m�
 \rm 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-6}
+\includegraphics[scale=0.5]{../figures/p1/p1-6}
 \end{center}
 \caption{Kiểm tra kết nối từ PC0 (\texttt{192.168.1.10}) đến PC2 (\texttt{192.168.8.3})}
 \end{figure}
 
-Có 1 gói tin đầu tiên bị mất, còn lại 3 gói tin kia đều gửi được. Bằng lệnh \texttt{tracert} (hình vẽ) ta thấy được gói tin ICMP đi qua router0, cổng 0: \texttt{192.168.1.1}, sau đó qua cổng 1: \texttt{192.168.8.1} (là default gateway của PC2) đến máy PC2 (\texttt{192.168.8.3}).
+Ở lần \texttt{ping} đầu tiên, có 1 gói tin đầu tiên bị mất, còn lại 3 gói tin kia đều gửi được. Từ lần \texttt{ping} thứ 2, cả 4 gói tin đều gửi được.
+
+Bằng lệnh \texttt{tracert} (hình vẽ) ta thấy được gói tin ICMP đi qua router0, cổng 0: \texttt{192.168.1.1}, sau đó qua cổng 1: \texttt{192.168.8.1} (là default gateway của PC2) đến máy PC2 (\texttt{192.168.8.3}).
 
 
 \bf \item Thay thế đường default route có trong Router0, Router1 bằng cấu hình định tuyến tĩnh sao cho tất cả các subnet có trong mô hình có thể kết nối lẫn nhau.
@@ -138,14 +147,14 @@ Có 1 gói tin đầu tiên bị mất, còn lại 3 gói tin kia đều gửi �
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-4a}
+\includegraphics[scale=0.5]{../figures/p1/p1-4a}
 \end{center}
 \caption{Cấu hình bảng định tuyến cho router0}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[scale=0.4]{../figures/p1/p1-4b}
+\includegraphics[scale=0.5]{../figures/p1/p1-4b}
 \end{center}
 \caption{Cấu hình bảng định tuyến router}
 \end{figure}

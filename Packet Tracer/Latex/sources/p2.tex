@@ -61,7 +61,7 @@ Trả lời:
 \begin{enumerate}
 \bf \item Phân tích hiện trạng và nhu cầu của công ty. Hãy vẽ sơ đồ mạng logic cho văn phòng công ty (có ghi chú tên thiết bị, tên interface/ port, IP, subnet).
 
-\rm Hiện trạng và nhu cầu của công ty: Công ty đã có dãy địa chỉ \tt \textcolor{red}{172.72.0.0/16} \rm cần chia cho toàn hệ thống (dùng số lượng host tối đa theo yêu cầu):
+\rm \textbf{Hiện trạng và nhu cầu của công ty:} Công ty đã có dãy địa chỉ \textcolor{red}{\bf 172.72.0.0/16} cần chia cho toàn hệ thống (dùng số lượng host tối đa theo yêu cầu):
 
 \begin{enumerate}
 \item Tầng 1: 
@@ -86,10 +86,13 @@ Trả lời:
 
 \end{enumerate}
 
-Ta thực hiện chia subnet như sau:
+\textbf{Ta thực hiện chia subnet như sau:}
 
-Có tổng cộng 6 subnets, trong đó subnet cần nhiều hosts/users nhất là 20 \(\Rightarrow\) cần giữ lại \(m\) bit host sao cho \(2^m-2\ge 20\Rightarrow m\ge 5\), do đó ta được mượn tối đa \(32-16-5 = 11\) bit net. Trong đó ta chỉ cần 6 subnets do đó ta chỉ cần mượn 3 bit (ở byte 3), chia được thành 8 địa chỉ đường mạng con (subnet), mỗi subnet này cho phép số địa chỉ host hợp lệ là \(2^{32-16-3}-2 = 8190 > 20\).
+\it Có tổng cộng 6 subnets, trong đó subnet cần nhiều hosts/users nhất là 20 \(\Rightarrow\) cần giữ lại \(m\) bit host sao cho \(2^m-2\ge 20\Rightarrow m\ge 5\), do đó ta được mượn tối đa \(32-16-5 = 11\) bit net. 
 
+Mà ta chỉ cần 6 subnets do đó ta chỉ cần mượn 3 bit (ở byte 3), chia được thành 8 địa chỉ đường mạng con (subnet), mỗi subnet này cho phép số địa chỉ host hợp lệ là \(2^{32-16-3}-2 = 8190 > 20\).
+\begin{table}[H]
+\begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
 STT & Đ/c đường mạng & Subnet mask & Đ/c broadcast & Dải đ/c host hợp lệ\\
@@ -111,30 +114,110 @@ STT & Đ/c đường mạng & Subnet mask & Đ/c broadcast & Dải đ/c host h�
 8 & 172.72.224.0 & 255.255.224.0 & 172.72.255.255 & 172.72.224.1 - 172.72.255.254\\
 \hline
 \end{tabular}
+\caption{Chia subnet}
+\end{center}
+\end{table}
 
-Ta chia cho từng nhu cầu một đường mạng con (subnet) như sau:
+Sau đó ta chia cho mỗi nhu cầu/phòng ban một đường mạng con/subnet như sau:
+\rm
+Subnet 172.72.0.0/19 dùng cho phòng hành chính, tầng 1 (10 hosts).
 
-Subnet 1: 172.72.0.0/19 dùng cho phòng hành chính, tầng 1 (10 hosts).
+Subnet 172.72.32.0/19 dùng cho mạng wi-fi nhân viên và khách vãng lai, tầng 1 (20 hosts).
 
-Subnet 2: 172.72.32.0/19 dùng cho mạng wi-fi nhân viên và khách vãng lai, tầng 1 (20 hosts).
+Subnet 172.72.64.0/19 dùng cho phòng kỹ thuật, tầng 2 (5 hosts).
 
-Subnet 3: 172.72.64.0/19 dùng cho phòng kỹ thuật, tầng 2 (5 hosts).
+Subnet 172.72.96.0/19 dùng cho phòng lãnh đạo, tầng 2 (5 hosts).
 
-Subnet 4: 172.72.96.0/19 dùng cho phòng lãnh đạo, tầng 2 (5 hosts).
+Subnet 172.72.128.0/19 dùng cho mạng wi-fi phòng họp, tầng 3 (20 hosts).
 
-Subnet 5: 172.72.128.0/19 dùng cho mạng wi-fi phòng họp, tầng 3 (20 hosts).
+Và lấy 10 địa chỉ IP tĩnh trong subnet 172.72.160.0/19 để cấp cho 10 servers, cụ thể ta sẽ chọn dãy địa chỉ 172.72.160.1 - 172.72.160.10 để cấp, trong đó
+\begin{enumerate}
+\item Dịch vụ DHCP: triển khai trên server 172.72.160.1
 
-Tầng 4, 10 servers dùng địa chỉ IP tĩnh, ta lấy tương ứng 10 địa chỉ trong subnet 6: 172.72.160.0/19, cụ thể là 172.72.160.1 - 172.72.160.10
+\item Dịch vụ DNS: triển khai trên server 172.72.160.2
 
-Dịch vụ DHCP: triển khai trên server 172.72.160.1
+\item Dịch vụ WEB: triển khai trên server 172.72.160.3
+\end{enumerate}
 
-Dịch vụ DNS: triển khai trên server 172.72.160.2
+\textbf{Sơ đồ mạng logic cho văn phòng công ty được thiết kế như sau:}
 
-Dịch vụ WEB: triển khai trên server 172.72.160.3
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.9]{../figures/p2/sodo}
+\end{center}
+\caption{Sơ đồ mạng logic cho văn phòng công ty}
+\end{figure}
 
 \bf \item Lập bảng mô tả chi tiết thiết bị gồm: khu vực đặt thiết bị, loại thiết bị, tên thiết bị, version/model, chức năng, tên interface/port, IP
 
 \rm
+\begin{longtable}{|p{1cm}|p{6cm}|p{4cm}|c|}
+\hline
+Tên thiết bị & \multicolumn{1}{c|}{Chức năng - Khu vực} & \multicolumn{1}{c|}{Interface/Port} & IP\\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các Router [Router-PT]: Kết nối các mạng logic khác nhau, sử dụng địa chỉ IP để xử lý gói tin, định tuyến và chuyển tiếp gói tin. Số lượng: 3}\\
+\hline
+\multirow{4}*{R0} & \multirow{4}{=}{Kết nối giữa 2 đường mạng ở tầng 1 và 2 router R1, R2} & FastEthernet0/0 & 172.72.0.1/19 \\
+ & & FastEthernet1/0 & 172.72.32.1/19 \\
+ & & Serial2/0 & 172.72.201.1/24\\
+ & & Serial3/0 & 172.72.202.2/24\\
+\hline
+\multirow{4}*{R1} & \multirow{4}{=}{Kết nối giữa 2 đường mạng ở tầng 2 và 2 router R0, R2} & FastEthernet0/0 & 172.72.64.1/19 \\
+ & & FastEthernet1/0 & 172.72.96.1/19 \\
+ & & Serial2/0 & 172.72.212.1/24\\
+ & & Serial3/0 & 172.72.201.2/24\\
+\hline
+\multirow{4}*{R2} & \multirow{4}{=}{Kết nối giữa 2 đường mạng ở tầng 3, 4 và 2 router R0, R1} & FastEthernet0/0 & 172.72.128.1/19 \\
+ & & FastEthernet1/0 & 172.72.191.254/19 \\
+ & & Serial2/0 & 172.72.202.1/24\\
+ & & Serial3/0 & 172.72.212.2/24\\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các Switch [2950-24] (gồm 24 port): Kết nối 2 nhánh mạng vật lý, chuyển tiếp gói tin có chọn lọc (filtering/forwarding), duy trì bảng địa chỉ MAC. Số lượng: 4}\\
+\hline
+Sw0 & Phòng hành chính (10 máy) & FastEthernet0/1-24 & - \\
+\hline
+Sw1 & Phòng kỹ thuật (5 máy) & FastEthernet0/1-24 & - \\
+\hline
+Sw2 & Phòng lãnh đạo (5 máy) & FastEthernet0/1-24 & - \\
+\hline
+Sw3 & Tầng 4 (10 máy) & FastEthernet0/1-24 & - \\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các Access Point [AccessPoint-PT]: Cho phép các thiết bị truy cập mạng không dây. Số lượng: 2}\\
+\hline
+AP0 & Nhân viên + Khách vãng lai (20 thiết bị) & Port0: Nối với router R0; Port1: SSID: wifi-tang-1, Authentication: WPA2-PSK, Pass phrase: 172-72-32 & -\\
+\hline
+AP1 & Phòng họp (20 thiết bị) & Port0: Nối với router R0; Port1: SSID: wifi-tang-3, Authentication: WPA2-PSK, Pass phrase: 172-72-128 & -\\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các Server [Server-PT]. Số lượng: 10, thể hiện 4 servers: 3 servers cho 3 yêu cầu + 1 server đại diện cho 7 server còn lại}\\
+\hline
+S0 & DHCP Server: Cấp phát địa chỉ IP động cho các hosts & FastEthernet0 & 172.72.160.1/19\\
+\hline
+S1 & DNS Server: Phân giải tên miền quản lý: mmt-72.com & FastEthernet0 & 172.72.160.2/19\\
+\hline
+S2 & WEB Server: Host của tên miền www.mmt-72.com & FastEthernet0 & 172.72.160.3/19\\
+\hline
+ & 7 server khác (đại diện là S3 với đ/c IP: 172.72.160.4/19) & FastEthernet0 & 172.72.160.(4-10)/19\\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các PC [PC-PT]. Số lượng: 20 (10 + 5 + 5), có thể thêm ở các mạng wi-fi ở tầng 1 hoặc tầng 3, trong đó thể hiện 6 PC + một số PC có thể kết nối vào các mạng wi-fi vừa nói.}\\
+\hline
+ & Phòng hành chính (đại diện là PC0, PC1) & FastEthernet0 & [DHCP] 172.72.(0.2-31.254)/19\\
+\hline
+ & Phòng kỹ thuật (đại diện là PC4, PC5) & FastEthernet0 & [DHCP] 172.72.(64.2-95.254)/19\\
+\hline
+ & Phòng lãnh đạo (đại diện là PC6, PC7) & FastEthernet0 & [DHCP] 172.72.(96.2-127.254)/19\\
+\hline
+ & Nhân viên + khách vãng lai (nếu có, đại diện là PC2, PC3) & Wireless0 (SSID wifi-tang-1) & [DHCP] 172.72.(32.2-63.254)/19\\
+\hline
+ & Phòng họp (nếu có, đại diện là PC8, PC9) & Wireless0 (SSID wifi-tang-3) & [DHCP] 172.72.(128.2-159.254)/19\\
+\hline
+\multicolumn{4}{|p{\linewidth}|}{Các thiết bị End Devices khác, nếu có.}\\
+\hline
+ & Nhân viên + khách vãng lai (nếu có, đại diện là Smartphone Sm0, Laptop L0) & Wireless0 (SSID wifi-tang-1) & [DHCP] 172.72.(32.2-63.254)/19\\
+\hline
+ & Phòng họp (nếu có) & Wireless0 (SSID wifi-tang-3) & [DHCP] 172.72.(128.2-159.254)/19\\
+\hline
+\caption{Bảng mô tả chi tiết thiết bị}
+\end{longtable}
 
 \bf \item Sử dụng công cụ packet tracer để triển khai mô hình mạng đã thiết kế (chụp hình các bước triển khai cấu hình)
 

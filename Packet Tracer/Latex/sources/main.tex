@@ -21,6 +21,7 @@
 \usepackage{minitoc}
 \pgfplotsset{compat=1.5}
 \usepackage{mathrsfs}
+\usepackage{longtable}
 \usetikzlibrary{arrows, calc}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
@@ -57,7 +58,7 @@
 \renewcommand{\listfigurename}{Danh sách hình}
 \renewcommand{\listtablename}{Tables}
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage[left=1cm,right=1cm,top=2cm,bottom=2cm]{geometry}
 \author{Nguyễn Văn Lộc}
 \newmdenv[linecolor=black,skipabove=\topsep,skipbelow=\topsep,
 leftmargin=-5pt,rightmargin=-5pt,
@@ -68,9 +69,9 @@ innerleftmargin=5pt,innerrightmargin=5pt]{mybox}
 \lhead{Báo cáo đồ án môn học Mạng máy tính}
 \chead{}
 \rhead{Đồ án thực hành Packet Tracer}
+\lfoot{}
 \cfoot{\thepage}
 \rfoot{}
-\lfoot{}
 \pagestyle{fancy}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
@@ -80,9 +81,7 @@ innerleftmargin=5pt,innerrightmargin=5pt]{mybox}
 \listoftables
 \newpage
 \input{header}
-\newpage
 \input{p1}
-\newpage
 \input{p2}
 \newpage
 \nocite{gt}
