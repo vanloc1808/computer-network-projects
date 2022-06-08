@@ -82,8 +82,12 @@ def command_parser(message, sender_address):
                     raise Exception("Invalid IP")  
 
                  # if the code goes here, it will start connection to the IP at msg[2]
-                ip_address = msg[2]
-                handler.authorize(sender_address, ip_address)
+                # ip_address = msg[2]
+                colon_index = msg[2].find(':')
+                ip_address = msg[2][:colon_index]
+                port = int(msg[2][colon_index+1:])
+                ip_tuple = (ip_address, port)
+                handler.authorize(sender_address, ip_tuple)
 
             elif msg[0] == "REGISTRY":
                 if msg[1] == "LIST":

@@ -1,3 +1,4 @@
+from cgitb import handler
 from collections import defaultdict
 from old_handle import app_process_server
 from old_handle import mac_address_server
@@ -7,6 +8,7 @@ import cv2
 import os
 from time import sleep
 from random import choices
+import re
 
 # import mail_provider_handle.SMTP_service
 from mail_provider_handle import SMTP_service as sp
@@ -29,8 +31,18 @@ action_dictionary = {}
 #     ip_per_address[sender_address] = ip_address
 #     return True
 
+def is_valid_ip(ip):
+    ip_address = "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"
+    port = "([0-9]|[1-9][0-9]|[1-9][0-9]{2}|[1-9][0-9]{3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])"
+    ip_pattern = re.compile(r"^" + ip_address + "\\." + ip_address + "\\." + ip_address + "\\." + ip_address + "\\:" + port + "$")
+    
+    if (ip_pattern.match(ip)):
+        return True
+    
+    return False
+
 def authorize(email, ip):
-    if (email not in auth_dict) or (not auth_dict[email]):
+    if ((email not in auth_dict) or (not auth_dict[email])) and ip in conn_ip_list:
         auth_dict[email] = True
         email_ip_dict[email] = ip
         ip_email_dict[ip] = email
