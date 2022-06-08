@@ -3,8 +3,28 @@
 \input{latex/handle}
 \input{latex/process_application}
 \input{latex/screenshot}
-\subsection{Webcam}
-
+\input{latex/webcam}
+\subsection{Keylogger}
+Server sẽ gửi lệnh \textbf{KEYLOG} cho client. Do thiết kế của các hàm có sẵn cho việc keylog ở client, server sẽ gửi lệnh \textbf{HOOK}, sau đó nghỉ một khoảng thời gian bằng đúng thời gian yêu cầu của lệnh, rồi lại gửi lệnh \textbf{HOOK} đến client. Sau đó, một lệnh \textbf{PRINT} được gửi đến client để client gửi dữ liệu về các phím nhấn đã bắt được trong thời gian đó lại cho server. Server nhận kết quả từ client.\\
+Các hàm cho quá trình này như sau:\\
+Ở server:
+\begin{lstlisting}
+def keylog(ip_address, time=10):
+\end{lstlisting}
+Chức năng: gửi yêu cầu keylog đến client, nhận kết quả từ client gửi về.\\
+Sử dụng hàm \lstinline{sleep} của thư viện time.\\
+Ở client:
+\begin{lstlisting}
+def keylog(client):
+\end{lstlisting}
+Chức năng: nhận lệnh từ server, bắt các phím nhấn rồi gửi kết quả lại cho server.\\
+Thư viện sử dụng: threading, keyboard, pynput.keyboard.\\
+Ngoài ra, ở client còn có các hàm để bổ trợ cho hàm \lstinline{keylog} trong việc bắt phím nhấn cũng như gửi kết quả lại cho server.
+\begin{lstlisting}
+def keylogger(key):
+def _print(client):
+def listen():
+\end{lstlisting}
 
 \begin{lstlisting}
 
