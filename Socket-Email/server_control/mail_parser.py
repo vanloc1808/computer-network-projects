@@ -1,15 +1,11 @@
-from queue import Queue
-import test_handle as handler
+import mail_handler as handler
 
 # a list of dictionary, each of which has the type
 # { email_address: IP connected }
-ip_per_address = {'vanloc1808@gmail.com': '127.0.0.1'}
-
-q = Queue(maxsize=0)
 
 def get_corresponding_ip(sender_address):
-    if sender_address in ip_per_address:
-        return ip_per_address[sender_address]
+    if sender_address in handler.email_ip_dict:
+        return handler.email_ip_dict[sender_address]
     return None
 
 """
@@ -87,7 +83,7 @@ def command_parser(message, sender_address):
 
                  # if the code goes here, it will start connection to the IP at msg[2]
                 ip_address = msg[2]
-                handler.authorize(sender_address, ip_address, ip_per_address)
+                handler.authorize(sender_address, ip_address)
 
             elif msg[0] == "REGISTRY":
                 if msg[1] == "LIST":
@@ -115,7 +111,7 @@ def command_parser(message, sender_address):
                 if msg[1] != key:
                     raise Exception("Invalid key")
 
-                handler.list_ip()
+                handler.list_ip(sender_address)
             elif msg[0] == "KILL":
                 ip_address = get_corresponding_ip(sender_address)
                 if ip_address is None:

@@ -1,8 +1,6 @@
 import poplib
 
-from numpy import empty
-
-from env import email, password
+from mail_provider_handle.env import email, password
 import logging
 from time import sleep
 
@@ -16,7 +14,7 @@ PORT = 995
 
 RELOAD_TIME = 10 # Reload cost 10 seconds
 
-q = Queue(0) # Max queue
+mail_queue = Queue(0) # Max queue
 
 def get_mails():    
     receiver = poplib.POP3_SSL(SERVER_NAME, PORT)
@@ -37,7 +35,7 @@ def get_mails():
             if (line[:8] == b'Subject:'):
                 subject = line[9:]
                 break
-        q.put((sender, subject))
+        mail_queue.put((sender, subject))
         # delete that message:
         receiver.dele(x + 1)
     receiver.quit()
@@ -49,12 +47,12 @@ def loop():
         sleep(RELOAD_TIME)
 
 t = threading.Thread(target = loop, args=())
-t.setDaemon(True)
+# t.setDaemon(True)
 t.start()
 
 # Getting message prototype <>: q.get() -> (sender_mail, subject), can be use to pass to function
-while True:
-    while(not q.empty()):
-        print("<get from queue>")
-        print(q.get())
-        q.task_done() # Required after get
+# while True:
+#     while(not mail_queue.empty()):
+#         print("<get from queue>")
+#         print(mail_queue.get())
+#         mail_queue.task_done() # Required after get
