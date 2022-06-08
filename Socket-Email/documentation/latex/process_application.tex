@@ -11,10 +11,12 @@ def list_process(ip_address): # module handle
 def _list(conn:socket.socket, s): # module app_process_server
 def send_kill(conn:socket.socket, process_id): # module app_process_server
 \end{lstlisting}
+Thư viện sử dụng: pickle, struct, pandas.\\
 Ở client:
 \begin{lstlisting}
 def app_process(client): # module app_process_client
 \end{lstlisting}
+Thư viện sử dụng: pickle, psutil, struct, os, subprocess.\\
 Server có các hàm phụ trách việc nhận dữ liệu:
 \begin{lstlisting}
 def recvall(sock, size):

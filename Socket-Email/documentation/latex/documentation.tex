@@ -1,100 +1,16 @@
 \section{Sưu liệu cho các hàm}
-\subsection{Phân tích câu lệnh}
-Hàm phân tích câu lệnh được định nghĩa là:
-\begin{lstlisting}
-def command_parser(message, sender_address):
-\end{lstlisting}
-Chức năng: phân tích câu lệnh được gửi đến, gọi hàm tương ứng với yêu cầu của câu lệnh.\\
-Tham số:
-\begin{itemize}
-\item \lstinline{message}: câu lệnh được gửi đến
-\item \lstinline{sender_address}: địa chỉ email của người gửi.
-\end{itemize}
-Không có giá trị trả về.\\
-
-Hàm \lstinline{get_corresponding_ip}
-\begin{lstlisting}
-def get_corresponding_ip(sender_address):
-\end{lstlisting}
-Chưc năng: lấy ra địa chỉ IP tương ứng với \lstinline{sender_address}.\\
-Tham số:
-\begin{itemize}
-\item \lstinline{sender_address}: địa chỉ email của người gửi.
-\end{itemize}
-Trả về địa chỉ IP tương ứng, trả về None nếu không tồn tại.
-
-\subsection{Module handle}
-Các hàm được định nghĩa trong module handle.py được sử dụng để xử lý các yêu cầu từ người dùng.
-\begin{lstlisting}
-def authorize(sender_address, ip_address, ip_per_address):
-\end{lstlisting}
-Chức năng: authorize địa chỉ email với IP tương ứng.\\
-Thám số: 
-\begin{itemize}
-\item \lstinline{sender_address}: địa chỉ email.
-\item \lstinline{ip_address}: địa chỉ IP
-\item \lstinline{ip_per_address}: dictionary, mỗi phần tử có dạng là <địa chỉ email>: <địa chỉ IP>.
-\end{itemize}
-Trả về True nếu thành công, False nếu không thành công.
-
-\begin{lstlisting}
-def list_ip():
-\end{lstlisting}
-Chức năng: trả về danh sách các địa chỉ IP đang được kết nối.
-
-\begin{lstlisting}
-def disconnect(email):
-\end{lstlisting}
-Chức năng: disconnect địa chỉ email hiện tại với IP tương ứng.
-Tham số:
-\begin{itemize}
-\item \lstinline{email}: địa chỉ IP tương ứng.
-\end{itemize}
-Không có giá trị trả về.
-
-\begin{lstlisting}
-def find_corresponding_email(ip_address):
-\end{lstlisting}
-Chức năng: tìm địa chỉ email tương ứng với IP được truyền vào.
-Tham số:
-\begin{itemize}
-\item \lstinline{ip_address}: địa chỉ IP.
-\end{itemize}
-Trả về: địa chỉ email tương ứng đang điều khiển địa chỉ IP này.
-
-\begin{lstlisting}
-def delete_ip_from_list(ip_address):
-\end{lstlisting}
-Chức năng: xóa địa chỉ IP ra khỏi danh sách IP kết nối.
-Tham số: 
-\begin{itemize}
-\item \lstinline{ip_address}: địa chỉ IP.
-\end{itemize}
-Không có giá trị trả về.
-
-\begin{lstlisting}
-def remove_this_connection(conn, ip_address):
-\end{lstlisting}
-Chức năng: loại bỏ kết nối tương ứng với IP.
-Tham số:
-\begin{itemize}
-\item \lstinline{conn}: socket tương ứng.
-\item \lstinline{ip_address}: địa chỉ IP.
-\end{itemize}
-Không có giá trị trả về.
-
-\begin{lstlisting}
-def __init__():
-\end{lstlisting}
-Chức năng: khởi tạo những giá trị liên quan.
-
+\input{latex/parser}
+\input{latex/handle}
 \input{latex/process_application}
+\input{latex/screenshot}
+\subsection{Webcam}
+
 
 \begin{lstlisting}
 
 \end{lstlisting}
-Chức năng:
-Tham số:
+Chức năng: \\
+Tham số: 
 \begin{itemize}
 \item \lstinline{}
 \end{itemize}

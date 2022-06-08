@@ -8,7 +8,7 @@ import os
 from time import sleep
 from random import choices
 
-import send_mail
+import mail_provider_handle.send_mail
 
 BUFSIZ = 4 * 1024
 
