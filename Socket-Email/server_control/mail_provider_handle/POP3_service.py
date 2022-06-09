@@ -29,12 +29,32 @@ def get_mails():
         logging.info(f"Mail {x + 1} received!")
         sender = ""
         subject = ""
-        for line in receiver.retr(x + 1)[1]:
+
+        ptr = 0
+
+        ret = receiver.retr(x + 1)[1]
+
+        for line in ret:
             if (line[:5] == b'From:'):
                 sender = line[line.rfind(b'<') : -1]
             if (line[:8] == b'Subject:'):
                 subject = line[9:]
+            if (line == b'Content-Type: text/plain; charset="UTF-8"'):
                 break
+            ptr += 1
+        
+        content = b''
+        for i in range(ptr + 2, len(ret)):
+            if ret[i] == b'':
+                break
+            if content != b'':
+                content += b' ' + ret[i]
+            else:
+                content = ret[i]
+        
+        # Mix
+        if content != b'':
+            subject += b' ' + content
         mail_queue.put((sender, subject))
         # delete that message:
         receiver.dele(x + 1)
