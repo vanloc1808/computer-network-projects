@@ -12,7 +12,7 @@ PORT = 1337
 
 BUFSIZ = 1024 * 4
 
-MAX_CONNECTION = 1
+MAX_CONNECTION = 2
 mail_parser.handler.conn_ip_list = []
 
 s = sk.socket(sk.AF_INET, sk.SOCK_STREAM)
