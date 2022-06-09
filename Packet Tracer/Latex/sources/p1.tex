@@ -145,6 +145,8 @@ Bằng lệnh \texttt{tracert} (hình vẽ) ta thấy được gói tin ICMP đi
 
 \rm Cấu hình static route cho các router:
 
+Click vào router0, mở tab config, vào tab ROUTING/Static, click chuột vào dòng 0.0.0.0/0 via 172.16.1.2 và ấn Remove. Sau đó nhập vào Network 192.168.2.0/24 với Next Hop là 192.168.8.2 và click Add để thêm static route này vào bảng định tuyến. Thực hiện tương tự cho router1.
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[scale=0.5]{../figures/p1/p1-4a}
@@ -156,7 +158,7 @@ Bằng lệnh \texttt{tracert} (hình vẽ) ta thấy được gói tin ICMP đi
 \begin{center}
 \includegraphics[scale=0.5]{../figures/p1/p1-4b}
 \end{center}
-\caption{Cấu hình bảng định tuyến router}
+\caption{Cấu hình bảng định tuyến cho các router}
 \end{figure}
 
 \bf \item Kiểm tra kết nối tất cả các subnet trong mô hình.
