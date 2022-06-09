@@ -221,8 +221,183 @@ S2 & WEB Server: Host của tên miền www.mmt-72.com & FastEthernet0 & 172.72.
 
 \bf \item Sử dụng công cụ packet tracer để triển khai mô hình mạng đã thiết kế (chụp hình các bước triển khai cấu hình)
 
-\rm
+\rm 
+\begin{enumerate}
+\item Dịch vụ DHCP:
 
+Mở Server \textsc{S0}, vào tab \textsc{Services}, chọn thẻ \textsc{DHCP}, sau đó bật Service thành On, cũng như điền thông tin tương ứng để cung cấp dải IP động cho các phòng ban từ tầng 1 đến tầng 3.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.5]{../figures/p2/dhcp1}
+\end{center}
+\caption{Triển khai dịch vụ DHCP trên server S0}
+\end{figure}
+
+Ví dụ sau đây là các thông tin để cung cấp IP động cho đường mạng phòng hành chính, tầng 1. Sau khi điền đầy đủ các thông tin, click Add để thêm vào bảng. Thực hiện tương tự cho wifi nhân viên + khách (tầng 1), phòng kỹ thuật (tầng 2), phòng lãnh đạo (tầng 2), wifi phòng họp (tầng 3). 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.7]{../figures/p2/dhcp2}
+\end{center}
+\caption{Điền các thông tin để cấp IP động cho mạng phòng hành chính, tầng 1}
+\end{figure}
+
+Về phía các hosts (PCs/các End Devices khác) sử dụng DHCP để cấp IP động, vào tab \textsc{Config}, sau đó vào tab \textsc{Global/Settings} và chọn DHCP ở phần Gateway/DNS IPv4 (hình vẽ minh họa cho các thiết bị Laptop L0, Smartphone Sm0, PC5)
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.5]{../figures/p2/dhcp3}
+\end{center}
+\caption{Cấu hình DHCP cho các hosts truy cập}
+\end{figure}
+
+\item Dịch vụ DNS: 
+
+Mở Server \textsc{S1}, vào tab \textsc{Services}, chọn thẻ \textsc{DNS}, sau đó bật DNS Service thành On, sau đó nhập tên miền cần quản lý, chọn Type là \texttt{\textcolor{blue}{A Record}}, và địa chỉ IP tương ứng. Sau đó click Add để thêm vào bảng.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.5]{../figures/p2/dns1}
+\end{center}
+\caption{Triển khai dịch vụ DNS trên server S1}
+\end{figure}
+
+Hình vẽ dưới đây là các thông tin ứng với domain name \texttt{\textcolor{blue}{mmt-72.com}} ứng với địa chỉ IP của DNS server này, là \texttt{\textcolor{blue}{172.72.160.2}}.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.7]{../figures/p2/dns2}
+\end{center}
+\caption{Điền các thông tin cho bản record domain name để DNS Server quản lý}
+\end{figure}
+
+Ta cũng thêm một bản record cho \texttt{\textcolor{blue}{www.mmt-72.com}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.160.3}}.
+
+\item Dịch vụ WEB:
+
+Mở Server \textsc{S2}, vào tab \textsc{Services}, chọn thẻ \textsc{HTTP}, bật các options ở cả HTTP và HTTPS thành On, cũng như thực hiện thêm hoặc xóa các file \texttt{.html} tại đây.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.5]{../figures/p2/web1}
+\end{center}
+\caption{Triển khai dịch vụ WEB trên server S2}
+\end{figure}
+
+Ta cũng có thể chỉnh sửa nội dung trang web hiển thị, chẳng hạn để tạo lập trang web hiển thị thông tin nhóm, như sau:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.7]{../figures/p2/web2}
+\end{center}
+\caption{Chỉnh sửa nội dung tập tin \texttt{\textcolor{blue}{index.html}}}
+\end{figure}
+
+Muốn truy cập trang web, vào tab Destop, chọn Web Browser và nhập www.mmt-72.com vào ô URL, màn hình sẽ hiện lên trang web. Các máy khác ở mạng khác muốn truy cập trang web này cũng làm tương tự, sau khi các subnet trong mô hình đã được kết nối với nhau hoàn tất.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.7]{../figures/p2/web3}
+\end{center}
+\caption{Nội dung trang web \texttt{\textcolor{blue}{www.mmt-72.com}}}
+\end{figure}
+
+\item Định tuyến:
+
+Ta thực hiện cấu hình các router R0, R1, R2.
+
+Đối với router R0: 
+
++ Cổng Fa0/0 nối với subnet \texttt{\textcolor{blue}{172.72.0.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.0.1/19}}, 
+
++ Cổng Fa1/0 nối với subnet \texttt{\textcolor{blue}{172.72.32.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.32.1/19}}, 
+
++ Cổng Se2/0 nối với Se3/0 của R1 với địa chỉ IP \texttt{\textcolor{blue}{172.72.201.1/24}}, 
+
++ Cổng Se3/0 nối với Se2/0 của R2 với địa chỉ IP \texttt{\textcolor{blue}{172.72.202.2/24}}.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.7]{../figures/p2/routing1}
+\includegraphics[scale=.6]{../figures/p2/routing2}
+\includegraphics[scale=.6]{../figures/p2/routing3}
+\includegraphics[scale=.6]{../figures/p2/routing4}
+\end{center}
+\caption{Cấu hình router R0}
+\end{figure}
+
+Ta thực hiện tương tự cho các router R1, R2 với các thông tin sau:
+
+Đối với router R1: 
+
++ Cổng Fa0/0 nối với subnet \texttt{\textcolor{blue}{172.72.64.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.64.1/19}}, 
+
++ Cổng Fa1/0 nối với subnet \texttt{\textcolor{blue}{172.72.96.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.96.1/19}}, 
+
++ Cổng Se2/0 nối với Se3/0 của R2 với địa chỉ IP \texttt{\textcolor{blue}{172.72.212.1/24}}, 
+
++ Cổng Se3/0 nối với Se2/0 của R0 với địa chỉ IP \texttt{\textcolor{blue}{172.72.201.2/24}}.
+
+Đối với router R2: 
+
++ Cổng Fa0/0 nối với subnet \texttt{\textcolor{blue}{172.72.128.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.128.1/19}}, 
+
++ Cổng Fa1/0 nối với subnet \texttt{\textcolor{blue}{172.72.160.0/19}} với địa chỉ IP \texttt{\textcolor{blue}{172.72.191.254/19}}, 
+
++ Cổng Se2/0 nối với Se3/0 của R0 với địa chỉ IP \texttt{\textcolor{blue}{172.72.202.1/24}}, 
+
++ Cổng Se3/0 nối với Se2/0 của R1 với địa chỉ IP \texttt{\textcolor{blue}{172.72.212.2/24}}.
+
+\item Cấu hình Access Point và truy cập mạng Wifi cho các thiết bị (nhân viên + khách ở tầng 1 và phòng họp ở tầng 3)
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/ap1}
+\includegraphics[scale=.6]{../figures/p2/ap2}
+\end{center}
+\caption{Cấu hình access point AP0 (nhân viên + khách vãng lai, tầng 1)}
+\end{figure}
+
+Thực hiện tương tự cho cấu hình access point AP1 cho phòng họp (tầng 3)
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/ap3}
+\end{center}
+\caption{Cấu hình access point AP1, port 1}
+\end{figure}
+
+Để truy cập wi-fi, đối với PC/laptop, ta cần tắt chúng đi và thay thiết bị (PT-PC-NM-1CFE/PT-LAPTOP-NM-1CFE) bởi WMP300N/WPC300N, sau đó khởi động lại. Sau đó chuyển qua tab Destop, mở PC Wireless và thực hiện kết nối với mạng tương ứng.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/ap4}
+\includegraphics[scale=.6]{../figures/p2/ap9}
+\includegraphics[scale=.5]{../figures/p2/ap5}
+\includegraphics[scale=.5]{../figures/p2/ap6}
+\includegraphics[scale=.6]{../figures/p2/ap7}
+\end{center}
+\caption{Kết nối từ PC/laptop đến wifi}
+\end{figure}
+
+Đối với điện thoại thông minh, ta vào tab Config và chọn thẻ Interface/Wireless0, sau đó nhập SSID, chọn Authenciation là WPA2-PSK và PSK Pass Phrase tương ứng với mạng cần kết nối.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/ap10}
+\end{center}
+\caption{Kết nối từ smartphone đến wifi}
+\end{figure}
+
+\item Cấu hình IP tĩnh cho các server:
+
+Mở server, vào tab Destop, chọn IP Configuration và sau đó nhập địa chỉ IP, subnet mask, default gateway và DNS server tương ứng (DNS server là 172.72.160.2, default gateway cho các server đều là 172.72.191.254, subnet mask là /19 hay 255.255.224.0)
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=.6]{../figures/p2/ipconf}
+\end{center}
+\caption{Cấu hình địa chỉ IP tĩnh}
+\end{figure}
+
+\end{enumerate}
 \bf \item Kiểm tra kết quả hoạt động của mô hình mạng vừa triển khai (dùng các câu lệnh console như ping, nslookup, ipconfig, và trình duyệt web)
 
 \rm
