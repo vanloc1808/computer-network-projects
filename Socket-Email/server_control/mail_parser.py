@@ -34,6 +34,7 @@ def get_corresponding_ip(email_address):
 """
 def command_parser(message, sender_address):
     print('Command:', message)
+    print('Command length: ', len(message))
     msg = message.split(' ')
     print('After split: ', msg)
     '''
