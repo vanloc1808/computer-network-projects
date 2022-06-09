@@ -43,7 +43,7 @@ def command_parser(message, sender_address):
     key = key.strip()
     # print(key)
     '''
-    key = 'ABDCFE123465'
+    key = '1234'
     # file_in.close()
     
     try:
