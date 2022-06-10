@@ -4,27 +4,11 @@
 \input{latex/process_application}
 \input{latex/screenshot}
 \input{latex/webcam}
-\subsection{Keylogger}
-Server sẽ gửi lệnh \textbf{KEYLOG} cho client. Do thiết kế của các hàm có sẵn cho việc keylog ở client, server sẽ gửi 2 lệnh \textbf{HOOK} đến client để lấy các hành động giữa 2 lần. Sau đó, một lệnh \textbf{PRINT} được gửi đến client để client gửi dữ liệu về các phím nhấn đã bắt được cho server. Server nhận kết quả từ client.\\
-Các hàm cho quá trình này như sau:\\
-- Ở server:
-\begin{lstlisting}
-def keylog(ip_address, time=10):
-\end{lstlisting}
-Chức năng: gửi yêu cầu keylog đến client, nhận kết quả từ client gửi về.\\
-Sử dụng hàm \lstinline{sleep} của thư viện time.\\
-- Ở client:
-\begin{lstlisting}
-def keylog(client):
-\end{lstlisting}
-Chức năng: nhận lệnh từ server, bắt các phím nhấn rồi gửi kết quả lại cho server, ngoài ra còn có chức năng phụ để có thể khóa phím người dùng (Không được đề cập trong chương trình).\\
-Thư viện sử dụng: threading, keyboard, pynput.keyboard.\\
-Ngoài ra, ở client còn có các hàm để bổ trợ cho hàm \lstinline{keylog} trong việc bắt phím nhấn cũng như gửi kết quả lại cho server.
-\begin{lstlisting}
-def keylogger(key):
-def _print(client):
-def listen():
-\end{lstlisting}
+\input{latex/keylog}
+\input{latex/registry}
+\input{latex/shutdown}
+
+% nhiều quá :( hjx :((
 
 \begin{lstlisting}
 
@@ -35,86 +19,3 @@ Tham số:
 \item \lstinline{}
 \end{itemize}
 Trả về: 
-% ------------------------
-\begin{lstlisting}
-def keylogger(key):
-\end{lstlisting}
-Chức năng: Dựa vào \lstinline{global} flag (nhận giá trị 0, 1, 2, 4), thực hiện xử lý \lstinline{key} lấy được từ \lstinline{Listener} trong hàm \lstinline{listen()} như sau:\\
-+ Thay thế \lstinline{space} thành ký tự khoảng trắng\\
-+ Thay thế phím ' thành chuỗi phù hợp \\
-+ Lọc bỏ toàn bộ ký tự ' dư thừa \\
-+ Nối vào câu \\
-Tham số: 
-\begin{itemize}
-\item \lstinline{key}: Phím được bắt từ quá trình Listener
-\end{itemize}
-Trả về: Không
-
-\begin{lstlisting}
-def _print(client):
-\end{lstlisting}
-Chức năng: Gửi câu đang được ghi về server\\
-Tham số: 
-\begin{itemize}
-\item \lstinline{client}: socket connection tới server
-\end{itemize}
-Trả về: Không
-
-\begin{lstlisting}
-def listen():
-\end{lstlisting}
-Chức năng: Tạo thread mới để ghi bàn phím (sử dụng hàm keylogger để xử lý)\\
-Trả về: Không
-
-%----
-\subsection{Registry}
-Sẽ có 2 loại lệnh được gửi cho client:\\
-- Liệt kê subkey: SERVER sẽ gửi lệnh \textbf{REGISTRY} cùng với \textbf{LIST} và đường dẫn (ví dụ như là HKEY_CURRENT_USER, HKEY_CURRENT_USER/System), client sẽ trả về danh sách các subkey tương ứng\\
-- Cập nhật key: SERVER sẽ gửi lệnh \textbf{REGISTRY} cùng với \textbf{UPDATE} và đường dẫn tới key, giá trị mới của key, và kiểu dữ liệu (kiểu dữ liệu thuộc 1 trong 3 loại: REG_BINARY, REG_DWORD, REG_QWORD)\\
-
-Các hàm cho quá trình này như sau:\\
-- Ở server (mail_handler.py):\\
-
-\begin{lstlisting}
-def registry_list(ip_address, full_path):
-\end{lstlisting}
-Chức năng: gửi các câu lệnh để liệt kê subkey với đường dẫn là \lstinline{full_path} đến client, sau đó nhận về danh sách subkey.\\
-Tham số: 
-\begin{itemize}
-\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
-\item \lstinline{full_path}: kiểu str, là đường dẫn cần liệt kê subkey.
-\end{itemize}
-
-- Ở client (registry_client.py):\\
-
-\begin{lstlisting}
-def identify_hkey(value_list):
-\end{lstlisting}
-Chức năng: Xác định hive từ đường dẫn đã được tách\\
-Tham số: 
-\begin{itemize}
-\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
-\item \lstinline{full_path}: kiểu str, là đường dẫn cần liệt kê subkey.
-\end{itemize}
-
-\begin{lstlisting}
-def registry_list(ip_address, full_path):
-\end{lstlisting}
-Chức năng: gửi các câu lệnh để liệt kê subkey với đường dẫn là \lstinline{full_path} đến client, sau đó nhận về danh sách subkey.\\
-Tham số: 
-\begin{itemize}
-\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
-\item \lstinline{full_path}: kiểu str, là đường dẫn cần liệt kê subkey.
-\end{itemize}
-
-\begin{lstlisting}
-def registry_list(ip_address, full_path):
-\end{lstlisting}
-Chức năng: gửi các câu lệnh để liệt kê subkey với đường dẫn là \lstinline{full_path} đến client, sau đó nhận về danh sách subkey.\\
-Tham số: 
-\begin{itemize}
-\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
-\item \lstinline{full_path}: kiểu str, là đường dẫn cần liệt kê subkey.
-\end{itemize}
-
-% nhiều quá :(

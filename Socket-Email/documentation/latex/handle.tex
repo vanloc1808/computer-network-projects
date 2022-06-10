@@ -1,4 +1,4 @@
-\subsection{Module handle}
+\subsection{Module mail$\_$handler}
 Các hàm được định nghĩa trong module handle.py được sử dụng để xử lý các yêu cầu từ người dùng.
 \begin{lstlisting}
 def authorize(email, ip):
@@ -7,7 +7,7 @@ Chức năng: authorize địa chỉ email với IP tương ứng.\\
 Thám số: 
 \begin{itemize}
 \item \lstinline{email}: địa chỉ email.
-\item \lstinline{ip}: địa chỉ IP.
+\item \lstinline{ip}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
 \end{itemize}
 Trả về True nếu thành công, False nếu không thành công.
 
@@ -32,7 +32,7 @@ def find_corresponding_email(ip_address):
 Chức năng: tìm địa chỉ email tương ứng với IP được truyền vào.
 Tham số:
 \begin{itemize}
-\item \lstinline{ip_address}: địa chỉ IP.
+\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
 \end{itemize}
 Trả về: địa chỉ email tương ứng đang điều khiển địa chỉ IP này.
 
@@ -42,7 +42,7 @@ def delete_ip_from_list(ip_address):
 Chức năng: xóa địa chỉ IP ra khỏi danh sách IP kết nối.
 Tham số: 
 \begin{itemize}
-\item \lstinline{ip_address}: địa chỉ IP.
+\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
 \end{itemize}
 Không có giá trị trả về.
 
@@ -53,7 +53,7 @@ Chức năng: loại bỏ kết nối tương ứng với IP.
 Tham số:
 \begin{itemize}
 \item \lstinline{conn}: socket tương ứng.
-\item \lstinline{ip_address}: địa chỉ IP.
+\item \lstinline{ip_address}: kiểu tuple(str, int) chứa địa chỉ ip và port của client gửi tới.
 \end{itemize}
 Không có giá trị trả về.
 
