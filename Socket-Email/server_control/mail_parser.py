@@ -1,8 +1,5 @@
 import mail_handler as handler
 
-# a list of dictionary, each of which has the type
-# { email_address: IP connected }
-
 def get_corresponding_ip(email_address):
     if email_address in handler.email_ip_dict:
         return handler.email_ip_dict[email_address]
@@ -37,14 +34,8 @@ def command_parser(message, sender_address):
     print('Command length: ', len(message))
     msg = message.split(' ')
     print('After split: ', msg)
-    '''
-    file_in = open('keys.txt', "r")
-    key = file_in.readline()
-    key = key.strip()
-    # print(key)
-    '''
+
     key = '1234'
-    # file_in.close()
     
     try:
         if len(msg) > 5: # too many arguments
@@ -54,7 +45,7 @@ def command_parser(message, sender_address):
             raise Exception("No arguments")
 
         if len(msg) == 5:
-             if msg[0] == "REGISTRY":
+            if msg[0] == "REGISTRY":
                 if msg[1] == "UPDATE":
                     ip_address = get_corresponding_ip(sender_address)
                     if ip_address is None:
@@ -79,12 +70,12 @@ def command_parser(message, sender_address):
         elif len(msg) == 3:
             if msg[0] == "AUTH":
                 if msg[1] != key:
-                   raise Exception("Invalid key")
+                    raise Exception("Invalid key")
 
                 if handler.is_valid_ip(msg[2]) == False:
                     raise Exception("Invalid IP")  
 
-                 # if the code goes here, it will start connection to the IP at msg[2]
+                # if the code goes here, it will start connection to the IP at msg[2]
                 # ip_address = msg[2]
                 colon_index = msg[2].find(':')
                 ip_address = msg[2][:colon_index]
@@ -173,13 +164,6 @@ def command_parser(message, sender_address):
                 if ip_address is None:
                     raise Exception("No corresponding IP")
                 handler.capture_screen(ip_address)
-                '''
-            elif msg[0] == "MAC":
-                ip_address = get_corresponding_ip(sender_address)
-                if ip_address is None:
-                    raise Exception("No corresponding IP")
-                handler.mac_address(ip_address)
-                '''
             elif msg[0] == "SHUTDOWN":
                 ip_address = get_corresponding_ip(sender_address)
                 if ip_address is None:

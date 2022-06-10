@@ -53,14 +53,4 @@ def safe_send(to_:str, subject_:str, content_, file_name):
 # Modified to safer version
 def send_threading(to_:str, subject_:str, content_, file_name = "x.txt"):
     t = threading.Thread(target=safe_send, args=(to_, subject_, content_, file_name))
-    # t.setDaemon(True)
     t.start()
-
-
-# # Testing
-# TO = 'vanloc1808@gmail.com'
-# SUBJECT = 'NHAN DUOC THU CKUA ?'
-# # CONTENT = 'welcome to smtp world!'
-# CONTENT = open("./test.png", "rb").read()
-
-# send_threading(TO, SUBJECT, CONTENT, "test.png")

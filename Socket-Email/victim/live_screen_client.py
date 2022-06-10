@@ -1,15 +1,9 @@
-# Socket
-# import socket
-
 # Work with Image
 from PIL import ImageGrab
 import io
 import time
 
 BUFSIZ = 4 * 1024
-
-# Thread
-# from threading import Thread
 
 
 def capture_screen(client):
@@ -18,7 +12,7 @@ def capture_screen(client):
     print('Message: ', msg)
     try:
         time_to_rec = float(msg)
-    except:
+    except Exception:
         return
 
     current = time.time()
@@ -32,5 +26,5 @@ def capture_screen(client):
         # Send image
         client.sendall(str(len(img_bytes)).ljust(INFO_SZ).encode())
         client.sendall(img_bytes)
-    print("Ah finish")
+    print("finish")
     client.sendall(b'END'.ljust(BUFSIZ))

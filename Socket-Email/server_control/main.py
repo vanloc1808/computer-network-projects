@@ -1,5 +1,3 @@
-# relative import! must be changed in production
-
 from mail_provider_handle import POP3_service as p3
 
 import mail_parser
@@ -23,7 +21,7 @@ s.listen(4) # Up to 4 clients (4 threads)
 print ("SERVER STARTED")
 
 # Warning: all client must connect before starting receive commands
-for i in range(MAX_CONNECTION):
+for _ in range(MAX_CONNECTION):
     conn, addr = s.accept()
     mail_parser.handler.conn_ip_list.append((conn, addr))
 
@@ -36,7 +34,6 @@ def _connect(conn, addr):
         # Blocking
         command_to_run = mail_parser.handler.action_dictionary[addr].get()
         command_to_run(conn)
-        # conn.sendall(b'QUIT') # Quit current command
     conn.close()
 
 for i in range(MAX_CONNECTION):

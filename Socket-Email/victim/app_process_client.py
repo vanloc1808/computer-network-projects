@@ -49,7 +49,7 @@ def list_apps():
             ls1.append(name)
             ls2.append(ID)
             ls3.append(threads)
-        except:
+        except Exception:
             pass
     return ls1, ls2, ls3
 
@@ -80,7 +80,7 @@ def kill(pid):
             return 1
         else:
             return 0
-    except:
+    except Exception:
         return 0
     
 def start(name):
@@ -103,8 +103,7 @@ def app_process(client):
         # print(pid)
         try:
             res = kill(pid)
-            
-        except:
+        except Exception:
             res = 0
         if res == 1:
             mesg = "Process " + str(pid) + " killed!"
