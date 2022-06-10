@@ -67,12 +67,4 @@ def loop():
         sleep(RELOAD_TIME)
 
 t = threading.Thread(target = loop, args=())
-# t.setDaemon(True)
 t.start()
-
-# Getting message prototype <>: q.get() -> (sender_mail, subject), can be use to pass to function
-# while True:
-#     while(not mail_queue.empty()):
-#         print("<get from queue>")
-#         print(mail_queue.get())
-#         mail_queue.task_done() # Required after get

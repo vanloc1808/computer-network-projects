@@ -1,12 +1,7 @@
-import re, winreg, json
-import os
-
-#from live_screen_client import BUFSIZ
-BUFSIZ = 1024 * 4
-
+import re
 import winreg
-# import registry_client as rc
-import json
+
+BUFSIZ = 1024 * 4
 
 def identify_hkey(value_list):
     if value_list[0] == 'HKEY_CURRENT_USER':
@@ -66,7 +61,7 @@ def list_all_registry_entries(registry_path, reg_dict):
         hkey = identify_hkey(value_list)
         go_through_registry_tree(hkey, key_path, reg_dict)
         return ["1", "1"]
-    except:
+    except Exception:
         return ["0", "0"]        
     
 
@@ -89,14 +84,14 @@ def parse_data(full_path):
         reg_key = re.sub(r'\\[^\\]+$', '', reg_key)
         reg_value = re.sub(r'^.*\\', '', full_path)
         return hive, reg_key, reg_value
-    except:
+    except Exception:
         return None, None, None
 
 def dec_value(c):
     c = c.upper()
-    if ord('0') <= ord(c) and ord(c) <= ord('9'):
+    if ord('0') <= ord(c) <= ord('9'):
         return ord(c) - ord('0')
-    if ord('A') <= ord(c) and ord(c) <= ord('F'):
+    if ord('A') <= ord(c) <= ord('F'):
         return ord(c) - ord('A') + 10
     return 0
 
@@ -111,7 +106,7 @@ def str_to_bin(s):
 def str_to_dec(s):
     s = s.upper()
     res = 0
-    for i in range(0, len(s)):
+    for i in range(len(s)):
         v = dec_value(s[i])
         res = res*16 + v
     return res

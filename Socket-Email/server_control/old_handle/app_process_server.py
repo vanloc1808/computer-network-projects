@@ -1,11 +1,6 @@
-# import tkinter as tk
-# from tkinter import  ttk
 import pickle, struct
-# from tkinter import Canvas, Button, PhotoImage
 import socket
 import pandas as pd
-# import os
-# import sys
 
 BUFSIZ = 1024 * 4
 
@@ -25,19 +20,13 @@ def receive(client):
     return data
 
 def send_kill(conn:socket.socket, process_id):
-    # global pid
-    # conn.sendall(bytes("0", "utf8"))
     conn.sendall(b"0".ljust(BUFSIZ))
     s = str(process_id)
-    # conn.sendall(bytes(str(process_id), "utf8"))
     conn.sendall(s.encode().ljust(BUFSIZ))
-    # print(s.encode().ljust(BUFSIZ))
     ack = conn.recv(BUFSIZ).decode()
-    
     return ack
 
 def _list(conn:socket.socket, s):
-    # Break system without padding ?
     conn.sendall(b"1".ljust(BUFSIZ))
     conn.sendall(s.encode().ljust(BUFSIZ))
 

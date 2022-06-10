@@ -1,8 +1,6 @@
-import pickle
 import os
 import shutil
 
-#from directory_tree_client import BUFFER_SIZE
 BUFFER_SIZE = 4096
 
 BUFSIZ = 1024 * 4
@@ -19,7 +17,6 @@ def directory_handle(conn):
         result = os.listdir(path_to_folder)
         print(result)
         conn.sendall(str(len(str(result))).encode('utf8'))
-        # print(str(len(result)))
         conn.sendall(str(result).encode('utf8'))
     elif 'COPY' in msg:
         try:
@@ -27,5 +24,5 @@ def directory_handle(conn):
             dest = msg.split(' ')[2]
             shutil.copy(src_file, dest)
             conn.sendall('OK'.encode('utf8'))
-        except:
+        except Exception:
             conn.sendall('ERROR'.encode('utf8'))
