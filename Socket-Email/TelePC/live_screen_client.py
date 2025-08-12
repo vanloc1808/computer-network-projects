@@ -1,5 +1,4 @@
 # Socket
-import socket
 
 # Thread
 from threading import Thread
@@ -18,7 +17,7 @@ from tkinter.filedialog import asksaveasfile
 BUFSIZ = 1024 * 4
 
 class Desktop_UI(Canvas):
-    def __init__(self, parent, client):    
+    def __init__(self, parent, client):
         Canvas.__init__(self, parent)
         self.configure(
             #window,
@@ -46,19 +45,19 @@ class Desktop_UI(Canvas):
 
         # a button to save captured screen
         self.btn_save = tk.Button(self, text = 'Save', command=lambda: self.click_save(), relief="flat")
-        self.btn_save.place(x=320,y=560,width=50,height=30)        
-        
+        self.btn_save.place(x=320,y=560,width=50,height=30)
+
         # a button to stop receiving and return to main interface
         self.btn_back = tk.Button(self, text = 'Back', command=lambda: self.click_back(), relief="flat")
-        self.btn_back.place(x=630,y=560,width=50,height=30)  
+        self.btn_back.place(x=630,y=560,width=50,height=30)
 
         # thread
         self.start = Thread(target=self.ChangeImage, daemon=True)
         self.start.start()
-    
+
     # display frames continously
     def ChangeImage(self):
-        while self.status:            
+        while self.status:
             sz = int(self.client.recv(100))
             #self.client.sendall(bytes("READY", "utf8"))
 
@@ -94,12 +93,12 @@ class Desktop_UI(Canvas):
         self.on_save = True
 
     def save_img(self):
-        if self.frame == None:
+        if self.frame is None:
             return
 
         types = [('Portable Network Graphics', '*.png'), ('All Files', '*.*')]
         img_file = asksaveasfile(mode='wb', filetypes=types, defaultextension='*.png')
-        if img_file == None:
+        if img_file is None:
             return
         img_file.write(self.frame)
 

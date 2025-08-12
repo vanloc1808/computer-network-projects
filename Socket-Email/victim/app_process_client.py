@@ -1,5 +1,7 @@
-import  pickle, psutil, struct
 import os
+import pickle
+import psutil
+import struct
 import subprocess
 
 BUFSIZ = 1024 * 4
@@ -15,7 +17,7 @@ def list_apps():
     ls2 = list()
     ls3 = list()
 
-    cmd = ['C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe', 
+    cmd = ['C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
         'gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}']
     #proc = os.popen(cmd).read().split('\n')
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE).stdout.read().split(b'\n')
@@ -82,7 +84,7 @@ def kill(pid):
             return 0
     except Exception:
         return 0
-    
+
 def start(name):
     os.system(name)
     return
@@ -121,7 +123,7 @@ def app_process(client):
             else:
                 ls1, ls2, ls3 = list_processes()
             res = 1
-        except:
+        except Exception:
             res = 0
     #2-xoa
     elif action == 2:
@@ -132,7 +134,7 @@ def app_process(client):
         try:
             start(pname)
             res = 1
-        except:
+        except Exception:
             res = 0
     if action != 1 and action != 3:
         client.sendall(bytes(str(res), "utf8"))
@@ -141,6 +143,6 @@ def app_process(client):
         ls2 = pickle.dumps(ls2)
         ls3 = pickle.dumps(ls3)
 
-        send_data(client, ls1)   
+        send_data(client, ls1)
         send_data(client, ls2)
         send_data(client, ls3)

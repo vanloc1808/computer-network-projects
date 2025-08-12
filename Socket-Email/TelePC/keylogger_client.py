@@ -1,10 +1,11 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import Canvas, Text, Button, PhotoImage
 
 BUFSIZ = 1024 * 4
 
-import os
-import sys
+
 def abs_path(file_name):
     file_name = 'assets\\' + file_name
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -23,7 +24,7 @@ def hook(client, btn):
     else:
         btn.configure(text = "HOOK")
     return
-    
+
 def _print(client, textbox):
     client.sendall(bytes("PRINT", "utf8"))
     print("  ")
@@ -34,7 +35,7 @@ def _print(client, textbox):
     textbox.insert(tk.END, data)
     textbox.config(state = "disable")
     return
-        
+
 def delete(textbox):
     textbox.config(state = "normal")
     textbox.delete("1.0", "end")
@@ -53,7 +54,7 @@ def back():
     return
 
 class Keylogger_UI(Canvas):
-     def __init__(self, parent, client):    
+    def __init__(self, parent, client):
         Canvas.__init__(self, parent)
         self.configure(
             #window,
@@ -150,4 +151,3 @@ class Keylogger_UI(Canvas):
             width=135.0,
             height=53.0
         )
-    

@@ -28,7 +28,7 @@ def back(ui):
 def live_screen():
     client.sendall(bytes("LIVESCREEN", "utf8"))
     tmp = lsc.Desktop_UI(root, client)
-    if tmp.status == False:
+    if not tmp.status:
         back(tmp)
     return
 
@@ -104,8 +104,8 @@ def connect():
         client.connect((ip, 5656))
         tk.messagebox.showinfo(message = "Connect successfully!")
         show_main_ui()
-    except:
-        tk.messagebox.showerror(message = "Cannot connect!")       
+    except Exception:
+        tk.messagebox.showerror(message = "Cannot connect!")
     return
 
 f1.button_1.configure(command = connect)

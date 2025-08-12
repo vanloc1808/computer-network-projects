@@ -13,7 +13,7 @@ def identify_hkey(value_list):
     elif value_list[0] == 'HKEY_USERS':
         return winreg.HKEY_USERS
     elif value_list[0] == 'HKEY_CURRENT_CONFIG':
-        return winreg.HKEY_CURRENT_CONFIG 
+        return winreg.HKEY_CURRENT_CONFIG
     else:
         return None
 
@@ -23,12 +23,12 @@ def get_value_of_key(key):
     while True:
         try:
             subvalue = winreg.EnumValue(key, i)
-        except WindowsError as e:
+        except OSError:
             break
         key_dict[subvalue[0]] = subvalue[1:]
         i+=1
     return key_dict
-        
+
 
 # https://stackoverflow.com/questions/32171448/python-winreg-get-key-values
 def get_sub_keys(key):
@@ -38,13 +38,13 @@ def get_sub_keys(key):
             subkey = winreg.EnumKey(key, i)
             yield subkey
             i += 1
-        except WindowsError as e:
+        except OSError:
             break
-    
+
 def go_through_registry_tree(hkey, key_path, reg_dict):
     key = winreg.OpenKey(hkey, key_path, 0, winreg.KEY_READ)
     reg_dict[key_path] = get_value_of_key(key)
-    
+
     for subkey in get_sub_keys(key):
         subkey_path = "%s\\%s" % (key_path, subkey)
         go_through_registry_tree(hkey, subkey_path, reg_dict)
@@ -62,8 +62,8 @@ def list_all_registry_entries(registry_path, reg_dict):
         go_through_registry_tree(hkey, key_path, reg_dict)
         return ["1", "1"]
     except Exception:
-        return ["0", "0"]        
-    
+        return ["0", "0"]
+
 
 def parse_data(full_path):
     try:
@@ -128,12 +128,12 @@ def set_value(full_path, value, value_type):
         if 'REG_QWORD' in value_type:
             if len(value) > 16:
                 value = value[:16]
-            value = str_to_dec(value)                 
-        
+            value = str_to_dec(value)
+
         winreg.SetValueEx(opened_key, value_list[2], 0, getattr(winreg, value_type), value)
         winreg.CloseKey(opened_key)
         return ["1", "1"]
-    except:
+    except Exception:
         return ["0", "0"]
 
 def registry_handle(conn):
@@ -146,7 +146,7 @@ def registry_handle(conn):
         print(msg)
         full_path = msg.split(' ')[1]
         result = list_all_registry_entries(full_path, reg_dict)
-        if (result == ["0", "0"]):
+        if result == ["0", "0"]:
             conn.send("FAIL")
         else:
             string_dictionary = str(reg_dict)
@@ -158,7 +158,7 @@ def registry_handle(conn):
         value_type = msg.split(' ')[3]
         print(msg)
         result = set_value(full_path, value, value_type)
-        if (result == ["0", "0"]):
+        if result == ["0", "0"]:
             conn.send("FAIL".encode('utf8'))
         else:
             conn.send("OK".encode('utf8'))

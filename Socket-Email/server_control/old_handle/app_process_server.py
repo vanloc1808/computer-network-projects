@@ -1,4 +1,5 @@
-import pickle, struct
+import pickle
+import struct
 import socket
 import pandas as pd
 

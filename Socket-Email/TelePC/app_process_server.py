@@ -1,4 +1,6 @@
-import  pickle, psutil, struct
+import pickle
+import psutil
+import struct
 import os
 
 BUFSIZ = 1024 * 4
@@ -45,7 +47,7 @@ def list_apps():
             ls1.append(name)
             ls2.append(ID)
             ls3.append(threads)
-        except:
+        except Exception:
             pass
     return ls1, ls2, ls3
 
@@ -76,9 +78,9 @@ def kill(pid):
             return 1
         else:
             return 0
-    except:
+    except Exception:
         return 0
-    
+
 def start(name):
     os.system(name)
     return
@@ -100,7 +102,7 @@ def app_process(client):
             pid = int(pid)
             try:
                 res = kill(pid)
-            except:
+            except Exception:
                 res = 0
         #1-xem
         elif action == 1:
@@ -111,7 +113,7 @@ def app_process(client):
                 else:
                     ls1, ls2, ls3 = list_processes()
                 res = 1
-            except:
+            except Exception:
                 res = 0
         #2-xoa
         elif action == 2:
@@ -122,7 +124,7 @@ def app_process(client):
             try:
                 start(pname)
                 res = 1
-            except:
+            except Exception:
                 res = 0
         if action != 1 and action != 3:
             client.sendall(bytes(str(res), "utf8"))
@@ -131,7 +133,7 @@ def app_process(client):
             ls2 = pickle.dumps(ls2)
             ls3 = pickle.dumps(ls3)
 
-            send_data(client, ls1)   
+            send_data(client, ls1)
             send_data(client, ls2)
             send_data(client, ls3)
     return

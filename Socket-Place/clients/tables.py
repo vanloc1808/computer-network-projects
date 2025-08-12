@@ -1,6 +1,10 @@
 import tkinter as tk
 from functools import partial
-from util import *
+
+from util import (
+    query_one_place_clicked,
+    download_images_one_place_clicked,
+)
 
 class Table(tk.LabelFrame):
     def __init__(self, received_data, column_headings, dictionary_headings, *args, **kwargs):

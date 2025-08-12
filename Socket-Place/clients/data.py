@@ -2,16 +2,17 @@ import socket as sk
 from random import choices
 from string import ascii_lowercase
 from tempfile import gettempdir
-from env import *
 
+from env import BLOCK_SIZE, IP, PORT, WINDOW_SIZE
 from error_check import check_split_not_corrupted
 from joiner import join
 
 import logging
 import json
 
-logging.basicConfig(format='%(asctime)s %(message)s', 
-    filename='program.log', level=logging.INFO)
+logging.basicConfig(
+    format='%(asctime)s %(message)s', filename='program.log', level=logging.INFO
+)
 
 
 def init():
@@ -32,10 +33,15 @@ def getLen():
     while True:
         try:
             data, addr_port = UDP_cli.recvfrom(BLOCK_SIZE)
-            if addr_port != (IP, PORT): continue # Not from server
+            if addr_port != (IP, PORT):
+                # Not from server
+                continue
             len_ = int(data.lstrip(b'\x00'))
             # Send back ACK:
-            UDP_cli.sendto(f'ACK_LEN_{str(len_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), addr_port)
+            UDP_cli.sendto(
+                f'ACK_LEN_{str(len_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                addr_port,
+            )
             return len_
         except sk.timeout:
             continue
@@ -49,38 +55,48 @@ def receiveData(len_):
         buffer = [None] * getSize(x, len_)
         while not all(buffer):
             for i in range(WINDOW_SIZE):
-                if (x + i) >= len_: break
-                if buffer[i] != None: continue
-                
+                if (x + i) >= len_:
+                    break
+                if buffer[i] is not None:
+                    continue
+
                 d, addr_port = UDP_cli.recvfrom(BLOCK_SIZE)
-                if addr_port != (IP, PORT): continue # Not from server
-                
+                if addr_port != (IP, PORT):
+                    # Not from server
+                    continue
+
                 id_ = int(d[:3])
                 if (id_ < x): # Old packet
                     # Just send ACK back and do nothing!
                     logging.info(f"? OLD ACK {id_}")
-                    UDP_cli.sendto(f'ACK_{str(id_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
+                    UDP_cli.sendto(
+                        f'ACK_{str(id_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                        (IP, PORT),
+                    )
                     continue
 
                 logging.info(f"Get: {d}")
                 if not check_split_not_corrupted(d):
-                    logging.warn(f"Corrupt datagram!")
+                    logging.warning("Corrupt datagram!")
                     # Skip
                     continue
                 buffer[i] = d
 
-                UDP_cli.sendto(f'ACK_{str(x + i).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
+                UDP_cli.sendto(
+                    f'ACK_{str(x + i).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                    (IP, PORT),
+                )
             result = result + buffer
         x += WINDOW_SIZE
     result = sorted(result)
     return join(result)
 
 def recvData():
-    l = getLen()
-    logging.info(f"[?] Len: {l}")
-    g = receiveData(l)
+    total_len = getLen()
+    logging.info(f"[?] Len: {total_len}")
+    received_data = receiveData(total_len)
     logging.info("[?] DONE")
-    return g
+    return received_data
 
 def sendCommand(cmd):
     UDP_cli.sendto(cmd.ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
@@ -122,7 +138,7 @@ def get_img(id_, pos):
 #     mess = input()
 #     UDP_cli.sendto(mess.encode(), (IP, PORT))
 #     if mess[:3] == 'GIV':
-        
+
 #         x = open("tmp", "wb")
 #         x.write(g)
 #         x.close()

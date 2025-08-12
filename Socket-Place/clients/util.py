@@ -1,9 +1,8 @@
 import tkinter as tk
-import tkinter.ttk as ttk
-from functools import partial
 from PIL import ImageTk, Image
-from data import *
-from pages import *
+
+from data import get_detail_info, get_avt, get_img
+from pages import Page, create_frames, show_first_frame
 
 # RGB link: https://htmlcolorcodes.com/
 
@@ -15,7 +14,7 @@ def query_one_place_clicked(id, name):
     w.geometry('800x600')
 
     # details = query_one_place(id)
-    
+
     details = get_detail_info(id)
 
     place_id = details['ID']
@@ -53,7 +52,9 @@ def query_one_place_clicked(id, name):
 
     frm_avatar = tk.Frame(master=w)
     frm_avatar.pack(side='top', fill='x', padx=10, pady=10)
-    img_avatar = ImageTk.PhotoImage(Image.open(get_avt(id)).resize((200, 200), Image.ANTIALIAS))
+    img_avatar = ImageTk.PhotoImage(
+        Image.open(get_avt(id)).resize((200, 200), Image.ANTIALIAS)
+    )
     lbl_avatar = tk.Label(master=frm_avatar, image=img_avatar)
     lbl_avatar.image = img_avatar
     lbl_avatar.pack(side='bottom', fill='x', padx=10, pady=10)

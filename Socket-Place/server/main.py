@@ -1,13 +1,14 @@
-import socket as sk
-from spliter import Spliter
-from queue import Queue
-from env import *
-import data_loader
-
 import logging
+import socket as sk
+from queue import Queue
 
-logging.basicConfig(format='%(asctime)s %(message)s', 
-    filename='program.log', level=logging.INFO)
+from env import BLOCK_SIZE, IP, PORT, WINDOW_SIZE
+import data_loader
+from spliter import Spliter
+
+logging.basicConfig(
+    format='%(asctime)s %(message)s', filename='program.log', level=logging.INFO
+)
 
 cache = Queue(maxsize=0) # infinity queue
 
@@ -35,12 +36,12 @@ def sendLen(addr_port, len_):
         UDP_sv.settimeout(1) # 1s timeout
         try:
             ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
-            while (r_addr != addr_port):
+            while r_addr != addr_port:
                 cache.put((ack, r_addr))
                 ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
             # request example: "ACK_LEN_000", send upto 999 blocks ~ 0.93mB real data
-            if ack[:7] == b"ACK_LEN": # Check packet
-                if int(ack[8:11]) == len_: # Check correct length
+            if ack[:7] == b"ACK_LEN":  # Check packet
+                if int(ack[8:11]) == len_:  # Check correct length
                     done = True
         except sk.timeout: # Not received in time
             continue
@@ -52,10 +53,10 @@ def sendData(addr_port, data_to_send):
         # Send phase
         while not all(ack_list):
             for j in range(len(ack_list)):
-                if not ack_list[j]: # Not sent / require resent
+                if not ack_list[j]:  # Not sent / require resent
                     UDP_sv.sendto(data_to_send[i + j], addr_port)
 
-            UDP_sv.settimeout(1) # 1 seconds to receive each ACK!
+            UDP_sv.settimeout(1)  # 1 seconds to receive each ACK!
             for j in range(len(ack_list)):
                 try:
                     req, req_addr = UDP_sv.recvfrom(BLOCK_SIZE)
@@ -71,7 +72,9 @@ def sendData(addr_port, data_to_send):
 
                     # request example: "ACK_000"
                     id_ = int(req[4:7])
-                    if (id_ - i < 0): continue # OLD packet!
+                    if id_ - i < 0:
+                        # OLD packet!
+                        continue
                     ack_list[id_ - i] = True
                     logging.info(f"[*] GOT ACK {id_}")
                 except sk.timeout: # Not received in time

@@ -1,14 +1,12 @@
 import os
+import sys
 import tkinter as tk
 import tkinter.ttk as ttk
 import pickle
-from tkinter import Canvas,  Text, Button, PhotoImage,  filedialog, messagebox
+from tkinter import Canvas, Text, Button, PhotoImage, filedialog, messagebox
 
 SEPARATOR = "<SEPARATOR>"
-BUFFER_SIZE = 4096 
-
-import os
-import sys
+BUFFER_SIZE = 4096
 def abs_path(file_name):
     file_name = 'assets\\' + file_name
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -35,7 +33,7 @@ def listDirs(client, path):
     if (data == "error"):
         messagebox.showerror(message = "Cannot open this directory!")
         return []
-    
+
     loaded_list = pickle.loads(data)
     return loaded_list
 
@@ -63,7 +61,7 @@ class DirectoryTree_UI(Canvas):
             327.0,
             image=self.image_image_1
         )
-        
+
         self.frame = tk.Frame(self, height = 200, width = 500)
         self.tree = ttk.Treeview(self.frame)
         self.frame.place(
@@ -72,7 +70,7 @@ class DirectoryTree_UI(Canvas):
             width=713.0,
             height=404.0
         )
-        
+
         self.insText1 = "Click SHOW button to show the server's directory tree."
         self.label1 = tk.Label(self.frame, text=self.insText1)
         self.label1.pack(fill = tk.X)
@@ -175,7 +173,7 @@ class DirectoryTree_UI(Canvas):
                 dirs = listDirs(self.client, abspath)
                 for p in dirs:
                     self.insert_node(node, p[0], os.path.join(abspath, p[0]), p[1])
-            except:
+            except Exception:
                 messagebox.showerror(message = "Cannot open this directory!")
 
     def select_node(self, event):
@@ -211,12 +209,12 @@ class DirectoryTree_UI(Canvas):
             packet = self.client.recv(999999)
             data += packet
         loaded_list = pickle.loads(data)
-        
+
         for path in loaded_list:
             try:
                 abspath = os.path.abspath(path)
                 self.insert_node('', abspath, abspath, True)
-            except:
+            except Exception:
                 continue
 
     # copy file from client to server
@@ -224,12 +222,13 @@ class DirectoryTree_UI(Canvas):
         self.client.sendall("COPYTO".encode())
         isOk = self.client.recv(BUFFER_SIZE).decode()
         if (isOk == "OK"):
-            filename = filedialog.askopenfilename(title="Select File", 
-                                                filetypes=[("All Files", "*.*")])
-            if filename == None or filename == "":
+            filename = filedialog.askopenfilename(
+                title="Select File", filetypes=[("All Files", "*.*")]
+            )
+            if filename is None or filename == "":
                 self.client.sendall("-1".encode())
-                temp = self.client.recv(BUFFER_SIZE)
-                return 
+                _ = self.client.recv(BUFFER_SIZE)
+                return
             destPath = self.currPath + "\\"
             filesize = os.path.getsize(filename)
             self.client.send(f"{filename}{SEPARATOR}{filesize}{SEPARATOR}{destPath}".encode())
@@ -239,13 +238,13 @@ class DirectoryTree_UI(Canvas):
                     with open(filename, "rb") as f:
                         data = f.read()
                         self.client.sendall(data)
-                except:
+                except Exception:
                     self.client.sendall("-1".encode())
                 isReceivedContent = self.client.recv(BUFFER_SIZE).decode()
                 if (isReceivedContent == "received content"):
                     messagebox.showinfo(message = "Copy successfully!")
                     return True
-        messagebox.showerror(message = "Cannot copy!")    
+        messagebox.showerror(message = "Cannot copy!")
         return False
 
     # copy file from server to client
@@ -255,15 +254,15 @@ class DirectoryTree_UI(Canvas):
         if (isOk == "OK"):
             try:
                 destPath = filedialog.askdirectory()
-                if destPath == None or destPath == "":
+                if destPath is None or destPath == "":
                     self.client.sendall("-1".encode())
-                    temp = self.client.recv(BUFFER_SIZE)
-                    return 
+                    _ = self.client.recv(BUFFER_SIZE)
+                    return
                 self.client.sendall(self.currPath.encode())
                 filename = os.path.basename(self.currPath)
                 filesize = int(self.client.recv(100))
                 if (filesize == -1):
-                    messagebox.showerror(message = "Cannot copy!")  
+                    messagebox.showerror(message = "Cannot copy!")
                     return
                 self.client.sendall("received filesize".encode())
                 data = b""
@@ -273,10 +272,10 @@ class DirectoryTree_UI(Canvas):
                 with open(destPath + "\\" + filename, "wb") as f:
                     f.write(data)
                 messagebox.showinfo(message = "Copy successfully!")
-            except:
-                messagebox.showerror(message = "Cannot copy!")  
+            except Exception:
+                messagebox.showerror(message = "Cannot copy!")
         else:
-            messagebox.showerror(message = "Cannot copy!") 
+            messagebox.showerror(message = "Cannot copy!")
 
     def deleteFile(self):
         self.client.sendall("DEL".encode())
@@ -287,9 +286,9 @@ class DirectoryTree_UI(Canvas):
             if (res == "ok"):
                 messagebox.showinfo(message = "Delete successfully!")
             else:
-                messagebox.showerror(message = "Cannot delete!") 
-        else: 
-            messagebox.showerror(message = "Cannot delete!")  
+                messagebox.showerror(message = "Cannot delete!")
+        else:
+            messagebox.showerror(message = "Cannot delete!")
 
     def back(self):
         return

@@ -1,6 +1,6 @@
 import tkinter as tk
-from PIL import ImageTk, Image
 from functools import partial
+from PIL import ImageTk, Image
 
 class Page(tk.Frame):
     def __init__(self, id, name, avt, size, *args, **kwargs):
@@ -25,7 +25,7 @@ def create_first_frame(frames):
 
 def create_last_frame(frames):
     idx = len(frames) - 1
-    
+
     frm_buttons = tk.Frame(master=frames[idx])
     frm_buttons.pack(side='bottom')
     btn_next = tk.Button(master=frm_buttons, text='Hình trước', command=partial(show_middle_frame, frames, idx - 1), height=5)
@@ -44,16 +44,16 @@ def create_frames(frames):
     create_last_frame(frames)
 
     for i in range(1, len(frames) - 1, 1):
-        create_middle_frames(frames, i)  
+        create_middle_frames(frames, i)
 
 def show_first_frame(frames):
-    if (frames[1].winfo_ismapped() == True):
+    if frames[1].winfo_ismapped():
         frames[1].pack_forget()
-    frames[0].pack()     
+    frames[0].pack()
 
 def show_last_frame(frames):
     idx = len(frames) - 1
-    if (frames[idx - 1].winfo_ismapped() == True):
+    if frames[idx - 1].winfo_ismapped():
         frames[idx - 1].pack_forget()
     frames[idx].pack()
 
@@ -63,9 +63,9 @@ def show_middle_frame(frames, i):
     elif i == len(frames) - 1:
         show_last_frame(frames)
     else:
-        if (frames[i - 1].winfo_ismapped() == True):
+        if frames[i - 1].winfo_ismapped():
             frames[i - 1].pack_forget()
-        if (frames[i + 1].winfo_ismapped() == True):
+        if frames[i + 1].winfo_ismapped():
             frames[i + 1].pack_forget()
-    
+
     frames[i].pack()

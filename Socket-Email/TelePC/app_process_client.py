@@ -1,11 +1,12 @@
+import os
+import sys
 import tkinter as tk
-from tkinter import  ttk
-import pickle, struct
+from tkinter import ttk
+import pickle
+import struct
 from tkinter import Canvas, Button, PhotoImage
 
 BUFSIZ = 1024 * 4
-import os
-import sys
 def abs_path(file_name):
     file_name = 'assets\\' + file_name
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -62,7 +63,7 @@ def _list(client, tab, s):
     ls1 = receive(client)
     ls1 = pickle.loads(ls1)
     ls2 = receive(client)
-    ls2 = pickle.loads(ls2) 
+    ls2 = pickle.loads(ls2)
     ls3 = receive(client)
     ls3 = pickle.loads(ls3)
     print(ls1)
@@ -84,7 +85,7 @@ def send_start(client):
     client.sendall(bytes("3", "utf8"))
     client.sendall(bytes(str(pname.get()), "utf8"))
     return
-        
+
 def start(root, client):
     global pname
     pstart = tk.Toplevel(root)
@@ -95,7 +96,7 @@ def start(root, client):
     tk.Button(pstart, text = "Start", width = 14, height = 1, fg = 'white', bg = 'IndianRed3', borderwidth=0,
             highlightthickness=0, command = lambda: send_start(client), relief="flat").grid(row = 0, column = 1)
     return
-    
+
 def kill(root, client):
     global pid
     kill = tk.Toplevel(root)
@@ -106,9 +107,9 @@ def kill(root, client):
     tk.Button(kill, text = "Kill", width = 14, height = 1, fg = 'white', bg = 'IndianRed3', borderwidth=0,
             highlightthickness=0, command = lambda: send_kill(client), relief="flat").grid(row = 0, column = 1)
     return
-        
+
 class App_Process_UI(Canvas):
-     def __init__(self, parent, client):    
+     def __init__(self, parent, client):
         Canvas.__init__(self, parent)
         self.configure(
             #window,

@@ -1,7 +1,6 @@
 import  pickle
 import os
 
-from directory_tree_client import BUFFER_SIZE
 
 BUFSIZ = 1024 * 4
 SEPARATOR = "<SEPARATOR>"
@@ -14,7 +13,7 @@ def showTree(sock):
             listD.append(path)
     data = pickle.dumps(listD)
     sock.sendall(str(len(data)).encode())
-    temp = sock.recv(BUFSIZ)
+    _ = sock.recv(BUFSIZ)
     sock.sendall(data)
 
 def sendListDirs(sock):
@@ -27,15 +26,15 @@ def sendListDirs(sock):
         listD = os.listdir(path)
         for d in listD:
             listT.append((d, os.path.isdir(path + "\\" + d)))
-        
+
         data = pickle.dumps(listT)
         sock.sendall(str(len(data)).encode())
-        temp = sock.recv(BUFSIZ)
+        _ = sock.recv(BUFSIZ)
         sock.sendall(data)
         return [True, path]
-    except:
+    except Exception:
         sock.sendall("error".encode())
-        return [False, "error"]    
+        return [False, "error"]
 
 def delFile(sock):
     p = sock.recv(BUFSIZ).decode()
@@ -43,7 +42,7 @@ def delFile(sock):
         try:
             os.remove(p)
             sock.sendall("ok".encode())
-        except:
+        except Exception:
             sock.sendall("error".encode())
             return
     else:
@@ -71,7 +70,7 @@ def copyFileToServer(sock):
         with open(path + filename, "wb") as f:
             f.write(data)
         sock.sendall("received content".encode())
-    except:
+    except Exception:
         sock.sendall("-1".encode())
 
 # copy file from server to client
@@ -82,14 +81,14 @@ def copyFileToClient(sock):
         return
     filesize = os.path.getsize(filename)
     sock.sendall(str(filesize).encode())
-    temp = sock.recv(BUFSIZ)
+    _ = sock.recv(BUFSIZ)
     with open(filename, "rb") as f:
         data = f.read()
         sock.sendall(data)
 
 def directory(client):
     isMod = False
-    
+
     while True:
         if not isMod:
             mod = client.recv(BUFSIZ).decode()
@@ -98,12 +97,12 @@ def directory(client):
             showTree(client)
             while True:
                 check = sendListDirs(client)
-                if not check[0]:    
+                if not check[0]:
                     mod = check[1]
                     if (mod != "error"):
                         isMod = True
                         break
-        
+
         # copy file from client to server
         elif (mod == "COPYTO"):
             client.sendall("OK".encode())
@@ -123,6 +122,6 @@ def directory(client):
 
         elif (mod == "QUIT"):
             return
-        
+
         else:
             client.sendall("-1".encode())

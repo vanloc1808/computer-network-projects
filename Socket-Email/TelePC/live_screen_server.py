@@ -1,12 +1,10 @@
 # Socket
-import socket
 
 # Work with Image
 from PIL import ImageGrab
 import io
 
 # Thread
-from threading import Thread
 
 
 def capture_screen(client):

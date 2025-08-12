@@ -3,13 +3,12 @@ import json
 # Tkinter
 import tkinter as tk
 from tkinter import Canvas, filedialog
-from tkinter.filedialog import asksaveasfile
 
 
 
 BUFSIZ = 32768
 class Registry_UI(Canvas):
-    def __init__(self, parent, client):    
+    def __init__(self, parent, client):
         Canvas.__init__(self, parent)
         self.configure(
             #window,
@@ -31,7 +30,7 @@ class Registry_UI(Canvas):
         self.data_type = 1
         # attributes for response of action
         self.res1 = None
-        self.res2 = None    
+        self.res2 = None
         # initialize status ready to use
         self.status = True
 
@@ -43,7 +42,7 @@ class Registry_UI(Canvas):
         self.key_txt = tk.Text(self)
         self.key_txt.place(x=150,y=50,width=300,height=25)
         self.ex1 = tk.Label(self, text='Ex: HKEY_CURRENT_USER\SOFTWARE\MyKey', anchor='w',bg = "#FCD0E8")
-        self.ex1.place(x=150,y=85,width=300,height=25)        
+        self.ex1.place(x=150,y=85,width=300,height=25)
 
         # NAME VALUE
         self.name_label = tk.Label(self, text='Name Value', relief="flat")
@@ -52,7 +51,7 @@ class Registry_UI(Canvas):
         self.name_txt.place(x=150,y=150,width=200,height=25)
         self.ex2 = tk.Label(self, text='Use only for Get Value / Set Value', anchor='w',bg = "#FCD0E8")
         self.ex2.place(x=150,y=185,width=300,height=25)
-        
+
         # DATA VALUE
         self.data_label = tk.Label(self, text='Data Value', relief="flat")
         self.data_label.place(x=50,y=250,width=90,height=25)
@@ -79,7 +78,7 @@ class Registry_UI(Canvas):
         self.ex8.place(x=150,y=435,width=100,height=25)
         self.ex9 = tk.Label(self, text='5 - REG_EXPAND_SZ', anchor='w',bg = "#FCD0E8")
         self.ex9.place(x=250,y=435,width=125,height=25)
-        
+
 
         # REG CONTENT
         self.content = tk.Text(self)
@@ -114,9 +113,9 @@ class Registry_UI(Canvas):
 
         # a button to stop receiving and return to main interface
         self.btn_back = tk.Button(self, text = 'Back', command=lambda: self.click_back(), relief="flat", bg="#eab676")
-        self.btn_back.place(x=900,y=500,width=50,height=50)  
+        self.btn_back.place(x=900,y=500,width=50,height=50)
 
-    
+
     def get_input(self):
         self.key = self.key_txt.get("1.0", "end").rstrip()
         self.name = self.name_txt.get("1.0", "end").rstrip()
@@ -124,11 +123,11 @@ class Registry_UI(Canvas):
         dtypes = ['REG_SZ', 'REG_BINARY', 'REG_DWORD', 'REG_QWORD', 'REG_MULTI_SZ', 'REG_EXPAND_SZ']
         try:
             t_num = int(self.data_type_txt.get("1.0", "end").rstrip())
-            if(0 <= t_num and t_num <= 5):
+            if 0 <= t_num <= 5:
                 self.data_type = dtypes[t_num]
             else:
                 self.data_type = dtypes[0]
-        except:
+        except Exception:
             self.data_type = dtypes[0]
 
     def get_value(self):
@@ -160,7 +159,7 @@ class Registry_UI(Canvas):
 
     def open_file(self):
         file = filedialog.askopenfilename()
-        if file == None or file == '':
+        if file is None or file == '':
             return
         self.content.delete("1.0", 'end')
         s=""
@@ -170,7 +169,7 @@ class Registry_UI(Canvas):
             self.content.insert(tk.END, line)
 
 
-    def send_msg(self):        
+    def send_msg(self):
         msg = {'ID' : self.action_ID, 'path' : self.key, 'name_value' : self.name, 'value' : self.data, 'v_type' : self.data_type}
         msg = json.dumps(msg)
         msg_bytes = bytes(msg, 'utf8')

