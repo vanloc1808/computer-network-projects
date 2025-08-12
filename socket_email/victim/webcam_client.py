@@ -1,21 +1,25 @@
-import cv2
 import socket
 import time
 from tempfile import gettempdir
 
-fourcc = cv2.VideoWriter_fourcc(*'XVID')
-file_to_write = gettempdir() + '/' + 'output.avi'
+import cv2
+
+fourcc = cv2.VideoWriter_fourcc(*"XVID")
+file_to_write = gettempdir() + "/" + "output.avi"
 
 BUFSIZ = 4 * 1024
 
+
 def send_file(conn: socket.socket):
-    file = open(file_to_write, "rb").read()
+    with open(file_to_write, "rb") as f:
+        file = f.read()
+
     size = len(file)
 
-    conn.sendall(str(size).encode().ljust(BUFSIZ)) # send length
+    conn.sendall(str(size).encode().ljust(BUFSIZ))  # send length
     for idx in range(0, size, BUFSIZ):
-        data_to_send = file[idx: idx + BUFSIZ]
-        conn.sendall(data_to_send.ljust(BUFSIZ)) # prevent last block not aligned
+        data_to_send = file[idx : idx + BUFSIZ]
+        conn.sendall(data_to_send.ljust(BUFSIZ))  # prevent last block not aligned
 
 
 def run(conn: socket.socket):
@@ -30,15 +34,15 @@ def run(conn: socket.socket):
             rval, frame = vc.read()
         else:
             rval = False
-        
+
         if not rval:
             return
-        
+
         current = time.time()
-        while time.time() - current < time_to_rec: # Lech ~2-5s do qua trinh chay
+        while time.time() - current < time_to_rec:  # Lech ~2-5s do qua trinh chay
             out.write(frame)
             rval, frame = vc.read()
-        
+
         vc.release()
         out.release()
         # End Record phase ------------------------

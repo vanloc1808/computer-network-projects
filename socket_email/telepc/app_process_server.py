@@ -1,23 +1,26 @@
-import pickle
-import psutil
-import struct
 import os
+import pickle
+import struct
+
+import psutil
 
 BUFSIZ = 1024 * 4
 
+
 def send_data(client, data):
-    size = struct.pack('!I', len(data))
+    size = struct.pack("!I", len(data))
     data = size + data
     client.sendall(data)
     return
+
 
 def list_apps():
     ls1 = list()
     ls2 = list()
     ls3 = list()
 
-    cmd = 'powershell "gps | where {$_.mainWindowTitle} | select Description, ID, @{Name=\'ThreadCount\';Expression ={$_.Threads.Count}}'
-    proc = os.popen(cmd).read().split('\n')
+    cmd = "powershell \"gps | where {$_.mainWindowTitle} | select Description, ID, @{Name='ThreadCount';Expression ={$_.Threads.Count}}"
+    proc = os.popen(cmd).read().split("\n")
     tmp = list()
     for line in proc:
         if not line.isspace():
@@ -28,7 +31,7 @@ def list_apps():
             arr = line.split(" ")
             if len(arr) < 3:
                 continue
-            if arr[0] == '' or arr[0] == ' ':
+            if arr[0] == "" or arr[0] == " ":
                 continue
 
             name = arr[0]
@@ -36,21 +39,20 @@ def list_apps():
             ID = 0
             # interation
             cur = len(arr) - 2
-            for i in range (cur, -1, -1):
+            for i in range(cur, -1, -1):
                 if len(arr[i]) != 0:
                     ID = arr[i]
                     cur = i
                     break
-            for i in range (1, cur, 1):
+            for i in range(1, cur, 1):
                 if len(arr[i]) != 0:
-                    name += ' ' + arr[i]
+                    name += " " + arr[i]
             ls1.append(name)
             ls2.append(ID)
             ls3.append(threads)
         except Exception:
             pass
     return ls1, ls2, ls3
-
 
 
 def list_processes():
@@ -70,8 +72,9 @@ def list_processes():
             pass
     return ls1, ls2, ls3
 
+
 def kill(pid):
-    cmd = 'taskkill.exe /F /PID ' + str(pid)
+    cmd = "taskkill.exe /F /PID " + str(pid)
     try:
         a = os.system(cmd)
         if a == 0:
@@ -81,9 +84,11 @@ def kill(pid):
     except Exception:
         return 0
 
+
 def start(name):
     os.system(name)
     return
+
 
 def app_process(client):
     global msg
@@ -96,7 +101,7 @@ def app_process(client):
         ls2 = list()
         ls3 = list()
         action = int(msg)
-        #0-kill
+        # 0-kill
         if action == 0:
             pid = client.recv(BUFSIZ).decode("utf8")
             pid = int(pid)
@@ -104,7 +109,7 @@ def app_process(client):
                 res = kill(pid)
             except Exception:
                 res = 0
-        #1-xem
+        # 1-xem
         elif action == 1:
             try:
                 status = client.recv(BUFSIZ).decode("utf8")
@@ -115,10 +120,10 @@ def app_process(client):
                 res = 1
             except Exception:
                 res = 0
-        #2-xoa
+        # 2-xoa
         elif action == 2:
             res = 1
-        #3 - start
+        # 3 - start
         elif action == 3:
             pname = client.recv(BUFSIZ).decode("utf8")
             try:

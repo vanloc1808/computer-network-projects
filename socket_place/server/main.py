@@ -1,3 +1,10 @@
+"""UDP server main loop implementing a simple ARQ-like protocol.
+
+Handles commands to retrieve all places, a specific place, an avatar image,
+or a specific gallery image. Data is split into fixed-size blocks with
+per-block acknowledgements to tolerate UDP loss.
+"""
+
 import logging
 import socket as sk
 from queue import Queue
@@ -7,32 +14,35 @@ from socket_place.server import data_loader
 from socket_place.server.spliter import Spliter
 
 logging.basicConfig(
-    format='%(asctime)s %(message)s', filename='program.log', level=logging.INFO
+    format="%(asctime)s %(message)s", filename="program.log", level=logging.INFO
 )
 
-cache = Queue(maxsize=0) # infinity queue
+cache = Queue(maxsize=0)  # infinity queue
+
 
 def init_socket() -> sk.socket:
-    sv = sk.socket(
-        family  = sk.AF_INET,
-        type    = sk.SOCK_DGRAM,
-        proto   = sk.IPPROTO_UDP
-    )
+    """Initialize and bind a UDP socket at the configured IP and port."""
+    sv = sk.socket(family=sk.AF_INET, type=sk.SOCK_DGRAM, proto=sk.IPPROTO_UDP)
     sv.bind((IP, PORT))
     logging.info(f"[+] UDP server at {(IP, PORT)}")
     return sv
 
+
 UDP_sv = init_socket()
 
+
 def getSize(idx, len_):
+    """Return the current window size bounded by remaining packets."""
     return min(WINDOW_SIZE, len_ - idx)
 
+
 def sendLen(addr_port, len_):
+    """Send the total number of blocks and wait for an ACK_LEN handshake."""
     done = False
     while not done:
         logging.info(f"[?] LEN: {len_}")
-        UDP_sv.sendto(str(len_).encode().rjust(BLOCK_SIZE, b'\x00'), addr_port)
-        UDP_sv.settimeout(1) # 1s timeout
+        UDP_sv.sendto(str(len_).encode().rjust(BLOCK_SIZE, b"\x00"), addr_port)
+        UDP_sv.settimeout(1)  # 1s timeout
         try:
             ack, r_addr = UDP_sv.recvfrom(BLOCK_SIZE)
             while r_addr != addr_port:
@@ -42,11 +52,13 @@ def sendLen(addr_port, len_):
             if ack[:7] == b"ACK_LEN":  # Check packet
                 if int(ack[8:11]) == len_:  # Check correct length
                     done = True
-        except sk.timeout: # Not received in time
+        except sk.timeout:  # Not received in time
             continue
     UDP_sv.settimeout(None)
 
+
 def sendData(addr_port, data_to_send):
+    """Send split data blocks and handle ACKs with simple retransmissions."""
     for i in range(0, len(data_to_send), WINDOW_SIZE):
         ack_list = [False] * getSize(i, len(data_to_send))
         # Send phase
@@ -76,20 +88,25 @@ def sendData(addr_port, data_to_send):
                         continue
                     ack_list[id_ - i] = True
                     logging.info(f"[*] GOT ACK {id_}")
-                except sk.timeout: # Not received in time
+                except sk.timeout:  # Not received in time
                     continue
             UDP_sv.settimeout(None)
+
 
 data_loader.initialize_database()
 
 sp = Spliter(BLOCK_SIZE)
 
+
 def send(addr_port, s: bytearray) -> None:
+    """Split payload into blocks, send length header and then all blocks."""
     splited = sp.split_from_bytearray(s)
     sendLen(addr_port, len(splited))
     sendData(addr_port, splited)
 
+
 def run_server() -> None:
+    """Start the UDP server loop and respond to supported client commands."""
     # Main loop
     while True:
         UDP_sv.settimeout(None)
@@ -101,21 +118,21 @@ def run_server() -> None:
         logging.info(f"[?] From: {addr_port}")
 
         # GIV_ALL
-        if mess[:7] == b'GIV_ALL':
+        if mess[:7] == b"GIV_ALL":
             logging.info(f"[?] Send all place to {addr_port}")
             send(addr_port, data_loader.query_all_places())
             continue
         # GIV_DETAIL_XXXX...
-        if mess[:11] == b'GIV_DETAIL_':
-            mess = mess.rstrip(b'\x00')
-            id_ = mess[11:].decode('UTF-8')
+        if mess[:11] == b"GIV_DETAIL_":
+            mess = mess.rstrip(b"\x00")
+            id_ = mess[11:].decode("UTF-8")
             logging.info(f"[?] Send specific place({id_}) to {addr_port}")
             send(addr_port, data_loader.query_one_place(id_))
             continue
         # GIV_AVT_XXXX...
-        if mess[:8] == b'GIV_AVT_':
-            mess = mess.rstrip(b'\x00')
-            id_ = mess[8:].decode('UTF-8')
+        if mess[:8] == b"GIV_AVT_":
+            mess = mess.rstrip(b"\x00")
+            id_ = mess[8:].decode("UTF-8")
             logging.info(f"[?] Send avatar of place({id_}) to {addr_port}")
             try:
                 send(addr_port, data_loader.query_avatar(id_))
@@ -123,13 +140,11 @@ def run_server() -> None:
                 logging.error(f"[x] Not found {id_}")
             continue
         # GIV_IMG_YYY_XXXX...
-        if mess[:8] == b'GIV_IMG_':
-            mess = mess.rstrip(b'\x00')
+        if mess[:8] == b"GIV_IMG_":
+            mess = mess.rstrip(b"\x00")
             pos = int(mess[8:11])  # YYY
-            id_ = mess[12:].decode('UTF-8')  # XXXX...
-            logging.info(
-                f"[?] Send image place({id_}) number {pos + 1} to {addr_port}"
-            )
+            id_ = mess[12:].decode("UTF-8")  # XXXX...
+            logging.info(f"[?] Send image place({id_}) number {pos + 1} to {addr_port}")
             try:
                 send(addr_port, data_loader.query_image(id_, pos))
             except Exception:

@@ -1,45 +1,50 @@
+"""UDP client for the socket_place demo with simple ARQ-like reliability."""
+
+import json
+import logging
 import socket as sk
 from random import choices
 from string import ascii_lowercase
 from tempfile import gettempdir
 
-from socket_place.common.config import BLOCK_SIZE, IP, PORT, WINDOW_SIZE
 from socket_place.client.error_check import check_split_not_corrupted
 from socket_place.client.joiner import join
-
-import logging
-import json
+from socket_place.common.config import BLOCK_SIZE, IP, PORT, WINDOW_SIZE
 
 logging.basicConfig(
-    format='%(asctime)s %(message)s', filename='program.log', level=logging.INFO
+    format="%(asctime)s %(message)s", filename="program.log", level=logging.INFO
 )
 
 
 def init():
-    sv = sk.socket(
-        family  = sk.AF_INET,
-        type    = sk.SOCK_DGRAM,
-        proto   = sk.IPPROTO_UDP
-    )
+    """Create and return a UDP socket for the client."""
+    sv = sk.socket(family=sk.AF_INET, type=sk.SOCK_DGRAM, proto=sk.IPPROTO_UDP)
     return sv
+
 
 UDP_cli = init()
 logging.info("[?] Client started!")
 
+
 def getSize(i, len_):
+    """Return the window size for position ``i`` bounded by remaining blocks."""
     return min(WINDOW_SIZE, len_ - i)
 
+
 def getLen():
+    """Read the total number of expected blocks and send an ACK_LEN reply."""
     while True:
         try:
             data, addr_port = UDP_cli.recvfrom(BLOCK_SIZE)
             if addr_port != (IP, PORT):
                 # Not from server
                 continue
-            len_ = int(data.lstrip(b'\x00'))
+            len_ = int(data.lstrip(b"\x00"))
             # Send back ACK:
             UDP_cli.sendto(
-                f'ACK_LEN_{str(len_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                f"ACK_LEN_{str(len_).rjust(3, '0')}".encode().ljust(
+                    BLOCK_SIZE, b"\x00"
+                ),
                 addr_port,
             )
             return len_
@@ -48,7 +53,9 @@ def getLen():
         except ValueError:
             print("? Not a length")
 
+
 def receiveData(len_):
+    """Receive ``len_`` blocks with per-packet ACKs and return reassembled bytes."""
     result = []
     x = 0
     while x < len_:
@@ -66,11 +73,13 @@ def receiveData(len_):
                     continue
 
                 id_ = int(d[:3])
-                if (id_ < x): # Old packet
+                if id_ < x:  # Old packet
                     # Just send ACK back and do nothing!
                     logging.info(f"? OLD ACK {id_}")
                     UDP_cli.sendto(
-                        f'ACK_{str(id_).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                        f"ACK_{str(id_).rjust(3, '0')}".encode().ljust(
+                            BLOCK_SIZE, b"\x00"
+                        ),
                         (IP, PORT),
                     )
                     continue
@@ -83,7 +92,9 @@ def receiveData(len_):
                 buffer[i] = d
 
                 UDP_cli.sendto(
-                    f'ACK_{str(x + i).rjust(3, "0")}'.encode().ljust(BLOCK_SIZE, b'\x00'),
+                    f"ACK_{str(x + i).rjust(3, '0')}".encode().ljust(
+                        BLOCK_SIZE, b"\x00"
+                    ),
                     (IP, PORT),
                 )
             result = result + buffer
@@ -91,46 +102,54 @@ def receiveData(len_):
     result = sorted(result)
     return join(result)
 
+
 def recvData():
+    """Receive a complete message by first obtaining its block count."""
     total_len = getLen()
     logging.info(f"[?] Len: {total_len}")
     received_data = receiveData(total_len)
     logging.info("[?] DONE")
     return received_data
 
+
 def sendCommand(cmd):
-    UDP_cli.sendto(cmd.ljust(BLOCK_SIZE, b'\x00'), (IP, PORT))
+    """Send a raw binary command padded to the configured block size."""
+    UDP_cli.sendto(cmd.ljust(BLOCK_SIZE, b"\x00"), (IP, PORT))
+
 
 def get_all_info():
-    sendCommand(b'GIV_ALL')
+    """Return a list of place summaries from the server (decoded JSON)."""
+    sendCommand(b"GIV_ALL")
     d = recvData()
-    return json.loads(d.rstrip(b'\x00'))
+    return json.loads(d.rstrip(b"\x00"))
+
 
 def get_detail_info(id_):
-    sendCommand(f'GIV_DETAIL_{id_}'.encode())
+    """Return a detail dictionary for ``id_`` from the server (decoded JSON)."""
+    sendCommand(f"GIV_DETAIL_{id_}".encode())
     d = recvData()
-    return json.loads(d.rstrip(b'\x00'))
+    return json.loads(d.rstrip(b"\x00"))
+
 
 def get_avt(id_):
-    sendCommand(f'GIV_AVT_{id_}'.encode())
+    """Download and save the avatar image for ``id_``; return the temp path."""
+    sendCommand(f"GIV_AVT_{id_}".encode())
     d = recvData()
-    # abcdefghijkl.jpg
-    file_name = ''.join(choices(ascii_lowercase, k=12)) + '.jpg'
-    path = gettempdir() + '/' + file_name
-    x = open(path, 'wb')
-    x.write(d)
-    x.close()
+    file_name = "".join(choices(ascii_lowercase, k=12)) + ".jpg"
+    path = gettempdir() + "/" + file_name
+    with open(path, "wb") as x:
+        x.write(d)
     return path
 
+
 def get_img(id_, pos):
-    sendCommand(f'GIV_IMG_{str(pos).rjust(3, "0")}_{id_}'.encode())
+    """Download and save the ``pos``-th gallery image for ``id_``; return path."""
+    sendCommand(f"GIV_IMG_{str(pos).rjust(3, '0')}_{id_}".encode())
     d = recvData()
-    # abcdefghijkl.jpg
-    file_name = ''.join(choices(ascii_lowercase, k=12)) + '.jpg'
-    path = gettempdir() + '/' + file_name
-    x = open(path, 'wb')
-    x.write(d)
-    x.close()
+    file_name = "".join(choices(ascii_lowercase, k=12)) + ".jpg"
+    path = gettempdir() + "/" + file_name
+    with open(path, "wb") as x:
+        x.write(d)
     return path
 
 
