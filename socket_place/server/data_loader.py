@@ -1,75 +1,108 @@
 import json
+import os
+from typing import Any, Dict, List, Tuple
 
-data = None
 
-def query_all_places():
-    global data
-    result = []
+_database: List[Dict[str, Any]] | None = None
+_db_base_dir: str | None = None
 
-    # read data from json file
-    for place in data:
-        id = place['id']
-        name = place['name']
-        img_list = place['images']
-        this_place = {'ID' : id, 'Name' : name, 'NOI': len(img_list)}
+
+def _module_dir() -> str:
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+def initialize_database(db_path: str | None = None) -> None:
+    """Load the JSON database once and cache it in memory.
+
+    If db_path is not provided, loads from the packaged `server/db.json`.
+    Also records the base directory for resolving relative image paths.
+    """
+    global _database, _db_base_dir
+    if _database is not None:
+        return
+
+    if db_path is None:
+        db_path = os.path.join(_module_dir(), "db.json")
+
+    _db_base_dir = os.path.dirname(db_path)
+    with open(db_path, "r", encoding="utf-8") as database_file:
+        _database = json.load(database_file)
+
+
+def _ensure_initialized() -> Tuple[List[Dict[str, Any]], str]:
+    if _database is None:
+        initialize_database()
+    # mypy/pylint safeguards; at this point they are not None
+    assert _database is not None
+    assert _db_base_dir is not None
+    return _database, _db_base_dir
+
+
+def query_all_places() -> bytes:
+    database, _ = _ensure_initialized()
+    result: List[Dict[str, Any]] = []
+
+    for place in database:
+        place_id = place["id"]
+        name = place["name"]
+        img_list = place["images"]
+        this_place = {"ID": place_id, "Name": name, "NOI": len(img_list)}
         result.append(this_place)
     return json.dumps(result).encode()
 
 
-def query_one_place(place_id):
-    global data
-    this_place = {
-        'ID' : '', 
-        'Name' : '', 
-        'Coordinate' : '',
-        'Description' : ''
+def query_one_place(place_id: str) -> bytes:
+    database, _ = _ensure_initialized()
+    this_place: Dict[str, Any] = {
+        "ID": "",
+        "Name": "",
+        "Coordinate": "",
+        "Description": "",
     }
 
-    # read data from json file
-    for place in data:
-        if place['id'] == place_id:
-            id = place['id']
-            name = place['name']
-            description = place['description']
-            coordinate = place['coordinate']
-            this_place = {'ID' : id, 
-                'Name' : name, 
-                'Coordinate' : coordinate ,
-                'Description' : description}
+    for place in database:
+        if place["id"] == place_id:
+            this_place = {
+                "ID": place["id"],
+                "Name": place["name"],
+                "Coordinate": place["coordinate"],
+                "Description": place["description"],
+            }
             break
 
     return json.dumps(this_place).encode()
 
-def query_avatar(place_id):
+
+def _resolve_path(base_dir: str, maybe_relative_path: str) -> str:
+    if os.path.isabs(maybe_relative_path):
+        return maybe_relative_path
+    return os.path.normpath(os.path.join(base_dir, maybe_relative_path))
+
+
+def query_avatar(place_id: str) -> bytes:
+    database, base_dir = _ensure_initialized()
     avt_path = ""
-    for place in data:
-        if place['id'] == place_id:
-            avt_path = place["avatar"]
+    for place in database:
+        if place["id"] == place_id:
+            avt_path = _resolve_path(base_dir, place["avatar"])
             break
     if avt_path == "":
-        raise Exception("No such ID!")
-    img = open(avt_path, "rb")
-    img_byte = img.read()
-    img.close()
-    return img_byte
+        raise ValueError("No such ID")
+    with open(avt_path, "rb") as img:
+        return img.read()
 
-def query_image(place_id, idx):
-    img_list = []
-    for place in data:
-        if place['id'] == place_id:
-            img_list = place["images"]
+
+def query_image(place_id: str, idx: int) -> bytes:
+    database, base_dir = _ensure_initialized()
+    img_list: List[str] = []
+    for place in database:
+        if place["id"] == place_id:
+            # Resolve each image to absolute path relative to db.json
+            img_list = [_resolve_path(base_dir, p) for p in place["images"]]
             break
-    if img_list == []:
-        raise Exception("No such ID!")
-    if idx >= len(img_list):
-        raise Exception("Out of bound!")
-    img = open(img_list[idx], "rb")
-    img_byte = img.read()
-    img.close()
-    return img_byte
-
-def __init__():
-    global data
-    database_file = open('db.json', 'r')
-    data = json.load(database_file)
-    database_file.close()
+    if not img_list:
+        raise ValueError("No such ID")
+    if idx < 0 or idx >= len(img_list):
+        raise IndexError("Image index out of bounds")
+    with open(img_list[idx], "rb") as img:
+        return img.read()

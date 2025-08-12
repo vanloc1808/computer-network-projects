@@ -1,22 +1,34 @@
 from typing import List
 import hashlib
 
-class Spliter(object):
+
+class Splitter:
+    """Split a bytearray payload into fixed-size blocks with id and SHA1 hash.
+
+    Layout per block:
+    - 3 bytes: zero-padded block id (ASCII)
+    - N bytes: payload (padded with nulls)
+    - 40 bytes: hex-encoded SHA1 of the payload
+    """
+
     def __init__(self, block_size: int):
-        # first 3 bytes for id, 40 bytes for SHA1 hash!
-        assert block_size > 43, "Block size must greater than 43!"
+        # first 3 bytes for id, 40 bytes for SHA1 hash
+        assert block_size > 43, "Block size must be greater than 43"
         self.block_size = block_size
         self.actual_size = block_size - 43
-    
-    
-    def split_from_bytearray(self, s: bytearray) -> List[bytearray]:
-        result = []
 
-        for i in range(0, len(s), self.actual_size):
-            tmp = s[i: i + self.actual_size]
-            tmp = tmp.ljust(self.actual_size, b'\x00')
-            
-            _id = str(i // self.actual_size).rjust(3, "0").encode()
-            _hash = hashlib.sha1(tmp).hexdigest().encode()
-            result.append(_id + tmp + _hash)
+    def split_from_bytearray(self, payload: bytearray) -> List[bytearray]:
+        result: List[bytearray] = []
+
+        for i in range(0, len(payload), self.actual_size):
+            chunk = payload[i : i + self.actual_size]
+            chunk = chunk.ljust(self.actual_size, b"\x00")
+
+            block_id = str(i // self.actual_size).rjust(3, "0").encode()
+            checksum = hashlib.sha1(chunk).hexdigest().encode()
+            result.append(block_id + chunk + checksum)
         return result
+
+
+# Backwards compatibility alias
+Spliter = Splitter
